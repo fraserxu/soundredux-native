@@ -2,27 +2,20 @@ var React = require('react-native');
 var {
   StyleSheet,
   View,
+  Text,
   Dimensions,
 } = React;
 
 var deviceWidth = Dimensions.get('window').width;
 
-import Header from './Header';
-import Player from './Player';
-// import Song from './Song';
-import Songs from './Songs';
-// import User from './User';
-
-class Scene extends React.Component {
+class Player extends React.Component {
   constructor (props) {
     super(props)
   }
   render () {
     return (
       <View style={styles.container}>
-        <Header />
-        <Songs />
-        <Player />
+        <Text style={styles.title}>Player</Text>
       </View>
     )
   }
@@ -30,9 +23,18 @@ class Scene extends React.Component {
 
 var styles = StyleSheet.create({
   container: {
-    flex: 1
+    width: deviceWidth,
+    height: 100,
+    backgroundColor: '#ccc'
   },
+  title: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: '#333',
+    height: 80,
+    lineHeight: 80,
+    marginTop: 25,
+  }
 });
 
-
-export default Scene
+export default Player
