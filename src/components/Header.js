@@ -25,12 +25,12 @@ var styles = StyleSheet.create({
   container: {
     width: deviceWidth,
     height: 50,
-    backgroundColor: '#f50'
+    backgroundColor: '#3a3f41'
   },
   title: {
     textAlign: 'center',
     fontWeight: 'bold',
-    color: '#333',
+    color: '#fff',
     height: 50,
     marginTop: 15,
     lineHeight: 50,
