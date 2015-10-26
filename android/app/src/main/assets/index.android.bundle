@@ -1,5 +1,5 @@
 __DEV__ = 
-false;
+true;
 
 
 __BUNDLE_START_TIME__ = Date.now();
@@ -1371,7 +1371,41 @@ throw new TypeError(
 
 var index=findIndex.call(this,predicate,context);
 return index === -1?undefined:this[index];}});}})();
-__d('soundreduxNative/index.ios.js',["react-native/Libraries/react-native/react-native.js","soundreduxNative/src/containers/root.js"],function(global, require, module, exports) {  function _interopRequireDefault(obj){return obj && obj.__esModule?obj:{'default':obj};}var _reactNative=require('react-native/Libraries/react-native/react-native.js');var _reactNative2=_interopRequireDefault(_reactNative);var _srcContainersRoot=require(
+(
+function(GLOBAL){
+
+
+
+
+
+
+
+function getInvalidGlobalUseError(name){
+return new Error(
+'You are trying to render the global ' + name + ' variable as a ' + 
+'React element. You probably forgot to require ' + name + '.');}
+
+
+GLOBAL.Text = {
+get defaultProps(){
+throw getInvalidGlobalUseError('Text');}};
+
+
+GLOBAL.Image = {
+get defaultProps(){
+throw getInvalidGlobalUseError('Image');}};
+
+
+
+if(GLOBAL.document){
+GLOBAL.document.createElement = null;}
+
+
+
+
+GLOBAL.MutationObserver = undefined;})(
+this);
+__d('soundreduxNative/index.android.js',["react-native/Libraries/react-native/react-native.js","soundreduxNative/src/containers/root.js"],function(global, require, module, exports) {  function _interopRequireDefault(obj){return obj && obj.__esModule?obj:{'default':obj};}var _reactNative=require('react-native/Libraries/react-native/react-native.js');var _reactNative2=_interopRequireDefault(_reactNative);var _srcContainersRoot=require(
 'soundreduxNative/src/containers/root.js');var _srcContainersRoot2=_interopRequireDefault(_srcContainersRoot);const 
 
 
@@ -5984,6 +6018,9 @@ window.webkitPerformance;}
 module.exports = performance || {};
 });
 __d('ExecutionEnvironment',[],function(global, require, module, exports) {  "use strict";
+
+
+
 
 
 
@@ -13423,7 +13460,7 @@ return stack;}};
 
 module.exports = StackTraceParser;
 });
-__d('Platform',[],function(global, require, module, exports) {  'use strict';
+__d('Platform',["NativeModules"],function(global, require, module, exports) {  'use strict';
 
 
 
@@ -13436,9 +13473,12 @@ __d('Platform',[],function(global, require, module, exports) {  'use strict';
 
 
 
+
+var AndroidConstants=require('NativeModules').AndroidConstants;
 
 var Platform={
-OS:'ios'};
+OS:'android',
+Version:AndroidConstants.Version};
 
 
 module.exports = Platform;
@@ -13503,7 +13543,7 @@ return ar?ar[0]:null;}
 
 module.exports = checkFlowAtRuntime;
 });
-__d('XMLHttpRequest',["FormData","NativeModules","RCTDeviceEventEmitter","XMLHttpRequestBase"],function(global, require, module, exports) {  'use strict';var _createClass=(function(){function defineProperties(target,props){for(var i=0;i < props.length;i++) {var descriptor=props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if('value' in descriptor)descriptor.writable = true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};})();var _get=function get(object,property,receiver){if(object === null)object = Function.prototype;var desc=Object.getOwnPropertyDescriptor(object,property);if(desc === undefined){var parent=Object.getPrototypeOf(object);if(parent === null){return undefined;}else {return get(parent,property,receiver);}}else if('value' in desc){return desc.value;}else {var getter=desc.get;if(getter === undefined){return undefined;}return getter.call(receiver);}};function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function');}}function _inherits(subClass,superClass){if(typeof superClass !== 'function' && superClass !== null){throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__ = superClass;}
+__d('XMLHttpRequest',["FormData","RCTNetworking","XMLHttpRequestBase"],function(global, require, module, exports) {  'use strict';var _createClass=(function(){function defineProperties(target,props){for(var i=0;i < props.length;i++) {var descriptor=props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if('value' in descriptor)descriptor.writable = true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};})();var _get=function get(object,property,receiver){if(object === null)object = Function.prototype;var desc=Object.getOwnPropertyDescriptor(object,property);if(desc === undefined){var parent=Object.getPrototypeOf(object);if(parent === null){return undefined;}else {return get(parent,property,receiver);}}else if('value' in desc){return desc.value;}else {var getter=desc.get;if(getter === undefined){return undefined;}return getter.call(receiver);}};function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function');}}function _inherits(subClass,superClass){if(typeof superClass !== 'function' && superClass !== null){throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__ = superClass;}
 
 
 
@@ -13517,119 +13557,54 @@ __d('XMLHttpRequest',["FormData","NativeModules","RCTDeviceEventEmitter","XMLHtt
 
 
 var FormData=require('FormData');
-var RCTNetworking=require('NativeModules').Networking;
-var RCTDeviceEventEmitter=require('RCTDeviceEventEmitter');
+var RCTNetworking=require('RCTNetworking');
+var XMLHttpRequestBase=require('XMLHttpRequestBase');
 
-var XMLHttpRequestBase=require('XMLHttpRequestBase');var 
+
+
+function convertHeadersMapToArray(headers){
+var headerArray=[];
+for(var name in headers) {
+headerArray.push([name,headers[name]]);}
+
+return headerArray;}var 
+
 
 XMLHttpRequest=(function(_XMLHttpRequestBase){_inherits(XMLHttpRequest,_XMLHttpRequestBase);
 
 
 
-
-
-
-
 function XMLHttpRequest(){_classCallCheck(this,XMLHttpRequest);
 _get(Object.getPrototypeOf(XMLHttpRequest.prototype),'constructor',this).call(this);
-this._requestId = null;
-this._subscriptions = [];
-this.upload = {};}_createClass(XMLHttpRequest,[{key:'_didCreateRequest',value:
-
-
-function _didCreateRequest(requestId){var _this=this;
-this._requestId = requestId;
-this._subscriptions.push(RCTDeviceEventEmitter.addListener(
-'didSendNetworkData',
-function(args){return _this._didUploadProgress.call(_this,args[0],args[1],args[2]);}));
-
-this._subscriptions.push(RCTDeviceEventEmitter.addListener(
-'didReceiveNetworkResponse',
-function(args){return _this._didReceiveResponse.call(_this,args[0],args[1],args[2]);}));
-
-this._subscriptions.push(RCTDeviceEventEmitter.addListener(
-'didReceiveNetworkData',
-function(args){return _this._didReceiveData.call(_this,args[0],args[1]);}));
-
-this._subscriptions.push(RCTDeviceEventEmitter.addListener(
-'didCompleteNetworkResponse',
-function(args){return _this._didCompleteResponse.call(_this,args[0],args[1]);}));}},{key:'_didUploadProgress',value:
-
-
-
-function _didUploadProgress(requestId,progress,total){
-if(requestId === this._requestId && this.upload.onprogress){
-var event={
-lengthComputable:true,
-loaded:progress,
-total:total};
-
-this.upload.onprogress(event);}}},{key:'_didReceiveResponse',value:
-
-
-
-function _didReceiveResponse(requestId,status,responseHeaders){
-if(requestId === this._requestId){
-this.status = status;
-this.setResponseHeaders(responseHeaders);
-this.setReadyState(this.HEADERS_RECEIVED);}}},{key:'_didReceiveData',value:
-
-
-
-function _didReceiveData(requestId,responseText){
-if(requestId === this._requestId){
-if(!this.responseText){
-this.responseText = responseText;}else 
-{
-this.responseText += responseText;}
-
-this.setReadyState(this.LOADING);}}},{key:'_didCompleteResponse',value:
-
-
-
-function _didCompleteResponse(requestId,error){
-if(requestId === this._requestId){
-if(error){
-this.responseText = error;}
-
-this._clearSubscriptions();
-this._requestId = null;
-this.setReadyState(this.DONE);}}},{key:'_clearSubscriptions',value:
-
-
-
-function _clearSubscriptions(){
-for(var i=0;i < this._subscriptions.length;i++) {
-var sub=this._subscriptions[i];
-sub.remove();}
-
-this._subscriptions = [];}},{key:'sendImpl',value:
+this._requestId = null;}_createClass(XMLHttpRequest,[{key:'sendImpl',value:
 
 
 function sendImpl(method,url,headers,data){
+var body;
 if(typeof data === 'string'){
-data = {string:data};}else 
+body = {string:data};}else 
 if(data instanceof FormData){
-data = {formData:data.getParts()};}
+body = {
+formData:data.getParts().map(function(part){
+part.headers = convertHeadersMapToArray(part.headers);
+return part;})};}else 
 
-RCTNetworking.sendRequest(
+
 {
-method:method,
-url:url,
-data:data,
-headers:headers,
-incrementalUpdates:this.onreadystatechange?true:false},
+body = data;}
 
-this._didCreateRequest.bind(this));}},{key:'abortImpl',value:
+
+this._requestId = RCTNetworking.sendRequest(
+method,
+url,
+convertHeadersMapToArray(headers),
+body,
+this.callback.bind(this));}},{key:'abortImpl',value:
 
 
 
 function abortImpl(){
-if(this._requestId){
-RCTNetworking.cancelRequest(this._requestId);
-this._clearSubscriptions();
-this._requestId = null;}}}]);return XMLHttpRequest;})(XMLHttpRequestBase);
-
+this._requestId && RCTNetworking.abortRequest(this._requestId);}}]);return XMLHttpRequest;})(XMLHttpRequestBase);
 
 
 
@@ -13730,6 +13705,52 @@ return _extends({},value,{headers:headers,fieldName:name});});}}]);return FormDa
 
 
 module.exports = FormData;
+});
+__d('RCTNetworking',["NativeModules"],function(global, require, module, exports) {  'use strict';var _createClass=(function(){function defineProperties(target,props){for(var i=0;i < props.length;i++) {var descriptor=props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if('value' in descriptor)descriptor.writable = true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};})();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function');}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+var RCTNetworkingNative=require('NativeModules').Networking;
+
+var _requestId=1;
+var generateRequestId=function(){
+return _requestId++;};var 
+
+
+
+
+
+
+RCTNetworking=(function(){function RCTNetworking(){_classCallCheck(this,RCTNetworking);}_createClass(RCTNetworking,null,[{key:'sendRequest',value:
+
+function sendRequest(method,url,headers,data,callback){
+var requestId=generateRequestId();
+RCTNetworkingNative.sendRequest(
+method,
+url,
+requestId,
+headers,
+data,
+callback);
+return requestId;}},{key:'abortRequest',value:
+
+
+function abortRequest(requestId){
+RCTNetworkingNative.abortRequest(requestId);}}]);return RCTNetworking;})();
+
+
+
+module.exports = RCTNetworking;
 });
 __d('XMLHttpRequestBase',[],function(global, require, module, exports) {  'use strict';var _createClass=(function(){function defineProperties(target,props){for(var i=0;i < props.length;i++) {var descriptor=props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if('value' in descriptor)descriptor.writable = true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};})();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function');}}var 
 
@@ -14470,7 +14491,7 @@ console.error.apply(console,arguments);}};
 
 module.exports = logError;
 });
-__d('WebSocket',["RCTDeviceEventEmitter","NativeModules","WebSocketBase"],function(global, require, module, exports) {  'use strict';var _createClass=(function(){function defineProperties(target,props){for(var i=0;i < props.length;i++) {var descriptor=props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if('value' in descriptor)descriptor.writable = true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};})();var _get=function get(object,property,receiver){if(object === null)object = Function.prototype;var desc=Object.getOwnPropertyDescriptor(object,property);if(desc === undefined){var parent=Object.getPrototypeOf(object);if(parent === null){return undefined;}else {return get(parent,property,receiver);}}else if('value' in desc){return desc.value;}else {var getter=desc.get;if(getter === undefined){return undefined;}return getter.call(receiver);}};function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function');}}function _inherits(subClass,superClass){if(typeof superClass !== 'function' && superClass !== null){throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__ = superClass;}
+__d('WebSocket',["WebSocketBase"],function(global, require, module, exports) {  'use strict';var _createClass=(function(){function defineProperties(target,props){for(var i=0;i < props.length;i++) {var descriptor=props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if('value' in descriptor)descriptor.writable = true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};})();var _get=function get(object,property,receiver){if(object === null)object = Function.prototype;var desc=Object.getOwnPropertyDescriptor(object,property);if(desc === undefined){var parent=Object.getPrototypeOf(object);if(parent === null){return undefined;}else {return get(parent,property,receiver);}}else if('value' in desc){return desc.value;}else {var getter=desc.get;if(getter === undefined){return undefined;}return getter.call(receiver);}};function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function');}}function _inherits(subClass,superClass){if(typeof superClass !== 'function' && superClass !== null){throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__ = superClass;}
 
 
 
@@ -14483,93 +14504,28 @@ __d('WebSocket',["RCTDeviceEventEmitter","NativeModules","WebSocketBase"],functi
 
 
 
-var RCTDeviceEventEmitter=require('RCTDeviceEventEmitter');
-var RCTWebSocketManager=require('NativeModules').WebSocketManager;
-
-var WebSocketBase=require('WebSocketBase');
-
-var WebSocketId=0;var 
+var WebSocketBase=require('WebSocketBase');var 
 
 WebSocket=(function(_WebSocketBase){_inherits(WebSocket,_WebSocketBase);function WebSocket(){_classCallCheck(this,WebSocket);_get(Object.getPrototypeOf(WebSocket.prototype),'constructor',this).apply(this,arguments);}_createClass(WebSocket,[{key:'connectToSocketImpl',value:
 
-
-
 function connectToSocketImpl(url){
-this._socketId = WebSocketId++;
-RCTWebSocketManager.connect(url,this._socketId);
-this._registerEvents(this._socketId);}},{key:'closeConnectionImpl',value:
+console.warn('WebSocket is not yet supported on Android');}},{key:'closeConnectionImpl',value:
 
 
 function closeConnectionImpl(){
-RCTWebSocketManager.close(this._socketId);}},{key:'cancelConnectionImpl',value:
+console.warn('WebSocket is not yet supported on Android');}},{key:'cancelConnectionImpl',value:
 
 
 function cancelConnectionImpl(){
-RCTWebSocketManager.close(this._socketId);}},{key:'sendStringImpl',value:
+console.warn('WebSocket is not yet supported on Android');}},{key:'sendStringImpl',value:
 
 
 function sendStringImpl(message){
-RCTWebSocketManager.send(message,this._socketId);}},{key:'sendArrayBufferImpl',value:
+console.warn('WebSocket is not yet supported on Android');}},{key:'sendArrayBufferImpl',value:
 
 
 function sendArrayBufferImpl(){
-
-console.warn('Sending ArrayBuffers is not yet supported');}},{key:'_unregisterEvents',value:
-
-
-function _unregisterEvents(){
-this._subs.forEach(function(e){return e.remove();});
-this._subs = [];}},{key:'_registerEvents',value:
-
-
-function _registerEvents(id){
-this._subs = [
-RCTDeviceEventEmitter.addListener(
-'websocketMessage',
-(function(ev){
-if(ev.id !== id){
-return;}
-
-this.onmessage && this.onmessage({
-data:ev.data});}).
-
-bind(this)),
-
-RCTDeviceEventEmitter.addListener(
-'websocketOpen',
-(function(ev){
-if(ev.id !== id){
-return;}
-
-this.readyState = this.OPEN;
-this.onopen && this.onopen();}).
-bind(this)),
-
-RCTDeviceEventEmitter.addListener(
-'websocketClosed',
-(function(ev){
-if(ev.id !== id){
-return;}
-
-this.readyState = this.CLOSED;
-this.onclose && this.onclose(ev);
-this._unregisterEvents();
-RCTWebSocketManager.close(id);}).
-bind(this)),
-
-RCTDeviceEventEmitter.addListener(
-'websocketFailed',
-(function(ev){
-if(ev.id !== id){
-return;}
-
-this.onerror && this.onerror(new Error(ev.message));
-this._unregisterEvents();
-RCTWebSocketManager.close(id);}).
-bind(this))];}}]);return WebSocket;})(WebSocketBase);
-
-
-
+console.warn('WebSocket is not yet supported on Android');}}]);return WebSocket;})(WebSocketBase);
 
 
 
@@ -24097,7 +24053,7 @@ return children;}
 
 module.exports = onlyChild;
 });
-__d('ActivityIndicatorIOS',["NativeMethodsMixin","ReactPropTypes","React","StyleSheet","View","requireNativeComponent"],function(global, require, module, exports) {  'use strict';function _objectWithoutProperties(obj,keys){var target={};for(var i in obj) {if(keys.indexOf(i) >= 0)continue;if(!Object.prototype.hasOwnProperty.call(obj,i))continue;target[i] = obj[i];}return target;}
+__d('ActivityIndicatorIOS',["React","View"],function(global, require, module, exports) {  'use strict';
 
 
 
@@ -24109,246 +24065,16 @@ __d('ActivityIndicatorIOS',["NativeMethodsMixin","ReactPropTypes","React","Style
 
 
 
-
-var NativeMethodsMixin=require('NativeMethodsMixin');
-var PropTypes=require('ReactPropTypes');
 var React=require('React');
-var StyleSheet=require('StyleSheet');
 var View=require('View');
 
-var requireNativeComponent=require('requireNativeComponent');
-
-var GRAY='#999999';
-
-
-
-
-
-
-
-
 var ActivityIndicatorIOS=React.createClass({displayName:'ActivityIndicatorIOS',
-mixins:[NativeMethodsMixin],
+render:function(){
+return React.createElement(View,this.props);}});
 
-propTypes:{
-
-
-
-animating:PropTypes.bool,
-
-
-
-color:PropTypes.string,
-
-
-
-hidesWhenStopped:PropTypes.bool,
-
-
-
-size:PropTypes.oneOf([
-'small',
-'large']),
-
-
-
-
-
-
-onLayout:PropTypes.func},
-
-
-getDefaultProps:function(){
-return {
-animating:true,
-color:GRAY,
-hidesWhenStopped:true,
-size:'small'};},
-
-
-
-render:function(){var _props=
-this.props;var onLayout=_props.onLayout;var style=_props.style;var props=_objectWithoutProperties(_props,['onLayout','style']);
-var sizeStyle=this.props.size === 'large'?styles.sizeLarge:styles.sizeSmall;
-return (
-React.createElement(View,{
-onLayout:onLayout,
-style:[styles.container,sizeStyle,style]},
-React.createElement(RCTActivityIndicatorView,props)));}});
-
-
-
-
-
-var styles=StyleSheet.create({
-container:{
-alignItems:'center',
-justifyContent:'center'},
-
-sizeSmall:{
-width:20,
-height:20},
-
-sizeLarge:{
-width:36,
-height:36}});
-
-
-
-var RCTActivityIndicatorView=requireNativeComponent(
-'RCTActivityIndicatorView',
-ActivityIndicatorIOS,
-{nativeOnly:{activityIndicatorViewStyle:true}});
 
 
 module.exports = ActivityIndicatorIOS;
-});
-__d('StyleSheet',["StyleSheetRegistry","StyleSheetValidation"],function(global, require, module, exports) {  'use strict';var _createClass=(function(){function defineProperties(target,props){for(var i=0;i < props.length;i++) {var descriptor=props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if('value' in descriptor)descriptor.writable = true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};})();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function');}}
-
-
-
-
-
-
-
-
-
-
-
-
-var StyleSheetRegistry=require('StyleSheetRegistry');
-var StyleSheetValidation=require('StyleSheetValidation');var 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-StyleSheet=(function(){function StyleSheet(){_classCallCheck(this,StyleSheet);}_createClass(StyleSheet,null,[{key:'create',value:
-function create(obj){
-var result={};
-for(var key in obj) {
-StyleSheetValidation.validateStyle(key,obj);
-result[key] = StyleSheetRegistry.registerStyle(obj[key]);}
-
-return result;}}]);return StyleSheet;})();
-
-
-
-module.exports = StyleSheet;
-});
-__d('StyleSheetValidation',["ImageStylePropTypes","ReactPropTypeLocations","TextStylePropTypes","ViewStylePropTypes","invariant"],function(global, require, module, exports) {  'use strict';var _createClass=(function(){function defineProperties(target,props){for(var i=0;i < props.length;i++) {var descriptor=props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if('value' in descriptor)descriptor.writable = true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};})();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function');}}
-
-
-
-
-
-
-
-
-
-
-
-
-var ImageStylePropTypes=require('ImageStylePropTypes');
-var ReactPropTypeLocations=require('ReactPropTypeLocations');
-var TextStylePropTypes=require('TextStylePropTypes');
-var ViewStylePropTypes=require('ViewStylePropTypes');
-
-var invariant=require('invariant');var 
-
-StyleSheetValidation=(function(){function StyleSheetValidation(){_classCallCheck(this,StyleSheetValidation);}_createClass(StyleSheetValidation,null,[{key:'validateStyleProp',value:
-function validateStyleProp(prop,style,caller){
-if(!__DEV__){
-return;}
-
-if(allStylePropTypes[prop] === undefined){
-var message1='"' + prop + '" is not a valid style property.';
-var message2='\nValid style props: ' + 
-JSON.stringify(Object.keys(allStylePropTypes).sort(),null,'  ');
-styleError(message1,style,caller,message2);}
-
-var error=allStylePropTypes[prop](
-style,
-prop,
-caller,
-ReactPropTypeLocations.prop);
-
-if(error){
-styleError(error.message,style,caller);}}},{key:'validateStyle',value:
-
-
-
-function validateStyle(name,styles){
-if(!__DEV__){
-return;}
-
-for(var prop in styles[name]) {
-StyleSheetValidation.validateStyleProp(prop,styles[name],'StyleSheet ' + name);}}},{key:'addValidStylePropTypes',value:
-
-
-
-function addValidStylePropTypes(stylePropTypes){
-for(var key in stylePropTypes) {
-allStylePropTypes[key] = stylePropTypes[key];}}}]);return StyleSheetValidation;})();
-
-
-
-
-var styleError=function(message1,style,caller,message2){
-invariant(
-false,
-message1 + '\n' + (caller || '<<unknown>>') + ': ' + 
-JSON.stringify(style,null,'  ') + (message2 || ''));};
-
-
-
-var allStylePropTypes={};
-
-StyleSheetValidation.addValidStylePropTypes(ImageStylePropTypes);
-StyleSheetValidation.addValidStylePropTypes(TextStylePropTypes);
-StyleSheetValidation.addValidStylePropTypes(ViewStylePropTypes);
-
-module.exports = StyleSheetValidation;
 });
 __d('View',["NativeMethodsMixin","ReactPropTypes","NativeModules","React","ReactNativeStyleAttributes","ReactNativeViewAttributes","StyleSheetPropType","ViewStylePropTypes","createReactNativeComponentClass"],function(global, require, module, exports) {  'use strict';
 
@@ -24852,172 +24578,11 @@ return chainedCheckType;}
 
 module.exports = createStrictShapeTypeChecker;
 });
-__d('requireNativeComponent',["verifyPropTypes","NativeModules","UnimplementedView","createReactNativeComponentClass","insetsDiffer","pointsDiffer","matricesDiffer","processColor","sizesDiffer","verifyPropTypes","warning"],function(global, require, module, exports) {  var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
+__d('DatePickerIOS',["React","StyleSheet","Text","View"],function(global, require, module, exports) {  'use strict';
 
 
 
 
-
-
-
-
-
-
-'use strict';
-
-var RCTUIManager=require('NativeModules').UIManager;
-var UnimplementedView=require('UnimplementedView');
-
-var createReactNativeComponentClass=require('createReactNativeComponentClass');
-var insetsDiffer=require('insetsDiffer');
-var pointsDiffer=require('pointsDiffer');
-var matricesDiffer=require('matricesDiffer');
-var processColor=require('processColor');
-var sizesDiffer=require('sizesDiffer');
-var verifyPropTypes=require('verifyPropTypes');
-var warning=require('warning');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function requireNativeComponent(
-viewName,
-componentInterface,
-extraConfig)
-{
-var viewConfig=RCTUIManager[viewName];
-if(!viewConfig || !viewConfig.NativeProps){
-warning(false,'Native component for "%s" does not exist',viewName);
-return UnimplementedView;}
-
-var nativeProps=_extends({},
-RCTUIManager.RCTView.NativeProps,
-viewConfig.NativeProps);
-
-viewConfig.uiViewClassName = viewName;
-viewConfig.validAttributes = {};
-viewConfig.propTypes = componentInterface && componentInterface.propTypes;
-for(var key in nativeProps) {
-var useAttribute=false;
-var attribute={};
-
-var differ=TypeToDifferMap[nativeProps[key]];
-if(differ){
-attribute.diff = differ;
-useAttribute = true;}
-
-
-var processor=TypeToProcessorMap[nativeProps[key]];
-if(processor){
-attribute.process = processor;
-useAttribute = true;}
-
-
-viewConfig.validAttributes[key] = useAttribute?attribute:true;}
-
-if(__DEV__){
-componentInterface && verifyPropTypes(
-componentInterface,
-viewConfig,
-extraConfig && extraConfig.nativeOnly);}
-
-
-return createReactNativeComponentClass(viewConfig);}
-
-
-var TypeToDifferMap={
-
-CATransform3D:matricesDiffer,
-CGPoint:pointsDiffer,
-CGSize:sizesDiffer,
-UIEdgeInsets:insetsDiffer};
-
-
-
-
-var TypeToProcessorMap={
-
-CGColor:processColor,
-CGColorArray:processColor,
-UIColor:processColor,
-UIColorArray:processColor,
-
-Color:processColor};
-
-
-module.exports = requireNativeComponent;
-});
-__d('verifyPropTypes',["ReactNativeStyleAttributes","View"],function(global, require, module, exports) {  'use strict';Object.defineProperty(exports,'__esModule',{value:true});
-
-
-
-
-
-
-
-
-
-
-
-
-var ReactNativeStyleAttributes=require('ReactNativeStyleAttributes');
-var View=require('View');
-
-
-
-
-
-
-
-function verifyPropTypes(
-componentInterface,
-viewConfig,
-nativePropsToIgnore)
-{
-if(!viewConfig){
-return;}
-
-var componentName=componentInterface.name || 
-componentInterface.displayName || 
-'unknown';
-if(!componentInterface.propTypes){
-throw new Error(
-'`' + componentName + '` has no propTypes defined`');}
-
-
-
-var nativeProps=viewConfig.NativeProps;
-for(var prop in nativeProps) {
-if(!componentInterface.propTypes[prop] && 
-!View.propTypes[prop] && 
-!ReactNativeStyleAttributes[prop] && (
-!nativePropsToIgnore || !nativePropsToIgnore[prop])){
-throw new Error(
-'`' + componentName + '` has no propType for native prop `' + 
-viewConfig.uiViewClassName + '.' + prop + '` of native type `' + 
-nativeProps[prop] + '`');}}}
-
-
-
-
-
-module.exports = verifyPropTypes;
-});
-__d('UnimplementedView',["React","StyleSheet","View"],function(global, require, module, exports) {  'use strict';
 
 
 
@@ -25028,34 +24593,53 @@ __d('UnimplementedView',["React","StyleSheet","View"],function(global, require, 
 
 var React=require('React');
 var StyleSheet=require('StyleSheet');
+var Text=require('Text');
 var View=require('View');
 
-var UnimplementedView=React.createClass({displayName:'UnimplementedView',
-setNativeProps:function(){},
-
-
-
-
+var DummyDatePickerIOS=React.createClass({displayName:'DummyDatePickerIOS',
 render:function(){
 return (
-React.createElement(View,{style:[styles.unimplementedView,this.props.style]},
-this.props.children));}});
+React.createElement(View,{style:[styles.dummyDatePickerIOS,this.props.style]},
+React.createElement(Text,{style:styles.datePickerText},'DatePickerIOS is not supported on this platform!')));}});
 
 
 
 
 
 var styles=StyleSheet.create({
-unimplementedView:{
+dummyDatePickerIOS:{
+height:100,
+width:300,
+backgroundColor:'#ffbcbc',
 borderWidth:1,
 borderColor:'red',
-alignSelf:'flex-start'}});
+alignItems:'center',
+justifyContent:'center',
+margin:10},
+
+datePickerText:{
+color:'#333333',
+margin:20}});
 
 
 
-module.exports = UnimplementedView;
+module.exports = DummyDatePickerIOS;
 });
-__d('insetsDiffer',[],function(global, require, module, exports) {  'use strict';
+__d('StyleSheet',["StyleSheetRegistry","StyleSheetValidation"],function(global, require, module, exports) {  'use strict';var _createClass=(function(){function defineProperties(target,props){for(var i=0;i < props.length;i++) {var descriptor=props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if('value' in descriptor)descriptor.writable = true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};})();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function');}}
+
+
+
+
+
+
+
+
+
+
+
+
+var StyleSheetRegistry=require('StyleSheetRegistry');
+var StyleSheetValidation=require('StyleSheetValidation');var 
 
 
 
@@ -25075,30 +24659,46 @@ __d('insetsDiffer',[],function(global, require, module, exports) {  'use strict'
 
 
 
-var dummyInsets={
-top:undefined,
-left:undefined,
-right:undefined,
-bottom:undefined};
-
-
-var insetsDiffer=function(
-one,
-two)
-{
-one = one || dummyInsets;
-two = two || dummyInsets;
-return one !== two && (
-one.top !== two.top || 
-one.left !== two.left || 
-one.right !== two.right || 
-one.bottom !== two.bottom);};
 
 
 
-module.exports = insetsDiffer;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+StyleSheet=(function(){function StyleSheet(){_classCallCheck(this,StyleSheet);}_createClass(StyleSheet,null,[{key:'create',value:
+function create(obj){
+var result={};
+for(var key in obj) {
+StyleSheetValidation.validateStyle(key,obj);
+result[key] = StyleSheetRegistry.registerStyle(obj[key]);}
+
+return result;}}]);return StyleSheet;})();
+
+
+
+module.exports = StyleSheet;
 });
-__d('pointsDiffer',[],function(global, require, module, exports) {  'use strict';
+__d('StyleSheetValidation',["ImageStylePropTypes","ReactPropTypeLocations","TextStylePropTypes","ViewStylePropTypes","invariant"],function(global, require, module, exports) {  'use strict';var _createClass=(function(){function defineProperties(target,props){for(var i=0;i < props.length;i++) {var descriptor=props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if('value' in descriptor)descriptor.writable = true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};})();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function');}}
 
 
 
@@ -25111,27 +24711,68 @@ __d('pointsDiffer',[],function(global, require, module, exports) {  'use strict'
 
 
 
+var ImageStylePropTypes=require('ImageStylePropTypes');
+var ReactPropTypeLocations=require('ReactPropTypeLocations');
+var TextStylePropTypes=require('TextStylePropTypes');
+var ViewStylePropTypes=require('ViewStylePropTypes');
+
+var invariant=require('invariant');var 
+
+StyleSheetValidation=(function(){function StyleSheetValidation(){_classCallCheck(this,StyleSheetValidation);}_createClass(StyleSheetValidation,null,[{key:'validateStyleProp',value:
+function validateStyleProp(prop,style,caller){
+if(!__DEV__){
+return;}
+
+if(allStylePropTypes[prop] === undefined){
+var message1='"' + prop + '" is not a valid style property.';
+var message2='\nValid style props: ' + 
+JSON.stringify(Object.keys(allStylePropTypes).sort(),null,'  ');
+styleError(message1,style,caller,message2);}
+
+var error=allStylePropTypes[prop](
+style,
+prop,
+caller,
+ReactPropTypeLocations.prop);
+
+if(error){
+styleError(error.message,style,caller);}}},{key:'validateStyle',value:
+
+
+
+function validateStyle(name,styles){
+if(!__DEV__){
+return;}
+
+for(var prop in styles[name]) {
+StyleSheetValidation.validateStyleProp(prop,styles[name],'StyleSheet ' + name);}}},{key:'addValidStylePropTypes',value:
+
+
+
+function addValidStylePropTypes(stylePropTypes){
+for(var key in stylePropTypes) {
+allStylePropTypes[key] = stylePropTypes[key];}}}]);return StyleSheetValidation;})();
 
 
 
 
-
-var dummyPoint={x:undefined,y:undefined};
-
-var pointsDiffer=function(one,two){
-one = one || dummyPoint;
-two = two || dummyPoint;
-return one !== two && (
-one.x !== two.x || 
-one.y !== two.y);};
+var styleError=function(message1,style,caller,message2){
+invariant(
+false,
+message1 + '\n' + (caller || '<<unknown>>') + ': ' + 
+JSON.stringify(style,null,'  ') + (message2 || ''));};
 
 
 
-module.exports = pointsDiffer;
+var allStylePropTypes={};
+
+StyleSheetValidation.addValidStylePropTypes(ImageStylePropTypes);
+StyleSheetValidation.addValidStylePropTypes(TextStylePropTypes);
+StyleSheetValidation.addValidStylePropTypes(ViewStylePropTypes);
+
+module.exports = StyleSheetValidation;
 });
-__d('DatePickerIOS',["NativeMethodsMixin","ReactPropTypes","React","NativeModules","StyleSheet","View","requireNativeComponent"],function(global, require, module, exports) {  'use strict';
-
-
+__d('Text',["NativeMethodsMixin","Platform","React","ReactInstanceMap","ReactNativeViewAttributes","StyleSheetPropType","TextStylePropTypes","Touchable","createReactNativeComponentClass","merge"],function(global, require, module, exports) {  'use strict';
 
 
 
@@ -25145,144 +24786,1309 @@ __d('DatePickerIOS',["NativeMethodsMixin","ReactPropTypes","React","NativeModule
 
 
 var NativeMethodsMixin=require('NativeMethodsMixin');
-var PropTypes=require('ReactPropTypes');
+var Platform=require('Platform');
 var React=require('React');
-var RCTDatePickerIOSConsts=require('NativeModules').UIManager.RCTDatePicker.Constants;
-var StyleSheet=require('StyleSheet');
-var View=require('View');
+var ReactInstanceMap=require('ReactInstanceMap');
+var ReactNativeViewAttributes=require('ReactNativeViewAttributes');
+var StyleSheetPropType=require('StyleSheetPropType');
+var TextStylePropTypes=require('TextStylePropTypes');
+var Touchable=require('Touchable');
 
-var requireNativeComponent=require('requireNativeComponent');
+var createReactNativeComponentClass=
+require('createReactNativeComponentClass');
+var merge=require('merge');
 
-var DATEPICKER='datepicker';
+var stylePropType=StyleSheetPropType(TextStylePropTypes);
 
+var viewConfig={
+validAttributes:merge(ReactNativeViewAttributes.UIView,{
+isHighlighted:true,
+numberOfLines:true,
+allowFontScaling:true}),
 
-
-
-
-
-
-
-
-
-
-
+uiViewClassName:'RCTText'};
 
 
-var DatePickerIOS=React.createClass({displayName:'DatePickerIOS',
-mixins:[NativeMethodsMixin],
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var Text=React.createClass({displayName:'Text',
+
+mixins:[Touchable.Mixin,NativeMethodsMixin],
 
 propTypes:{
 
 
 
-date:PropTypes.instanceOf(Date).isRequired,
+
+
+numberOfLines:React.PropTypes.number,
 
 
 
 
 
+onLayout:React.PropTypes.func,
 
 
 
-onDateChange:PropTypes.func.isRequired,
-
-
-
-
-
-
-maximumDate:PropTypes.instanceOf(Date),
+onPress:React.PropTypes.func,
 
 
 
 
 
-
-minimumDate:PropTypes.instanceOf(Date),
-
-
-
-
-mode:PropTypes.oneOf(['date','time','datetime']),
+suppressHighlighting:React.PropTypes.bool,
+style:stylePropType,
 
 
 
-
-minuteInterval:PropTypes.oneOf([1,2,3,4,5,6,10,12,15,20,30]),
-
+testID:React.PropTypes.string,
 
 
 
+allowFontScaling:React.PropTypes.bool},
 
 
+viewConfig:viewConfig,
 
+getInitialState:function(){
+return merge(this.touchableGetInitialState(),{
+isHighlighted:false});},
 
-timeZoneOffsetInMinutes:PropTypes.number},
 
 
 getDefaultProps:function(){
 return {
-mode:'datetime'};},
+allowFontScaling:true};},
 
 
 
-_onChange:function(event){
-var nativeTimeStamp=event.nativeEvent.timestamp;
-this.props.onDateChange && this.props.onDateChange(
-new Date(nativeTimeStamp));
-
-this.props.onChange && this.props.onChange(event);
-
+onStartShouldSetResponder:function(){
+var shouldSetFromProps=this.props.onStartShouldSetResponder && 
+this.props.onStartShouldSetResponder();
+return shouldSetFromProps || !!this.props.onPress;},
 
 
 
 
-var propsTimeStamp=this.props.date.getTime();
-if(nativeTimeStamp !== propsTimeStamp){
-this.refs[DATEPICKER].setNativeProps({
-date:propsTimeStamp});}},
+
+handleResponderTerminationRequest:function(){
 
 
+var allowTermination=this.touchableHandleResponderTerminationRequest();
+if(allowTermination && this.props.onResponderTerminationRequest){
+allowTermination = this.props.onResponderTerminationRequest();}
+
+return allowTermination;},
+
+
+handleResponderGrant:function(e,dispatchID){
+this.touchableHandleResponderGrant(e,dispatchID);
+this.props.onResponderGrant && 
+this.props.onResponderGrant.apply(this,arguments);},
+
+
+handleResponderMove:function(e){
+this.touchableHandleResponderMove(e);
+this.props.onResponderMove && 
+this.props.onResponderMove.apply(this,arguments);},
+
+
+handleResponderRelease:function(e){
+this.touchableHandleResponderRelease(e);
+this.props.onResponderRelease && 
+this.props.onResponderRelease.apply(this,arguments);},
+
+
+handleResponderTerminate:function(e){
+this.touchableHandleResponderTerminate(e);
+this.props.onResponderTerminate && 
+this.props.onResponderTerminate.apply(this,arguments);},
+
+
+touchableHandleActivePressIn:function(){
+if(this.props.suppressHighlighting || !this.props.onPress){
+return;}
+
+this.setState({
+isHighlighted:true});},
+
+
+
+touchableHandleActivePressOut:function(){
+if(this.props.suppressHighlighting || !this.props.onPress){
+return;}
+
+this.setState({
+isHighlighted:false});},
+
+
+
+touchableHandlePress:function(){
+this.props.onPress && this.props.onPress();},
+
+
+touchableGetPressRectOffset:function(){
+return PRESS_RECT_OFFSET;},
+
+
+getChildContext:function(){
+return {isInAParentText:true};},
+
+
+childContextTypes:{
+isInAParentText:React.PropTypes.bool},
 
 
 render:function(){
-var props=this.props;
+var props={};
+for(var key in this.props) {
+props[key] = this.props[key];}
+
+
+if(props.accessible !== false){
+props.accessible = true;}
+
+props.isHighlighted = this.state.isHighlighted;
+props.onStartShouldSetResponder = this.onStartShouldSetResponder;
+props.onResponderTerminationRequest = 
+this.handleResponderTerminationRequest;
+props.onResponderGrant = this.handleResponderGrant;
+props.onResponderMove = this.handleResponderMove;
+props.onResponderRelease = this.handleResponderRelease;
+props.onResponderTerminate = this.handleResponderTerminate;
+
+
+var context=ReactInstanceMap.get(this)._context;
+if(context.isInAParentText){
+return React.createElement(RCTVirtualText,props);}else 
+{
+return React.createElement(RCTText,props);}}});
+
+
+
+
+
+
+
+
+
+
+
+var PRESS_RECT_OFFSET={top:20,left:20,right:20,bottom:30};
+
+var RCTText=createReactNativeComponentClass(viewConfig);
+var RCTVirtualText=RCTText;
+
+if(Platform.OS === 'android'){
+RCTVirtualText = createReactNativeComponentClass({
+validAttributes:merge(ReactNativeViewAttributes.UIView,{
+isHighlighted:true}),
+
+uiViewClassName:'RCTVirtualText'});}
+
+
+
+module.exports = Text;
+});
+__d('Touchable',["BoundingDimensions","Position","TouchEventUtils","keyMirror","queryLayoutByID"],function(global, require, module, exports) {  'use strict';
+
+
+
+
+
+var BoundingDimensions=require('BoundingDimensions');
+var Position=require('Position');
+var TouchEventUtils=require('TouchEventUtils');
+
+var keyMirror=require('keyMirror');
+var queryLayoutByID=require('queryLayoutByID');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var States=keyMirror({
+NOT_RESPONDER:null,
+RESPONDER_INACTIVE_PRESS_IN:null,
+RESPONDER_INACTIVE_PRESS_OUT:null,
+RESPONDER_ACTIVE_PRESS_IN:null,
+RESPONDER_ACTIVE_PRESS_OUT:null,
+RESPONDER_ACTIVE_LONG_PRESS_IN:null,
+RESPONDER_ACTIVE_LONG_PRESS_OUT:null,
+ERROR:null});
+
+
+
+
+
+var IsActive={
+RESPONDER_ACTIVE_PRESS_OUT:true,
+RESPONDER_ACTIVE_PRESS_IN:true};
+
+
+
+
+
+
+var IsPressingIn={
+RESPONDER_INACTIVE_PRESS_IN:true,
+RESPONDER_ACTIVE_PRESS_IN:true,
+RESPONDER_ACTIVE_LONG_PRESS_IN:true};
+
+
+var IsLongPressingIn={
+RESPONDER_ACTIVE_LONG_PRESS_IN:true};
+
+
+
+
+
+var Signals=keyMirror({
+DELAY:null,
+RESPONDER_GRANT:null,
+RESPONDER_RELEASE:null,
+RESPONDER_TERMINATED:null,
+ENTER_PRESS_RECT:null,
+LEAVE_PRESS_RECT:null,
+LONG_PRESS_DETECTED:null});
+
+
+
+
+
+var Transitions={
+NOT_RESPONDER:{
+DELAY:States.ERROR,
+RESPONDER_GRANT:States.RESPONDER_INACTIVE_PRESS_IN,
+RESPONDER_RELEASE:States.ERROR,
+RESPONDER_TERMINATED:States.ERROR,
+ENTER_PRESS_RECT:States.ERROR,
+LEAVE_PRESS_RECT:States.ERROR,
+LONG_PRESS_DETECTED:States.ERROR},
+
+RESPONDER_INACTIVE_PRESS_IN:{
+DELAY:States.RESPONDER_ACTIVE_PRESS_IN,
+RESPONDER_GRANT:States.ERROR,
+RESPONDER_RELEASE:States.NOT_RESPONDER,
+RESPONDER_TERMINATED:States.NOT_RESPONDER,
+ENTER_PRESS_RECT:States.RESPONDER_INACTIVE_PRESS_IN,
+LEAVE_PRESS_RECT:States.RESPONDER_INACTIVE_PRESS_OUT,
+LONG_PRESS_DETECTED:States.ERROR},
+
+RESPONDER_INACTIVE_PRESS_OUT:{
+DELAY:States.RESPONDER_ACTIVE_PRESS_OUT,
+RESPONDER_GRANT:States.ERROR,
+RESPONDER_RELEASE:States.NOT_RESPONDER,
+RESPONDER_TERMINATED:States.NOT_RESPONDER,
+ENTER_PRESS_RECT:States.RESPONDER_INACTIVE_PRESS_IN,
+LEAVE_PRESS_RECT:States.RESPONDER_INACTIVE_PRESS_OUT,
+LONG_PRESS_DETECTED:States.ERROR},
+
+RESPONDER_ACTIVE_PRESS_IN:{
+DELAY:States.ERROR,
+RESPONDER_GRANT:States.ERROR,
+RESPONDER_RELEASE:States.NOT_RESPONDER,
+RESPONDER_TERMINATED:States.NOT_RESPONDER,
+ENTER_PRESS_RECT:States.RESPONDER_ACTIVE_PRESS_IN,
+LEAVE_PRESS_RECT:States.RESPONDER_ACTIVE_PRESS_OUT,
+LONG_PRESS_DETECTED:States.RESPONDER_ACTIVE_LONG_PRESS_IN},
+
+RESPONDER_ACTIVE_PRESS_OUT:{
+DELAY:States.ERROR,
+RESPONDER_GRANT:States.ERROR,
+RESPONDER_RELEASE:States.NOT_RESPONDER,
+RESPONDER_TERMINATED:States.NOT_RESPONDER,
+ENTER_PRESS_RECT:States.RESPONDER_ACTIVE_PRESS_IN,
+LEAVE_PRESS_RECT:States.RESPONDER_ACTIVE_PRESS_OUT,
+LONG_PRESS_DETECTED:States.ERROR},
+
+RESPONDER_ACTIVE_LONG_PRESS_IN:{
+DELAY:States.ERROR,
+RESPONDER_GRANT:States.ERROR,
+RESPONDER_RELEASE:States.NOT_RESPONDER,
+RESPONDER_TERMINATED:States.NOT_RESPONDER,
+ENTER_PRESS_RECT:States.RESPONDER_ACTIVE_LONG_PRESS_IN,
+LEAVE_PRESS_RECT:States.RESPONDER_ACTIVE_LONG_PRESS_OUT,
+LONG_PRESS_DETECTED:States.RESPONDER_ACTIVE_LONG_PRESS_IN},
+
+RESPONDER_ACTIVE_LONG_PRESS_OUT:{
+DELAY:States.ERROR,
+RESPONDER_GRANT:States.ERROR,
+RESPONDER_RELEASE:States.NOT_RESPONDER,
+RESPONDER_TERMINATED:States.NOT_RESPONDER,
+ENTER_PRESS_RECT:States.RESPONDER_ACTIVE_LONG_PRESS_IN,
+LEAVE_PRESS_RECT:States.RESPONDER_ACTIVE_LONG_PRESS_OUT,
+LONG_PRESS_DETECTED:States.ERROR},
+
+error:{
+DELAY:States.NOT_RESPONDER,
+RESPONDER_GRANT:States.RESPONDER_INACTIVE_PRESS_IN,
+RESPONDER_RELEASE:States.NOT_RESPONDER,
+RESPONDER_TERMINATED:States.NOT_RESPONDER,
+ENTER_PRESS_RECT:States.NOT_RESPONDER,
+LEAVE_PRESS_RECT:States.NOT_RESPONDER,
+LONG_PRESS_DETECTED:States.NOT_RESPONDER}};
+
+
+
+
+
+
+var HIGHLIGHT_DELAY_MS=130;
+
+var PRESS_EXPAND_PX=20;
+
+var LONG_PRESS_THRESHOLD=500;
+
+var LONG_PRESS_DELAY_MS=LONG_PRESS_THRESHOLD - HIGHLIGHT_DELAY_MS;
+
+var LONG_PRESS_ALLOWED_MOVEMENT=10;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var TouchableMixin={
+
+
+
+
+
+
+
+touchableGetInitialState:function(){
+return {
+touchable:{touchState:undefined,responderID:null}};},
+
+
+
+
+
+
+
+touchableHandleResponderTerminationRequest:function(){
+return !this.props.rejectResponderTermination;},
+
+
+
+
+
+touchableHandleStartShouldSetResponder:function(){
+return true;},
+
+
+
+
+
+touchableLongPressCancelsPress:function(){
+return true;},
+
+
+
+
+
+
+
+
+touchableHandleResponderGrant:function(e,dispatchID){
+
+
+
+e.persist();
+
+this.pressOutDelayTimeout && clearTimeout(this.pressOutDelayTimeout);
+this.pressOutDelayTimeout = null;
+
+this.state.touchable.touchState = States.NOT_RESPONDER;
+this.state.touchable.responderID = dispatchID;
+this._receiveSignal(Signals.RESPONDER_GRANT,e);
+var delayMS=
+this.touchableGetHighlightDelayMS !== undefined?
+Math.max(this.touchableGetHighlightDelayMS(),0):HIGHLIGHT_DELAY_MS;
+delayMS = isNaN(delayMS)?HIGHLIGHT_DELAY_MS:delayMS;
+if(delayMS !== 0){
+this.touchableDelayTimeout = setTimeout(
+this._handleDelay.bind(this,e),
+delayMS);}else 
+
+{
+this._handleDelay(e);}
+
+
+var longDelayMS=
+this.touchableGetLongPressDelayMS !== undefined?
+Math.max(this.touchableGetLongPressDelayMS(),10):LONG_PRESS_DELAY_MS;
+longDelayMS = isNaN(longDelayMS)?LONG_PRESS_DELAY_MS:longDelayMS;
+this.longPressDelayTimeout = setTimeout(
+this._handleLongDelay.bind(this,e),
+longDelayMS + delayMS);},
+
+
+
+
+
+
+touchableHandleResponderRelease:function(e){
+this._receiveSignal(Signals.RESPONDER_RELEASE,e);},
+
+
+
+
+
+touchableHandleResponderTerminate:function(e){
+this._receiveSignal(Signals.RESPONDER_TERMINATED,e);},
+
+
+
+
+
+touchableHandleResponderMove:function(e){
+
+
+if(this.state.touchable.touchState === States.RESPONDER_INACTIVE_PRESS_IN){
+return;}
+
+
+
+if(!this.state.touchable.positionOnActivate){
+return;}
+
+
+var positionOnActivate=this.state.touchable.positionOnActivate;
+var dimensionsOnActivate=this.state.touchable.dimensionsOnActivate;
+var pressRectOffset=this.touchableGetPressRectOffset?
+this.touchableGetPressRectOffset():null;
+var pressExpandLeft=
+pressRectOffset.left != null?pressRectOffset.left:PRESS_EXPAND_PX;
+var pressExpandTop=
+pressRectOffset.top != null?pressRectOffset.top:PRESS_EXPAND_PX;
+var pressExpandRight=
+pressRectOffset.right != null?pressRectOffset.right:PRESS_EXPAND_PX;
+var pressExpandBottom=
+pressRectOffset.bottom != null?pressRectOffset.bottom:PRESS_EXPAND_PX;
+
+var touch=TouchEventUtils.extractSingleTouch(e.nativeEvent);
+var pageX=touch && touch.pageX;
+var pageY=touch && touch.pageY;
+
+if(this.pressInLocation){
+var movedDistance=this._getDistanceBetweenPoints(pageX,pageY,this.pressInLocation.pageX,this.pressInLocation.pageY);
+if(movedDistance > LONG_PRESS_ALLOWED_MOVEMENT){
+this._cancelLongPressDelayTimeout();}}
+
+
+
+var isTouchWithinActive=
+pageX > positionOnActivate.left - pressExpandLeft && 
+pageY > positionOnActivate.top - pressExpandTop && 
+pageX < 
+positionOnActivate.left + 
+dimensionsOnActivate.width + 
+pressExpandRight && 
+pageY < 
+positionOnActivate.top + 
+dimensionsOnActivate.height + 
+pressExpandBottom;
+if(isTouchWithinActive){
+this._receiveSignal(Signals.ENTER_PRESS_RECT,e);}else 
+{
+this._cancelLongPressDelayTimeout();
+this._receiveSignal(Signals.LEAVE_PRESS_RECT,e);}},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_remeasureMetricsOnActivation:function(){
+queryLayoutByID(
+this.state.touchable.responderID,
+null,
+this._handleQueryLayout);},
+
+
+
+_handleQueryLayout:function(l,t,w,h,globalX,globalY){
+this.state.touchable.positionOnActivate && 
+Position.release(this.state.touchable.positionOnActivate);
+this.state.touchable.dimensionsOnActivate && 
+BoundingDimensions.release(this.state.touchable.dimensionsOnActivate);
+this.state.touchable.positionOnActivate = Position.getPooled(globalX,globalY);
+this.state.touchable.dimensionsOnActivate = BoundingDimensions.getPooled(w,h);},
+
+
+_handleDelay:function(e){
+this.touchableDelayTimeout = null;
+this._receiveSignal(Signals.DELAY,e);},
+
+
+_handleLongDelay:function(e){
+this.longPressDelayTimeout = null;
+this._receiveSignal(Signals.LONG_PRESS_DETECTED,e);},
+
+
+
+
+
+
+
+
+
+
+_receiveSignal:function(signal,e){
+var curState=this.state.touchable.touchState;
+if(!(Transitions[curState] && Transitions[curState][signal])){
+throw new Error(
+'Unrecognized signal `' + signal + '` or state `' + curState + 
+'` for Touchable responder `' + this.state.touchable.responderID + '`');}
+
+
+var nextState=Transitions[curState][signal];
+if(nextState === States.ERROR){
+throw new Error(
+'Touchable cannot transition from `' + curState + '` to `' + signal + 
+'` for responder `' + this.state.touchable.responderID + '`');}
+
+
+if(curState !== nextState){
+this._performSideEffectsForTransition(curState,nextState,signal,e);
+this.state.touchable.touchState = nextState;}},
+
+
+
+_cancelLongPressDelayTimeout:function(){
+this.longPressDelayTimeout && clearTimeout(this.longPressDelayTimeout);
+this.longPressDelayTimeout = null;},
+
+
+_isHighlight:function(state){
+return state === States.RESPONDER_ACTIVE_PRESS_IN || 
+state === States.RESPONDER_ACTIVE_LONG_PRESS_IN;},
+
+
+_savePressInLocation:function(e){
+var touch=TouchEventUtils.extractSingleTouch(e.nativeEvent);
+var pageX=touch && touch.pageX;
+var pageY=touch && touch.pageY;
+this.pressInLocation = {pageX:pageX,pageY:pageY};},
+
+
+_getDistanceBetweenPoints:function(aX,aY,bX,bY){
+var deltaX=aX - bX;
+var deltaY=aY - bY;
+return Math.sqrt(deltaX * deltaX + deltaY * deltaY);},
+
+
+
+
+
+
+
+
+
+
+
+
+
+_performSideEffectsForTransition:function(curState,nextState,signal,e){
+var curIsHighlight=this._isHighlight(curState);
+var newIsHighlight=this._isHighlight(nextState);
+
+var isFinalSignal=
+signal === Signals.RESPONDER_TERMINATED || 
+signal === Signals.RESPONDER_RELEASE;
+
+if(isFinalSignal){
+this._cancelLongPressDelayTimeout();}
+
+
+if(!IsActive[curState] && IsActive[nextState]){
+this._remeasureMetricsOnActivation();}
+
+
+if(IsPressingIn[curState] && signal === Signals.LONG_PRESS_DETECTED){
+this.touchableHandleLongPress && this.touchableHandleLongPress(e);}
+
+
+if(newIsHighlight && !curIsHighlight){
+this._savePressInLocation(e);
+this.touchableHandleActivePressIn && this.touchableHandleActivePressIn(e);}else 
+if(!newIsHighlight && curIsHighlight && this.touchableHandleActivePressOut){
+if(this.touchableGetPressOutDelayMS && this.touchableGetPressOutDelayMS()){
+this.pressOutDelayTimeout = this.setTimeout(function(){
+this.touchableHandleActivePressOut(e);},
+this.touchableGetPressOutDelayMS());}else 
+{
+this.touchableHandleActivePressOut(e);}}
+
+
+
+if(IsPressingIn[curState] && signal === Signals.RESPONDER_RELEASE){
+var hasLongPressHandler=!!this.props.onLongPress;
+var pressIsLongButStillCallOnPress=
+IsLongPressingIn[curState] && (
+!hasLongPressHandler || 
+!this.touchableLongPressCancelsPress());
+
+
+var shouldInvokePress=!IsLongPressingIn[curState] || pressIsLongButStillCallOnPress;
+if(shouldInvokePress && this.touchableHandlePress){
+this.touchableHandlePress(e);}}
+
+
+
+this.touchableDelayTimeout && clearTimeout(this.touchableDelayTimeout);
+this.touchableDelayTimeout = null;}};
+
+
+
+
+var Touchable={
+Mixin:TouchableMixin};
+
+
+module.exports = Touchable;
+});
+__d('BoundingDimensions',["PooledClass"],function(global, require, module, exports) {  "use strict";
+
+
+
+
+
+var PooledClass=require('PooledClass');
+
+var twoArgumentPooler=PooledClass.twoArgumentPooler;
+
+
+
+
+
+
+
+
+function BoundingDimensions(width,height){
+this.width = width;
+this.height = height;}
+
+
+
+
+
+
+BoundingDimensions.getPooledFromElement = function(element){
+return BoundingDimensions.getPooled(
+element.offsetWidth,
+element.offsetHeight);};
+
+
+
+PooledClass.addPoolingTo(BoundingDimensions,twoArgumentPooler);
+
+module.exports = BoundingDimensions;
+});
+__d('Position',["PooledClass"],function(global, require, module, exports) {  "use strict";
+
+
+
+
+
+var PooledClass=require('PooledClass');
+
+var twoArgumentPooler=PooledClass.twoArgumentPooler;
+
+
+
+
+
+
+
+
+
+function Position(left,top){
+this.left = left;
+this.top = top;}
+
+
+PooledClass.addPoolingTo(Position,twoArgumentPooler);
+
+module.exports = Position;
+});
+__d('TouchEventUtils',[],function(global, require, module, exports) {  var 
+
+
+
+
+
+
+
+
+
+
+TouchEventUtils={
+
+
+
+
+
+
+
+
+
+
+extractSingleTouch:function(nativeEvent){
+var touches=nativeEvent.touches;
+var changedTouches=nativeEvent.changedTouches;
+var hasTouches=touches && touches.length > 0;
+var hasChangedTouches=changedTouches && changedTouches.length > 0;
+
+return !hasTouches && hasChangedTouches?changedTouches[0]:
+hasTouches?touches[0]:
+nativeEvent;}};
+
+
+
+module.exports = TouchEventUtils;
+});
+__d('queryLayoutByID',["ReactNativeTagHandles","NativeModules"],function(global, require, module, exports) {  'use strict';
+
+
+
+
+
+
+
+
+
+
+
+
+var ReactNativeTagHandles=require('ReactNativeTagHandles');
+var RCTUIManager=require('NativeModules').UIManager;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var queryLayoutByID=function(
+rootNodeID,
+onError,
+onSuccess)
+{
+
+RCTUIManager.measure(
+ReactNativeTagHandles.rootNodeIDToTag[rootNodeID],
+onSuccess);};
+
+
+
+module.exports = queryLayoutByID;
+});
+__d('DrawerLayoutAndroid',["NativeModules","NativeMethodsMixin","React","ReactPropTypes","ReactNativeViewAttributes","NativeModules","StyleSheet","View","createReactNativeComponentClass","dismissKeyboard","merge"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
+
+
+
+
+
+
+
+
+
+
+
+var DrawerConsts=require('NativeModules').UIManager.AndroidDrawerLayout.Constants;
+var NativeMethodsMixin=require('NativeMethodsMixin');
+var React=require('React');
+var ReactPropTypes=require('ReactPropTypes');
+var ReactNativeViewAttributes=require('ReactNativeViewAttributes');
+var RCTUIManager=require('NativeModules').UIManager;
+var StyleSheet=require('StyleSheet');
+var View=require('View');
+
+var createReactNativeComponentClass=require('createReactNativeComponentClass');
+var dismissKeyboard=require('dismissKeyboard');
+var merge=require('merge');
+
+var RK_DRAWER_REF='drawerlayout';
+var INNERVIEW_REF='innerView';
+
+var DrawerLayoutValidAttributes={
+drawerWidth:true,
+drawerPosition:true};
+
+
+var DRAWER_STATES=[
+'Idle',
+'Dragging',
+'Settling'];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var DrawerLayoutAndroid=React.createClass({displayName:'DrawerLayoutAndroid',
+statics:{
+positions:DrawerConsts.DrawerPosition},
+
+
+propTypes:{
+
+
+
+
+
+keyboardDismissMode:ReactPropTypes.oneOf([
+'none',
+'on-drag']),
+
+
+
+
+drawerPosition:ReactPropTypes.oneOf([
+DrawerConsts.DrawerPosition.Left,
+DrawerConsts.DrawerPosition.Right]),
+
+
+
+
+
+drawerWidth:ReactPropTypes.number,
+
+
+
+onDrawerSlide:ReactPropTypes.func,
+
+
+
+
+
+
+
+onDrawerStateChanged:ReactPropTypes.func,
+
+
+
+onDrawerOpen:ReactPropTypes.func,
+
+
+
+onDrawerClose:ReactPropTypes.func,
+
+
+
+renderNavigationView:ReactPropTypes.func.isRequired},
+
+
+mixins:[NativeMethodsMixin],
+
+getInnerViewNode:function(){
+return this.refs[INNERVIEW_REF].getInnerViewNode();},
+
+
+render:function(){
+var drawerViewWrapper=
+React.createElement(View,{style:[styles.drawerSubview,{width:this.props.drawerWidth}],collapsable:false},
+this.props.renderNavigationView());
+
+var childrenWrapper=
+React.createElement(View,{ref:INNERVIEW_REF,style:styles.mainSubview,collapsable:false},
+this.props.children);
+
 return (
-React.createElement(View,{style:props.style},
-React.createElement(RCTDatePickerIOS,{
-ref:DATEPICKER,
-style:styles.datePickerIOS,
-date:props.date.getTime(),
-maximumDate:
-props.maximumDate?props.maximumDate.getTime():undefined,
-
-minimumDate:
-props.minimumDate?props.minimumDate.getTime():undefined,
-
-mode:props.mode,
-minuteInterval:props.minuteInterval,
-timeZoneOffsetInMinutes:props.timeZoneOffsetInMinutes,
-onChange:this._onChange})));}});
+React.createElement(AndroidDrawerLayout,_extends({},
+this.props,{
+ref:RK_DRAWER_REF,
+drawerWidth:this.props.drawerWidth,
+drawerPosition:this.props.drawerPosition,
+style:styles.base,
+onDrawerSlide:this._onDrawerSlide,
+onDrawerOpen:this._onDrawerOpen,
+onDrawerClose:this._onDrawerClose,
+onDrawerStateChanged:this._onDrawerStateChanged}),
+childrenWrapper,
+drawerViewWrapper));},
 
 
 
+
+_onDrawerSlide:function(event){
+if(this.props.onDrawerSlide){
+this.props.onDrawerSlide(event);}
+
+if(this.props.keyboardDismissMode === 'on-drag'){
+dismissKeyboard();}},
+
+
+
+_onDrawerOpen:function(){
+if(this.props.onDrawerOpen){
+this.props.onDrawerOpen();}},
+
+
+
+_onDrawerClose:function(){
+if(this.props.onDrawerClose){
+this.props.onDrawerClose();}},
+
+
+
+_onDrawerStateChanged:function(event){
+if(this.props.onDrawerStateChanged){
+this.props.onDrawerStateChanged(DRAWER_STATES[event.nativeEvent.drawerState]);}},
+
+
+
+openDrawer:function(){
+RCTUIManager.dispatchViewManagerCommand(
+this._getDrawerLayoutHandle(),
+RCTUIManager.AndroidDrawerLayout.Commands.openDrawer,
+null);},
+
+
+
+closeDrawer:function(){
+RCTUIManager.dispatchViewManagerCommand(
+this._getDrawerLayoutHandle(),
+RCTUIManager.AndroidDrawerLayout.Commands.closeDrawer,
+null);},
+
+
+
+_getDrawerLayoutHandle:function(){
+return React.findNodeHandle(this.refs[RK_DRAWER_REF]);}});
 
 
 
 var styles=StyleSheet.create({
-datePickerIOS:{
-height:RCTDatePickerIOSConsts.ComponentHeight,
-width:RCTDatePickerIOSConsts.ComponentWidth}});
+base:{
+flex:1},
+
+mainSubview:{
+position:'absolute',
+top:0,
+left:0,
+right:0,
+bottom:0},
+
+drawerSubview:{
+position:'absolute',
+top:0,
+bottom:0}});
 
 
 
-var RCTDatePickerIOS=requireNativeComponent('RCTDatePicker',DatePickerIOS,{
-nativeOnly:{onChange:true}});
+
+var AndroidDrawerLayout=createReactNativeComponentClass({
+validAttributes:merge(ReactNativeViewAttributes.UIView,DrawerLayoutValidAttributes),
+uiViewClassName:'AndroidDrawerLayout'});
 
 
-module.exports = DatePickerIOS;
+module.exports = DrawerLayoutAndroid;
 });
-__d('DrawerLayoutAndroid',["UnimplementedView"],function(global, require, module, exports) {  'use strict';
+__d('dismissKeyboard',["TextInputState"],function(global, require, module, exports) {  'use strict';
 
 
 
@@ -25291,12 +26097,15 @@ __d('DrawerLayoutAndroid',["UnimplementedView"],function(global, require, module
 
 
 
+var TextInputState=require('TextInputState');
+
+function dismissKeyboard(){
+TextInputState.blurTextInput(TextInputState.currentlyFocusedField());}
 
 
-
-module.exports = require('UnimplementedView');
+module.exports = dismissKeyboard;
 });
-__d('Image',["EdgeInsetsPropType","ImageResizeMode","ImageStylePropTypes","NativeMethodsMixin","NativeModules","ReactPropTypes","React","ReactNativeViewAttributes","StyleSheet","StyleSheetPropType","flattenStyle","invariant","requireNativeComponent","resolveAssetSource","warning"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
+__d('Image',["NativeMethodsMixin","NativeModules","ImageResizeMode","ImageStylePropTypes","ReactPropTypes","React","ReactNativeViewAttributes","StyleSheet","StyleSheetPropType","View","createReactNativeComponentClass","flattenStyle","invariant","merge","resolveAssetSource"],function(global, require, module, exports) {  'use strict';
 
 
 
@@ -25309,22 +26118,22 @@ __d('Image',["EdgeInsetsPropType","ImageResizeMode","ImageStylePropTypes","Nativ
 
 
 
-var EdgeInsetsPropType=require('EdgeInsetsPropType');
-var ImageResizeMode=require('ImageResizeMode');
-var ImageStylePropTypes=require('ImageStylePropTypes');
 var NativeMethodsMixin=require('NativeMethodsMixin');
 var NativeModules=require('NativeModules');
+var ImageResizeMode=require('ImageResizeMode');
+var ImageStylePropTypes=require('ImageStylePropTypes');
 var PropTypes=require('ReactPropTypes');
 var React=require('React');
 var ReactNativeViewAttributes=require('ReactNativeViewAttributes');
 var StyleSheet=require('StyleSheet');
 var StyleSheetPropType=require('StyleSheetPropType');
+var View=require('View');
 
+var createReactNativeComponentClass=require('createReactNativeComponentClass');
 var flattenStyle=require('flattenStyle');
 var invariant=require('invariant');
-var requireNativeComponent=require('requireNativeComponent');
+var merge=require('merge');
 var resolveAssetSource=require('resolveAssetSource');
-var warning=require('warning');
 
 
 
@@ -25348,91 +26157,27 @@ var warning=require('warning');
 
 
 
+
+var ImageViewAttributes=merge(ReactNativeViewAttributes.UIView,{
+src:true,
+resizeMode:true});
 
 
 var Image=React.createClass({displayName:'Image',
 propTypes:{
+source:PropTypes.shape({
+
+
+
+
+
+uri:PropTypes.string}).
+isRequired,
 style:StyleSheetPropType(ImageStylePropTypes),
 
 
 
-
-
-source:PropTypes.oneOfType([
-PropTypes.shape({
-uri:PropTypes.string}),
-
-
-PropTypes.number]),
-
-
-
-
-
-
-defaultSource:PropTypes.shape({
-uri:PropTypes.string}),
-
-
-
-
-
-accessible:PropTypes.bool,
-
-
-
-
-
-accessibilityLabel:PropTypes.string,
-
-
-
-
-
-
-
-
-capInsets:EdgeInsetsPropType,
-
-
-
-
-resizeMode:PropTypes.oneOf(['cover','contain','stretch']),
-
-
-
-
-testID:PropTypes.string,
-
-
-
-
-onLayout:PropTypes.func,
-
-
-
-
-onLoadStart:PropTypes.func,
-
-
-
-
-onProgress:PropTypes.func,
-
-
-
-
-onError:PropTypes.func,
-
-
-
-
-onLoad:PropTypes.func,
-
-
-
-
-onLoadEnd:PropTypes.func},
+testID:PropTypes.string},
 
 
 statics:{
@@ -25445,92 +26190,90 @@ mixins:[NativeMethodsMixin],
 
 
 
+
 viewConfig:{
-uiViewClassName:'UIView',
-validAttributes:ReactNativeViewAttributes.UIView},
+uiViewClassName:'RCTView',
+validAttributes:ReactNativeViewAttributes.RKView},
+
+
+_updateViewConfig:function(props){
+if(props.children){
+this.viewConfig = {
+uiViewClassName:'RCTView',
+validAttributes:ReactNativeViewAttributes.RKView};}else 
+
+{
+this.viewConfig = {
+uiViewClassName:'RCTImageView',
+validAttributes:ImageViewAttributes};}},
+
+
+
+
+componentWillMount:function(){
+this._updateViewConfig(this.props);},
+
+
+componentWillReceiveProps:function(nextProps){
+this._updateViewConfig(nextProps);},
 
 
 render:function(){
-for(var prop in cfg.nativeOnly) {
-if(this.props[prop] !== undefined){
-console.warn('Prop `' + prop + ' = ' + this.props[prop] + '` should ' + 
-'not be set directly on Image.');}}
+var source=resolveAssetSource(this.props.source);
+if(source && source.uri){
+var isNetwork=source.uri.match(/^https?:/);
+invariant(
+!(isNetwork && source.isStatic),
+'Static image URIs cannot start with "http": "' + source.uri + '"');var 
 
-
-var source=resolveAssetSource(this.props.source) || {};
-var defaultSource=this.props.defaultSource && resolveAssetSource(this.props.defaultSource) || {};var 
 
 width=source.width;var height=source.height;
-var style=flattenStyle([{width:width,height:height},styles.base,this.props.style]) || {};
+var style=flattenStyle([{width:width,height:height},styles.base,this.props.style]);
 
-var isNetwork=source.uri && source.uri.match(/^https?:/);
-var RawImage=isNetwork?RCTNetworkImageView:RCTImageView;
-var resizeMode=this.props.resizeMode || (style || {}).resizeMode || 'cover';
-var tintColor=(style || {}).tintColor;
-
+var nativeProps=merge(this.props,{
+style:style,
+src:source.uri});
 
 
-if(isNetwork && tintColor){
-RawImage = RCTImageView;}
+if(nativeProps.children){
 
+var imageProps=merge(nativeProps,{
+style:styles.absoluteImage,
+children:undefined});
 
 return (
-React.createElement(RawImage,_extends({},
-this.props,{
-style:style,
-resizeMode:resizeMode,
-tintColor:tintColor,
-src:source.uri,
-defaultImageSrc:defaultSource.uri})));}});
+React.createElement(View,{style:nativeProps.style},
+React.createElement(RKImage,imageProps),
+this.props.children));}else 
 
 
+{
+return React.createElement(RKImage,nativeProps);}}
+
+
+return null;}});
 
 
 
 var styles=StyleSheet.create({
 base:{
-overflow:'hidden'}});
+overflow:'hidden'},
+
+absoluteImage:{
+left:0,
+right:0,
+top:0,
+bottom:0,
+position:'absolute'}});
 
 
 
-var cfg={
-nativeOnly:{
-src:true,
-defaultImageSrc:true,
-imageTag:true,
-progressHandlerRegistered:true}};
+var RKImage=createReactNativeComponentClass({
+validAttributes:ImageViewAttributes,
+uiViewClassName:'RCTImageView'});
 
-
-var RCTImageView=requireNativeComponent('RCTImageView',Image,cfg);
-var RCTNetworkImageView=NativeModules.NetworkImageViewManager?requireNativeComponent('RCTNetworkImageView',Image,cfg):RCTImageView;
 
 module.exports = Image;
-});
-__d('EdgeInsetsPropType',["ReactPropTypes","createStrictShapeTypeChecker"],function(global, require, module, exports) {  'use strict';
-
-
-
-
-
-
-
-
-
-
-
-
-var PropTypes=require('ReactPropTypes');
-
-var createStrictShapeTypeChecker=require('createStrictShapeTypeChecker');
-
-var EdgeInsetsPropType=createStrictShapeTypeChecker({
-top:PropTypes.number,
-left:PropTypes.number,
-bottom:PropTypes.number,
-right:PropTypes.number});
-
-
-module.exports = EdgeInsetsPropType;
 });
 __d('resolveAssetSource',["AssetRegistry","PixelRatio","Platform","NativeModules"],function(global, require, module, exports) {  'use strict';
 
@@ -27384,6 +28127,32 @@ var RCTScrollView=requireNativeComponent('RCTScrollView',ScrollView);}
 
 module.exports = ScrollView;
 });
+__d('EdgeInsetsPropType',["ReactPropTypes","createStrictShapeTypeChecker"],function(global, require, module, exports) {  'use strict';
+
+
+
+
+
+
+
+
+
+
+
+
+var PropTypes=require('ReactPropTypes');
+
+var createStrictShapeTypeChecker=require('createStrictShapeTypeChecker');
+
+var EdgeInsetsPropType=createStrictShapeTypeChecker({
+top:PropTypes.number,
+left:PropTypes.number,
+bottom:PropTypes.number,
+right:PropTypes.number});
+
+
+module.exports = EdgeInsetsPropType;
+});
 __d('PointPropType',["ReactPropTypes","createStrictShapeTypeChecker"],function(global, require, module, exports) {  'use strict';
 
 
@@ -28002,7 +28771,7 @@ eventEmitter.addListener(eventType,listener,context));}};
 
 module.exports = Subscribable;
 });
-__d('dismissKeyboard',["TextInputState"],function(global, require, module, exports) {  'use strict';
+__d('insetsDiffer',[],function(global, require, module, exports) {  'use strict';
 
 
 
@@ -28011,13 +28780,273 @@ __d('dismissKeyboard',["TextInputState"],function(global, require, module, expor
 
 
 
-var TextInputState=require('TextInputState');
-
-function dismissKeyboard(){
-TextInputState.blurTextInput(TextInputState.currentlyFocusedField());}
 
 
-module.exports = dismissKeyboard;
+
+
+
+
+
+
+
+
+
+var dummyInsets={
+top:undefined,
+left:undefined,
+right:undefined,
+bottom:undefined};
+
+
+var insetsDiffer=function(
+one,
+two)
+{
+one = one || dummyInsets;
+two = two || dummyInsets;
+return one !== two && (
+one.top !== two.top || 
+one.left !== two.left || 
+one.right !== two.right || 
+one.bottom !== two.bottom);};
+
+
+
+module.exports = insetsDiffer;
+});
+__d('pointsDiffer',[],function(global, require, module, exports) {  'use strict';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var dummyPoint={x:undefined,y:undefined};
+
+var pointsDiffer=function(one,two){
+one = one || dummyPoint;
+two = two || dummyPoint;
+return one !== two && (
+one.x !== two.x || 
+one.y !== two.y);};
+
+
+
+module.exports = pointsDiffer;
+});
+__d('requireNativeComponent',["verifyPropTypes","NativeModules","UnimplementedView","createReactNativeComponentClass","insetsDiffer","pointsDiffer","matricesDiffer","processColor","sizesDiffer","verifyPropTypes","warning"],function(global, require, module, exports) {  var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
+
+
+
+
+
+
+
+
+
+
+'use strict';
+
+var RCTUIManager=require('NativeModules').UIManager;
+var UnimplementedView=require('UnimplementedView');
+
+var createReactNativeComponentClass=require('createReactNativeComponentClass');
+var insetsDiffer=require('insetsDiffer');
+var pointsDiffer=require('pointsDiffer');
+var matricesDiffer=require('matricesDiffer');
+var processColor=require('processColor');
+var sizesDiffer=require('sizesDiffer');
+var verifyPropTypes=require('verifyPropTypes');
+var warning=require('warning');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function requireNativeComponent(
+viewName,
+componentInterface,
+extraConfig)
+{
+var viewConfig=RCTUIManager[viewName];
+if(!viewConfig || !viewConfig.NativeProps){
+warning(false,'Native component for "%s" does not exist',viewName);
+return UnimplementedView;}
+
+var nativeProps=_extends({},
+RCTUIManager.RCTView.NativeProps,
+viewConfig.NativeProps);
+
+viewConfig.uiViewClassName = viewName;
+viewConfig.validAttributes = {};
+viewConfig.propTypes = componentInterface && componentInterface.propTypes;
+for(var key in nativeProps) {
+var useAttribute=false;
+var attribute={};
+
+var differ=TypeToDifferMap[nativeProps[key]];
+if(differ){
+attribute.diff = differ;
+useAttribute = true;}
+
+
+var processor=TypeToProcessorMap[nativeProps[key]];
+if(processor){
+attribute.process = processor;
+useAttribute = true;}
+
+
+viewConfig.validAttributes[key] = useAttribute?attribute:true;}
+
+if(__DEV__){
+componentInterface && verifyPropTypes(
+componentInterface,
+viewConfig,
+extraConfig && extraConfig.nativeOnly);}
+
+
+return createReactNativeComponentClass(viewConfig);}
+
+
+var TypeToDifferMap={
+
+CATransform3D:matricesDiffer,
+CGPoint:pointsDiffer,
+CGSize:sizesDiffer,
+UIEdgeInsets:insetsDiffer};
+
+
+
+
+var TypeToProcessorMap={
+
+CGColor:processColor,
+CGColorArray:processColor,
+UIColor:processColor,
+UIColorArray:processColor,
+
+Color:processColor};
+
+
+module.exports = requireNativeComponent;
+});
+__d('verifyPropTypes',["ReactNativeStyleAttributes","View"],function(global, require, module, exports) {  'use strict';Object.defineProperty(exports,'__esModule',{value:true});
+
+
+
+
+
+
+
+
+
+
+
+
+var ReactNativeStyleAttributes=require('ReactNativeStyleAttributes');
+var View=require('View');
+
+
+
+
+
+
+
+function verifyPropTypes(
+componentInterface,
+viewConfig,
+nativePropsToIgnore)
+{
+if(!viewConfig){
+return;}
+
+var componentName=componentInterface.name || 
+componentInterface.displayName || 
+'unknown';
+if(!componentInterface.propTypes){
+throw new Error(
+'`' + componentName + '` has no propTypes defined`');}
+
+
+
+var nativeProps=viewConfig.NativeProps;
+for(var prop in nativeProps) {
+if(!componentInterface.propTypes[prop] && 
+!View.propTypes[prop] && 
+!ReactNativeStyleAttributes[prop] && (
+!nativePropsToIgnore || !nativePropsToIgnore[prop])){
+throw new Error(
+'`' + componentName + '` has no propType for native prop `' + 
+viewConfig.uiViewClassName + '.' + prop + '` of native type `' + 
+nativeProps[prop] + '`');}}}
+
+
+
+
+
+module.exports = verifyPropTypes;
+});
+__d('UnimplementedView',["React","StyleSheet","View"],function(global, require, module, exports) {  'use strict';
+
+
+
+
+
+
+
+
+var React=require('React');
+var StyleSheet=require('StyleSheet');
+var View=require('View');
+
+var UnimplementedView=React.createClass({displayName:'UnimplementedView',
+setNativeProps:function(){},
+
+
+
+
+render:function(){
+return (
+React.createElement(View,{style:[styles.unimplementedView,this.props.style]},
+this.props.children));}});
+
+
+
+
+
+var styles=StyleSheet.create({
+unimplementedView:{
+borderWidth:1,
+borderColor:'red',
+alignSelf:'flex-start'}});
+
+
+
+module.exports = UnimplementedView;
 });
 __d('StaticRenderer',["React"],function(global, require, module, exports) {  'use strict';
 
@@ -30272,22 +31301,6 @@ __d('NavigatorBreadcrumbNavigationBarStyles',["Dimensions","NavigatorNavigationB
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 var Dimensions=require('Dimensions');
 var NavigatorNavigationBarStyles=require('NavigatorNavigationBarStyles');
 
@@ -30295,13 +31308,13 @@ var buildStyleInterpolator=require('buildStyleInterpolator');
 var merge=require('merge');
 
 var SCREEN_WIDTH=Dimensions.get('window').width;
-var STATUS_BAR_HEIGHT=NavigatorNavigationBarStyles.General.StatusBarHeight;
 var NAV_BAR_HEIGHT=NavigatorNavigationBarStyles.General.NavBarHeight;
 
-var SPACING=4;
+var SPACING=8;
 var ICON_WIDTH=40;
 var SEPARATOR_WIDTH=9;
 var CRUMB_WIDTH=ICON_WIDTH + SEPARATOR_WIDTH;
+var NAV_ELEMENT_HEIGHT=NAV_BAR_HEIGHT;
 
 var OPACITY_RATIO=100;
 var ICON_INACTIVE_OPACITY=0.6;
@@ -30310,44 +31323,42 @@ var MAX_BREADCRUMBS=10;
 var CRUMB_BASE={
 position:'absolute',
 flexDirection:'row',
-top:STATUS_BAR_HEIGHT,
+top:0,
 width:CRUMB_WIDTH,
-height:NAV_BAR_HEIGHT,
+height:NAV_ELEMENT_HEIGHT,
 backgroundColor:'transparent'};
 
 
 var ICON_BASE={
 width:ICON_WIDTH,
-height:NAV_BAR_HEIGHT};
+height:NAV_ELEMENT_HEIGHT};
 
 
 var SEPARATOR_BASE={
 width:SEPARATOR_WIDTH,
-height:NAV_BAR_HEIGHT};
+height:NAV_ELEMENT_HEIGHT};
 
 
 var TITLE_BASE={
 position:'absolute',
-top:STATUS_BAR_HEIGHT,
-height:NAV_BAR_HEIGHT,
-backgroundColor:'transparent'};
-
+top:0,
+height:NAV_ELEMENT_HEIGHT,
+backgroundColor:'transparent',
+alignItems:'flex-start'};
 
 
 var FIRST_TITLE_BASE=merge(TITLE_BASE,{
 left:0,
-right:0,
-alignItems:'center',
-height:NAV_BAR_HEIGHT});
+right:0});
 
 
 var RIGHT_BUTTON_BASE={
 position:'absolute',
-top:STATUS_BAR_HEIGHT,
-right:SPACING,
+top:0,
+right:0,
 overflow:'hidden',
 opacity:1,
-height:NAV_BAR_HEIGHT,
+height:NAV_ELEMENT_HEIGHT,
 backgroundColor:'transparent'};
 
 
@@ -30377,7 +31388,7 @@ opacity:1}),
 
 RightItem:merge(RIGHT_BUTTON_BASE,{opacity:1})};
 
-var crumbRight=SCREEN_WIDTH - 100;
+var crumbRight=crumbLeft + 50;
 RIGHT[i] = {
 Crumb:merge(CRUMB_BASE,{left:crumbRight}),
 Icon:merge(ICON_BASE,{opacity:0}),
@@ -30392,26 +31403,30 @@ RightItem:merge(RIGHT_BUTTON_BASE,{opacity:0})};}
 
 
 CENTER[0] = {
-Crumb:merge(CRUMB_BASE,{left:SCREEN_WIDTH / 4}),
+Crumb:merge(CRUMB_BASE,{left:SPACING + CRUMB_WIDTH}),
 Icon:merge(ICON_BASE,{opacity:0}),
 Separator:merge(SEPARATOR_BASE,{opacity:0}),
 Title:merge(FIRST_TITLE_BASE,{opacity:1}),
 RightItem:CENTER[0].RightItem};
 
-LEFT[0].Title = merge(FIRST_TITLE_BASE,{left:-SCREEN_WIDTH / 4,opacity:0});
+LEFT[0].Title = merge(FIRST_TITLE_BASE,{opacity:0});
 RIGHT[0].Title = merge(FIRST_TITLE_BASE,{opacity:0});
 
 
 var buildIndexSceneInterpolator=function(startStyles,endStyles){
 return {
 Crumb:buildStyleInterpolator({
-left:{
+translateX:{
 type:'linear',
-from:startStyles.Crumb.left,
-to:endStyles.Crumb.left,
+from:0,
+to:endStyles.Crumb.left - startStyles.Crumb.left,
 min:0,
 max:1,
-extrapolate:true}}),
+extrapolate:true},
+
+left:{
+value:startStyles.Crumb.left,
+type:'constant'}}),
 
 
 Icon:buildStyleInterpolator({
@@ -30440,13 +31455,17 @@ to:endStyles.Title.opacity,
 min:0,
 max:1},
 
-left:{
+translateX:{
 type:'linear',
-from:startStyles.Title.left,
-to:endStyles.Title.left,
+from:0,
+to:endStyles.Title.left - startStyles.Title.left,
 min:0,
 max:1,
-extrapolate:true}}),
+extrapolate:true},
+
+left:{
+value:startStyles.Title.left,
+type:'constant'}}),
 
 
 RightItem:buildStyleInterpolator({
@@ -30487,7 +31506,7 @@ IconHeight:NAV_BAR_HEIGHT,
 SeparatorWidth:SEPARATOR_WIDTH,
 SeparatorHeight:NAV_BAR_HEIGHT};
 });
-__d('NavigatorNavigationBarStyles',["Dimensions","buildStyleInterpolator","merge"],function(global, require, module, exports) {  'use strict';
+__d('NavigatorNavigationBarStyles',["buildStyleInterpolator","merge"],function(global, require, module, exports) {  'use strict';
 
 
 
@@ -30498,60 +31517,46 @@ __d('NavigatorNavigationBarStyles',["Dimensions","buildStyleInterpolator","merge
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var Dimensions=require('Dimensions');
 
 var buildStyleInterpolator=require('buildStyleInterpolator');
 var merge=require('merge');
 
-var SCREEN_WIDTH=Dimensions.get('window').width;
-var NAV_BAR_HEIGHT=44;
-var STATUS_BAR_HEIGHT=20;
-var NAV_HEIGHT=NAV_BAR_HEIGHT + STATUS_BAR_HEIGHT;
+
+var NAV_BAR_HEIGHT=56;
+var TITLE_LEFT=72;
+var BUTTON_SIZE=24;
+var TOUCH_TARGT_SIZE=48;
+var BUTTON_HORIZONTAL_MARGIN=16;
+
+var BUTTON_EFFECTIVE_MARGIN=BUTTON_HORIZONTAL_MARGIN - (TOUCH_TARGT_SIZE - BUTTON_SIZE) / 2;
+var NAV_ELEMENT_HEIGHT=NAV_BAR_HEIGHT;
 
 var BASE_STYLES={
 Title:{
 position:'absolute',
-top:STATUS_BAR_HEIGHT,
+bottom:0,
 left:0,
 right:0,
-alignItems:'center',
-height:NAV_BAR_HEIGHT,
-backgroundColor:'transparent'},
+alignItems:'flex-start',
+height:NAV_ELEMENT_HEIGHT,
+backgroundColor:'transparent',
+marginLeft:TITLE_LEFT},
 
 LeftButton:{
 position:'absolute',
-top:STATUS_BAR_HEIGHT,
-left:0,
+top:0,
+left:BUTTON_EFFECTIVE_MARGIN,
 overflow:'hidden',
-opacity:1,
-height:NAV_BAR_HEIGHT,
+height:NAV_ELEMENT_HEIGHT,
 backgroundColor:'transparent'},
 
 RightButton:{
 position:'absolute',
-top:STATUS_BAR_HEIGHT,
-right:0,
+top:0,
+right:BUTTON_EFFECTIVE_MARGIN,
 overflow:'hidden',
-opacity:1,
 alignItems:'flex-end',
-height:NAV_BAR_HEIGHT,
+height:NAV_ELEMENT_HEIGHT,
 backgroundColor:'transparent'}};
 
 
@@ -30565,19 +31570,19 @@ backgroundColor:'transparent'}};
 
 var Stages={
 Left:{
-Title:merge(BASE_STYLES.Title,{left:-SCREEN_WIDTH / 2,opacity:0}),
-LeftButton:merge(BASE_STYLES.LeftButton,{left:-SCREEN_WIDTH / 3,opacity:1}),
-RightButton:merge(BASE_STYLES.RightButton,{left:SCREEN_WIDTH / 3,opacity:0})},
+Title:merge(BASE_STYLES.Title,{opacity:0}),
+LeftButton:merge(BASE_STYLES.LeftButton,{opacity:0}),
+RightButton:merge(BASE_STYLES.RightButton,{opacity:0})},
 
 Center:{
-Title:merge(BASE_STYLES.Title,{left:0,opacity:1}),
-LeftButton:merge(BASE_STYLES.LeftButton,{left:0,opacity:1}),
-RightButton:merge(BASE_STYLES.RightButton,{left:2 * SCREEN_WIDTH / 3 - 0,opacity:1})},
+Title:merge(BASE_STYLES.Title,{opacity:1}),
+LeftButton:merge(BASE_STYLES.LeftButton,{opacity:1}),
+RightButton:merge(BASE_STYLES.RightButton,{opacity:1})},
 
 Right:{
-Title:merge(BASE_STYLES.Title,{left:SCREEN_WIDTH / 2,opacity:0}),
-LeftButton:merge(BASE_STYLES.LeftButton,{left:0,opacity:0}),
-RightButton:merge(BASE_STYLES.RightButton,{left:SCREEN_WIDTH,opacity:0})}};
+Title:merge(BASE_STYLES.Title,{opacity:0}),
+LeftButton:merge(BASE_STYLES.LeftButton,{opacity:0}),
+RightButton:merge(BASE_STYLES.RightButton,{opacity:0})}};
 
 
 
@@ -30654,8 +31659,8 @@ RightToLeft:buildSceneInterpolators(Stages.Right,Stages.Left)};
 module.exports = {
 General:{
 NavBarHeight:NAV_BAR_HEIGHT,
-StatusBarHeight:STATUS_BAR_HEIGHT,
-TotalNavHeight:NAV_HEIGHT},
+StatusBarHeight:0,
+TotalNavHeight:NAV_BAR_HEIGHT},
 
 Interpolators:Interpolators,
 Stages:Stages};
@@ -38722,814 +39727,7 @@ util.extend(exports,rebound);}else
 if(typeof window != 'undefined'){
 window.rebound = rebound;}})();
 });
-__d('NavigatorIOS',["EventEmitter","Image","NavigationContext","React","NativeModules","StyleSheet","StaticContainer.react","View","requireNativeComponent","invariant","logError"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
-
-
-
-
-
-
-
-
-
-
-
-
-var EventEmitter=require('EventEmitter');
-var Image=require('Image');
-var NavigationContext=require('NavigationContext');
-var React=require('React');
-var RCTNavigatorManager=require('NativeModules').NavigatorManager;
-var StyleSheet=require('StyleSheet');
-var StaticContainer=require('StaticContainer.react');
-var View=require('View');
-
-var requireNativeComponent=require('requireNativeComponent');
-var invariant=require('invariant');
-var logError=require('logError');
-
-var TRANSITIONER_REF='transitionerRef';
-
-var PropTypes=React.PropTypes;
-
-var __uid=0;
-function getuid(){
-return __uid++;}
-
-
-var NavigatorTransitionerIOS=React.createClass({displayName:'NavigatorTransitionerIOS',
-requestSchedulingNavigation:function(cb){
-RCTNavigatorManager.requestSchedulingJavaScriptNavigation(
-React.findNodeHandle(this),
-logError,
-cb);},
-
-
-
-render:function(){
-return (
-React.createElement(RCTNavigator,this.props));}});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var NavigatorIOS=React.createClass({displayName:'NavigatorIOS',
-
-propTypes:{
-
-
-
-
-
-
-initialRoute:PropTypes.shape({
-
-
-
-component:PropTypes.func.isRequired,
-
-
-
-
-title:PropTypes.string.isRequired,
-
-
-
-
-
-passProps:PropTypes.object,
-
-
-
-
-
-
-backButtonIcon:Image.propTypes.source,
-
-
-
-
-
-
-backButtonTitle:PropTypes.string,
-
-
-
-
-leftButtonIcon:Image.propTypes.source,
-
-
-
-
-leftButtonTitle:PropTypes.string,
-
-
-
-
-onLeftButtonPress:PropTypes.func,
-
-
-
-
-rightButtonIcon:Image.propTypes.source,
-
-
-
-
-rightButtonTitle:PropTypes.string,
-
-
-
-
-onRightButtonPress:PropTypes.func,
-
-
-
-
-wrapperStyle:View.propTypes.style}).
-
-isRequired,
-
-
-
-
-navigationBarHidden:PropTypes.bool,
-
-
-
-
-shadowHidden:PropTypes.bool,
-
-
-
-
-
-itemWrapperStyle:View.propTypes.style,
-
-
-
-
-tintColor:PropTypes.string,
-
-
-
-
-barTintColor:PropTypes.string,
-
-
-
-
-titleTextColor:PropTypes.string,
-
-
-
-
-translucent:PropTypes.bool},
-
-
-
-navigator:undefined,
-navigationContext:new NavigationContext(),
-
-componentWillMount:function(){
-
-
-this.navigator = {
-push:this.push,
-pop:this.pop,
-popN:this.popN,
-replace:this.replace,
-replacePrevious:this.replacePrevious,
-replacePreviousAndPop:this.replacePreviousAndPop,
-resetTo:this.resetTo,
-popToRoute:this.popToRoute,
-popToTop:this.popToTop,
-navigationContext:this.navigationContext};
-
-this._emitWillFocus(this.state.routeStack[this.state.observedTopOfStack]);},
-
-
-componentDidMount:function(){
-this._emitDidFocus(this.state.routeStack[this.state.observedTopOfStack]);},
-
-
-componentWillUnmount:function(){
-this.navigationContext.dispose();
-this.navigationContext = new NavigationContext();},
-
-
-getInitialState:function(){
-return {
-idStack:[getuid()],
-routeStack:[this.props.initialRoute],
-
-requestedTopOfStack:0,
-
-
-
-
-
-
-observedTopOfStack:0,
-progress:1,
-fromIndex:0,
-toIndex:0,
-
-
-makingNavigatorRequest:false,
-
-
-
-updatingAllIndicesAtOrBeyond:0};},
-
-
-
-_toFocusOnNavigationComplete:undefined,
-
-_handleFocusRequest:function(item){
-if(this.state.makingNavigatorRequest){
-this._toFocusOnNavigationComplete = item;}else 
-{
-this._getFocusEmitter().emit('focus',item);}},
-
-
-
-_focusEmitter:undefined,
-
-_getFocusEmitter:function(){
-
-var focusEmitter=this._focusEmitter;
-if(!focusEmitter){
-focusEmitter = new EventEmitter();
-this._focusEmitter = focusEmitter;}
-
-return focusEmitter;},
-
-
-getChildContext:function()
-
-
-{
-return {
-onFocusRequested:this._handleFocusRequest,
-focusEmitter:this._getFocusEmitter()};},
-
-
-
-childContextTypes:{
-onFocusRequested:React.PropTypes.func,
-focusEmitter:React.PropTypes.instanceOf(EventEmitter)},
-
-
-_tryLockNavigator:function(cb){
-this.refs[TRANSITIONER_REF].requestSchedulingNavigation(
-function(acquiredLock){return acquiredLock && cb();});},
-
-
-
-_handleNavigatorStackChanged:function(e){
-var newObservedTopOfStack=e.nativeEvent.stackLength - 1;
-this._emitDidFocus(this.state.routeStack[newObservedTopOfStack]);
-
-invariant(
-newObservedTopOfStack <= this.state.requestedTopOfStack,
-'No navigator item should be pushed without JS knowing about it %s %s',newObservedTopOfStack,this.state.requestedTopOfStack);
-
-var wasWaitingForConfirmation=
-this.state.requestedTopOfStack !== this.state.observedTopOfStack;
-if(wasWaitingForConfirmation){
-invariant(
-newObservedTopOfStack === this.state.requestedTopOfStack,
-'If waiting for observedTopOfStack to reach requestedTopOfStack, ' + 
-'the only valid observedTopOfStack should be requestedTopOfStack.');}
-
-
-
-
-
-
-
-
-
-
-
-var nextState={
-observedTopOfStack:newObservedTopOfStack,
-makingNavigatorRequest:false,
-updatingAllIndicesAtOrBeyond:null,
-progress:1,
-toIndex:newObservedTopOfStack,
-fromIndex:newObservedTopOfStack};
-
-this.setState(nextState,this._eliminateUnneededChildren);},
-
-
-_eliminateUnneededChildren:function(){
-
-
-
-var updatingAllIndicesAtOrBeyond=
-this.state.routeStack.length > this.state.observedTopOfStack + 1?
-this.state.observedTopOfStack + 1:
-null;
-this.setState({
-idStack:this.state.idStack.slice(0,this.state.observedTopOfStack + 1),
-routeStack:this.state.routeStack.slice(0,this.state.observedTopOfStack + 1),
-
-requestedTopOfStack:this.state.observedTopOfStack,
-makingNavigatorRequest:true,
-updatingAllIndicesAtOrBeyond:updatingAllIndicesAtOrBeyond});},
-
-
-
-_emitDidFocus:function(route){
-this.navigationContext.emit('didfocus',{route:route});},
-
-
-_emitWillFocus:function(route){
-this.navigationContext.emit('willfocus',{route:route});},
-
-
-push:function(route){var _this=this;
-invariant(!!route,'Must supply route to push');
-
-if(this.state.requestedTopOfStack === this.state.observedTopOfStack){
-this._tryLockNavigator(function(){
-_this._emitWillFocus(route);
-
-var nextStack=_this.state.routeStack.concat([route]);
-var nextIDStack=_this.state.idStack.concat([getuid()]);
-_this.setState({
-
-
-idStack:nextIDStack,
-routeStack:nextStack,
-requestedTopOfStack:nextStack.length - 1,
-makingNavigatorRequest:true,
-updatingAllIndicesAtOrBeyond:nextStack.length - 1});});}},
-
-
-
-
-
-popN:function(n){var _this2=this;
-if(n === 0){
-return;}
-
-
-if(this.state.requestedTopOfStack === this.state.observedTopOfStack){
-if(this.state.requestedTopOfStack > 0){
-this._tryLockNavigator(function(){
-var newRequestedTopOfStack=_this2.state.requestedTopOfStack - n;
-invariant(newRequestedTopOfStack >= 0,'Cannot pop below 0');
-_this2._emitWillFocus(_this2.state.routeStack[newRequestedTopOfStack]);
-_this2.setState({
-requestedTopOfStack:newRequestedTopOfStack,
-makingNavigatorRequest:true,
-
-
-updatingAllIndicesAtOrBeyond:null});});}}},
-
-
-
-
-
-
-pop:function(){
-this.popN(1);},
-
-
-
-
-
-
-
-
-replaceAtIndex:function(route,index){
-invariant(!!route,'Must supply route to replace');
-if(index < 0){
-index += this.state.routeStack.length;}
-
-
-if(this.state.routeStack.length <= index){
-return;}
-
-
-
-
-var nextIDStack=this.state.idStack.slice();
-var nextRouteStack=this.state.routeStack.slice();
-nextIDStack[index] = getuid();
-nextRouteStack[index] = route;
-
-this.setState({
-idStack:nextIDStack,
-routeStack:nextRouteStack,
-makingNavigatorRequest:false,
-updatingAllIndicesAtOrBeyond:index});
-
-
-this._emitWillFocus(route);
-this._emitDidFocus(route);},
-
-
-
-
-
-replace:function(route){
-this.replaceAtIndex(route,-1);},
-
-
-
-
-
-replacePrevious:function(route){
-this.replaceAtIndex(route,-2);},
-
-
-popToTop:function(){
-this.popToRoute(this.state.routeStack[0]);},
-
-
-popToRoute:function(route){
-var indexOfRoute=this.state.routeStack.indexOf(route);
-invariant(
-indexOfRoute !== -1,
-'Calling pop to route for a route that doesn\'t exist!');
-
-var numToPop=this.state.routeStack.length - indexOfRoute - 1;
-this.popN(numToPop);},
-
-
-replacePreviousAndPop:function(route){var _this3=this;
-
-if(this.state.requestedTopOfStack !== this.state.observedTopOfStack){
-return;}
-
-if(this.state.routeStack.length < 2){
-return;}
-
-this._tryLockNavigator(function(){
-_this3.replacePrevious(route);
-_this3.setState({
-requestedTopOfStack:_this3.state.requestedTopOfStack - 1,
-makingNavigatorRequest:true});});},
-
-
-
-
-resetTo:function(route){
-invariant(!!route,'Must supply route to push');
-
-if(this.state.requestedTopOfStack !== this.state.observedTopOfStack){
-return;}
-
-this.replaceAtIndex(route,0);
-this.popToRoute(route);},
-
-
-handleNavigationComplete:function(e){
-if(this._toFocusOnNavigationComplete){
-this._getFocusEmitter().emit('focus',this._toFocusOnNavigationComplete);
-this._toFocusOnNavigationComplete = null;}
-
-this._handleNavigatorStackChanged(e);},
-
-
-_routeToStackItem:function(route,i){
-var Component=route.component;
-var shouldUpdateChild=this.state.updatingAllIndicesAtOrBeyond !== null && 
-this.state.updatingAllIndicesAtOrBeyond >= i;
-
-return (
-React.createElement(StaticContainer,{key:'nav' + i,shouldUpdate:shouldUpdateChild},
-React.createElement(RCTNavigatorItem,{
-title:route.title,
-style:[
-styles.stackItem,
-this.props.itemWrapperStyle,
-route.wrapperStyle],
-
-backButtonIcon:this._imageNameFromSource(route.backButtonIcon),
-backButtonTitle:route.backButtonTitle,
-leftButtonIcon:this._imageNameFromSource(route.leftButtonIcon),
-leftButtonTitle:route.leftButtonTitle,
-onNavLeftButtonTap:route.onLeftButtonPress,
-rightButtonIcon:this._imageNameFromSource(route.rightButtonIcon),
-rightButtonTitle:route.rightButtonTitle,
-onNavRightButtonTap:route.onRightButtonPress,
-navigationBarHidden:this.props.navigationBarHidden,
-shadowHidden:this.props.shadowHidden,
-tintColor:this.props.tintColor,
-barTintColor:this.props.barTintColor,
-translucent:this.props.translucent !== false,
-titleTextColor:this.props.titleTextColor},
-React.createElement(Component,_extends({
-navigator:this.navigator,
-route:route},
-route.passProps)))));},
-
-
-
-
-
-
-_imageNameFromSource:function(source){
-return source?source.uri:undefined;},
-
-
-renderNavigationStackItems:function(){
-var shouldRecurseToNavigator=
-this.state.makingNavigatorRequest || 
-this.state.updatingAllIndicesAtOrBeyond !== null;
-
-
-var items=shouldRecurseToNavigator?
-this.state.routeStack.map(this._routeToStackItem):null;
-return (
-React.createElement(StaticContainer,{shouldUpdate:shouldRecurseToNavigator},
-React.createElement(NavigatorTransitionerIOS,{
-ref:TRANSITIONER_REF,
-style:styles.transitioner,
-vertical:this.props.vertical,
-requestedTopOfStack:this.state.requestedTopOfStack,
-onNavigationComplete:this.handleNavigationComplete},
-items)));},
-
-
-
-
-
-render:function(){
-return (
-React.createElement(View,{style:this.props.style},
-this.renderNavigationStackItems()));}});
-
-
-
-
-
-var styles=StyleSheet.create({
-stackItem:{
-backgroundColor:'white',
-overflow:'hidden',
-position:'absolute',
-top:0,
-left:0,
-right:0,
-bottom:0},
-
-transitioner:{
-flex:1}});
-
-
-
-var RCTNavigator=requireNativeComponent('RCTNavigator');
-var RCTNavigatorItem=requireNativeComponent('RCTNavItem');
-
-module.exports = NavigatorIOS;
-});
-__d('PickerIOS',["NativeMethodsMixin","React","ReactChildren","ReactNativeViewAttributes","NativeModules","StyleSheet","View","requireNativeComponent","merge"],function(global, require, module, exports) {  'use strict';
-
-
-
-
-
-
-
-
-
-
-
-
-
-var NativeMethodsMixin=require('NativeMethodsMixin');
-var React=require('React');
-var ReactChildren=require('ReactChildren');
-var ReactNativeViewAttributes=require('ReactNativeViewAttributes');
-var RCTPickerIOSConsts=require('NativeModules').UIManager.RCTPicker.Constants;
-var StyleSheet=require('StyleSheet');
-var View=require('View');
-
-var requireNativeComponent=require('requireNativeComponent');
-var merge=require('merge');
-
-var PICKER='picker';
-
-var PickerIOS=React.createClass({displayName:'PickerIOS',
-mixins:[NativeMethodsMixin],
-
-propTypes:{
-onValueChange:React.PropTypes.func,
-selectedValue:React.PropTypes.any},
-
-
-getInitialState:function(){
-return this._stateFromProps(this.props);},
-
-
-componentWillReceiveProps:function(nextProps){
-this.setState(this._stateFromProps(nextProps));},
-
-
-
-_stateFromProps:function(props){
-var selectedIndex=0;
-var items=[];
-ReactChildren.forEach(props.children,function(child,index){
-if(child.props.value === props.selectedValue){
-selectedIndex = index;}
-
-items.push({value:child.props.value,label:child.props.label});});
-
-return {selectedIndex:selectedIndex,items:items};},
-
-
-render:function(){
-return (
-React.createElement(View,{style:this.props.style},
-React.createElement(RCTPickerIOS,{
-ref:PICKER,
-style:styles.pickerIOS,
-items:this.state.items,
-selectedIndex:this.state.selectedIndex,
-onChange:this._onChange})));},
-
-
-
-
-
-_onChange:function(event){
-if(this.props.onChange){
-this.props.onChange(event);}
-
-if(this.props.onValueChange){
-this.props.onValueChange(event.nativeEvent.newValue);}
-
-
-
-
-
-
-
-
-if(this.state.selectedIndex !== event.nativeEvent.newIndex){
-this.refs[PICKER].setNativeProps({
-selectedIndex:this.state.selectedIndex});}}});
-
-
-
-
-
-PickerIOS.Item = React.createClass({displayName:'Item',
-propTypes:{
-value:React.PropTypes.any,
-label:React.PropTypes.string},
-
-
-render:function(){
-
-return null;}});
-
-
-
-var styles=StyleSheet.create({
-pickerIOS:{
-
-
-
-height:RCTPickerIOSConsts.ComponentHeight}});
-
-
-
-var RCTPickerIOS=requireNativeComponent('RCTPicker',PickerIOS,{
-nativeOnly:{
-items:true,
-onChange:true,
-selectedIndex:true}});
-
-
-
-module.exports = PickerIOS;
-});
-__d('ProgressBarAndroid',["UnimplementedView"],function(global, require, module, exports) {  'use strict';
+__d('NavigatorIOS',["UnimplementedView"],function(global, require, module, exports) {  'use strict';
 
 
 
@@ -39543,7 +39741,7 @@ __d('ProgressBarAndroid',["UnimplementedView"],function(global, require, module,
 
 module.exports = require('UnimplementedView');
 });
-__d('ProgressViewIOS',["Image","NativeMethodsMixin","NativeModules","ReactPropTypes","React","StyleSheet","requireNativeComponent"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
+__d('PickerIOS',["UnimplementedView"],function(global, require, module, exports) {  'use strict';
 
 
 
@@ -39556,78 +39754,10 @@ __d('ProgressViewIOS',["Image","NativeMethodsMixin","NativeModules","ReactPropTy
 
 
 
-var Image=require('Image');
-var NativeMethodsMixin=require('NativeMethodsMixin');
-var NativeModules=require('NativeModules');
-var PropTypes=require('ReactPropTypes');
-var React=require('React');
-var StyleSheet=require('StyleSheet');
 
-var requireNativeComponent=require('requireNativeComponent');
-
-
-
-
-var ProgressViewIOS=React.createClass({displayName:'ProgressViewIOS',
-mixins:[NativeMethodsMixin],
-
-propTypes:{
-
-
-
-progressViewStyle:PropTypes.oneOf(['default','bar']),
-
-
-
-
-progress:PropTypes.number,
-
-
-
-
-progressTintColor:PropTypes.string,
-
-
-
-
-trackTintColor:PropTypes.string,
-
-
-
-
-progressImage:Image.propTypes.source,
-
-
-
-
-trackImage:Image.propTypes.source},
-
-
-render:function(){
-return (
-React.createElement(RCTProgressView,_extends({},
-this.props,{
-style:[styles.progressView,this.props.style]})));}});
-
-
-
-
-
-var styles=StyleSheet.create({
-progressView:{
-height:NativeModules.ProgressViewManager.ComponentHeight}});
-
-
-
-var RCTProgressView=requireNativeComponent(
-'RCTProgressView',
-ProgressViewIOS);
-
-
-module.exports = ProgressViewIOS;
+module.exports = require('UnimplementedView');
 });
-__d('SegmentedControlIOS',["NativeMethodsMixin","NativeModules","ReactPropTypes","React","StyleSheet","requireNativeComponent"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
-
+__d('ProgressBarAndroid',["NativeMethodsMixin","React","ReactPropTypes","ReactNativeViewAttributes","createReactNativeComponentClass"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
 
 
 
@@ -39640,222 +39770,188 @@ __d('SegmentedControlIOS',["NativeMethodsMixin","NativeModules","ReactPropTypes"
 
 
 var NativeMethodsMixin=require('NativeMethodsMixin');
-var NativeModules=require('NativeModules');
-var PropTypes=require('ReactPropTypes');
 var React=require('React');
-var StyleSheet=require('StyleSheet');
+var ReactPropTypes=require('ReactPropTypes');
+var ReactNativeViewAttributes=require('ReactNativeViewAttributes');
 
-var requireNativeComponent=require('requireNativeComponent');
+var createReactNativeComponentClass=require('createReactNativeComponentClass');
 
-
-
-
-
-
-var SEGMENTED_CONTROL_REFERENCE='segmentedcontrol';
-
-
-
-
+var STYLE_ATTRIBUTES=[
+'Horizontal',
+'Small',
+'Large',
+'Inverse',
+'SmallInverse',
+'LargeInverse'];
 
 
-var SegmentedControlIOS=React.createClass({displayName:'SegmentedControlIOS',
-mixins:[NativeMethodsMixin],
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var ProgressBarAndroid=React.createClass({displayName:'ProgressBarAndroid',
 propTypes:{
 
 
 
-values:PropTypes.arrayOf(PropTypes.string),
-
-
-
-
-selectedIndex:PropTypes.number,
 
 
 
 
 
-onValueChange:PropTypes.func,
+
+
+styleAttr:ReactPropTypes.oneOf(STYLE_ATTRIBUTES),
 
 
 
-
-
-onChange:PropTypes.func,
-
-
-
-
-
-enabled:PropTypes.bool,
-
-
-
-
-tintColor:PropTypes.string,
-
-
-
-
-
-momentary:PropTypes.bool},
+testID:ReactPropTypes.string},
 
 
 getDefaultProps:function(){
 return {
-values:[],
-enabled:true};},
+styleAttr:'Large'};},
 
 
 
-_onChange:function(event){
-this.props.onChange && this.props.onChange(event);
-this.props.onValueChange && this.props.onValueChange(event.nativeEvent.value);},
-
-
-render:function(){
-return (
-React.createElement(RCTSegmentedControl,_extends({},
-this.props,{
-ref:SEGMENTED_CONTROL_REFERENCE,
-style:[styles.segmentedControl,this.props.style],
-onChange:this._onChange})));}});
-
-
-
-
-
-var styles=StyleSheet.create({
-segmentedControl:{
-height:NativeModules.SegmentedControlManager.ComponentHeight}});
-
-
-
-var RCTSegmentedControl=requireNativeComponent(
-'RCTSegmentedControl',
-SegmentedControlIOS);
-
-
-module.exports = SegmentedControlIOS;
-});
-__d('SliderIOS',["NativeMethodsMixin","ReactPropTypes","React","StyleSheet","View","requireNativeComponent"],function(global, require, module, exports) {  'use strict';
-
-
-
-
-
-
-
-
-
-
-
-
-var NativeMethodsMixin=require('NativeMethodsMixin');
-var PropTypes=require('ReactPropTypes');
-var React=require('React');
-var StyleSheet=require('StyleSheet');
-var View=require('View');
-
-var requireNativeComponent=require('requireNativeComponent');
-
-
-
-var SliderIOS=React.createClass({displayName:'SliderIOS',
 mixins:[NativeMethodsMixin],
 
-propTypes:{
+render:function(){
+return React.createElement(AndroidProgressBar,this.props);}});
 
 
 
+var AndroidProgressBar=createReactNativeComponentClass({
+validAttributes:_extends({},
+ReactNativeViewAttributes.UIView,{
+styleAttr:true}),
 
-style:View.propTypes.style,
-
-
-
-
-
-
+uiViewClassName:'AndroidProgressBar'});
 
 
-
-value:PropTypes.number,
-
-
-
-
-minimumValue:PropTypes.number,
-
-
-
-
-maximumValue:PropTypes.number,
+module.exports = ProgressBarAndroid;
+});
+__d('ProgressViewIOS',["React","StyleSheet","Text","View"],function(global, require, module, exports) {  'use strict';
 
 
 
 
 
-minimumTrackTintColor:PropTypes.string,
 
 
 
 
 
-maximumTrackTintColor:PropTypes.string,
 
 
 
+var React=require('React');
+var StyleSheet=require('StyleSheet');
+var Text=require('Text');
+var View=require('View');
 
-onValueChange:PropTypes.func,
-
-
-
-
-
-onSlidingComplete:PropTypes.func},
-
-
-_onValueChange:function(event){
-this.props.onChange && this.props.onChange(event);
-if(event.nativeEvent.continuous){
-this.props.onValueChange && 
-this.props.onValueChange(event.nativeEvent.value);}else 
-{
-this.props.onSlidingComplete && event.nativeEvent.value !== undefined && 
-this.props.onSlidingComplete(event.nativeEvent.value);}},
-
-
-
+var DummyProgressViewIOS=React.createClass({displayName:'DummyProgressViewIOS',
 render:function(){
 return (
-React.createElement(RCTSlider,{
-style:[styles.slider,this.props.style],
-value:this.props.value,
-maximumValue:this.props.maximumValue,
-minimumValue:this.props.minimumValue,
-minimumTrackTintColor:this.props.minimumTrackTintColor,
-maximumTrackTintColor:this.props.maximumTrackTintColor,
-onChange:this._onValueChange}));}});
+React.createElement(View,{style:[styles.dummy,this.props.style]},
+React.createElement(Text,{style:styles.text},'ProgressViewIOS is not supported on this platform!')));}});
+
+
 
 
 
 
 
 var styles=StyleSheet.create({
-slider:{
-height:40}});
+dummy:{
+width:120,
+height:20,
+backgroundColor:'#ffbcbc',
+borderWidth:1,
+borderColor:'red',
+alignItems:'center',
+justifyContent:'center'},
+
+text:{
+color:'#333333',
+margin:5,
+fontSize:10}});
 
 
 
-var RCTSlider=requireNativeComponent('RCTSlider',SliderIOS,{
-nativeOnly:{onChange:true}});
-
-
-module.exports = SliderIOS;
+module.exports = DummyProgressViewIOS;
 });
-__d('SwitchAndroid',["UnimplementedView"],function(global, require, module, exports) {  'use strict';
+__d('SegmentedControlIOS',["React","StyleSheet","Text","View"],function(global, require, module, exports) {  'use strict';
+
+
+
+
+
+
+
+
+
+
+
+
+
+var React=require('React');
+var StyleSheet=require('StyleSheet');
+var Text=require('Text');
+var View=require('View');
+
+var DummySegmentedControlIOS=React.createClass({displayName:'DummySegmentedControlIOS',
+render:function(){
+return (
+React.createElement(View,{style:[styles.dummy,this.props.style]},
+React.createElement(Text,{style:styles.text},'SegmentedControlIOS is not supported on this platform!')));}});
+
+
+
+
+
+
+
+var styles=StyleSheet.create({
+dummy:{
+width:120,
+height:50,
+backgroundColor:'#ffbcbc',
+borderWidth:1,
+borderColor:'red',
+alignItems:'center',
+justifyContent:'center'},
+
+text:{
+color:'#333333',
+margin:5,
+fontSize:10}});
+
+
+
+module.exports = DummySegmentedControlIOS;
+});
+__d('SliderIOS',["UnimplementedView"],function(global, require, module, exports) {  'use strict';
+
 
 
 
@@ -39869,10 +39965,7 @@ __d('SwitchAndroid',["UnimplementedView"],function(global, require, module, expo
 
 module.exports = require('UnimplementedView');
 });
-__d('SwitchIOS',["NativeMethodsMixin","ReactPropTypes","React","StyleSheet","requireNativeComponent"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
-
-
-
+__d('SwitchAndroid',["NativeMethodsMixin","ReactPropTypes","React","requireNativeComponent"],function(global, require, module, exports) {  'use strict';
 
 
 
@@ -39887,7 +39980,6 @@ __d('SwitchIOS',["NativeMethodsMixin","ReactPropTypes","React","StyleSheet","req
 var NativeMethodsMixin=require('NativeMethodsMixin');
 var PropTypes=require('ReactPropTypes');
 var React=require('React');
-var StyleSheet=require('StyleSheet');
 
 var requireNativeComponent=require('requireNativeComponent');
 
@@ -39896,22 +39988,10 @@ var SWITCH='switch';
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-var SwitchIOS=React.createClass({displayName:'SwitchIOS',
+var SwitchAndroid=React.createClass({displayName:'SwitchAndroid',
 mixins:[NativeMethodsMixin],
 
 propTypes:{
-
 
 
 
@@ -39919,10 +39999,7 @@ value:PropTypes.bool,
 
 
 
-
-
 disabled:PropTypes.bool,
-
 
 
 
@@ -39930,18 +40007,7 @@ onValueChange:PropTypes.func,
 
 
 
-
-onTintColor:PropTypes.string,
-
-
-
-
-thumbTintColor:PropTypes.string,
-
-
-
-
-tintColor:PropTypes.string},
+testID:PropTypes.string},
 
 
 getDefaultProps:function(){
@@ -39954,7 +40020,7 @@ disabled:false};},
 _onChange:function(event){
 
 
-this.refs[SWITCH].setNativeProps({value:this.props.value});
+this.refs[SWITCH].setNativeProps({on:this.props.value});
 
 if(this.props.value === event.nativeEvent.value || this.props.disabled){
 return;}
@@ -39966,30 +40032,25 @@ this.props.onValueChange && this.props.onValueChange(event.nativeEvent.value);},
 
 render:function(){
 return (
-React.createElement(RCTSwitch,_extends({},
-this.props,{
+React.createElement(RKSwitch,{
 ref:SWITCH,
+style:this.props.style,
+enabled:!this.props.disabled,
+on:this.props.value,
 onChange:this._onChange,
-style:[styles.rkSwitch,this.props.style]})));}});
+testID:this.props.testID,
+onStartShouldSetResponder:function(){return true;},
+onResponderTerminationRequest:function(){return false;}}));}});
 
 
 
 
 
-var styles=StyleSheet.create({
-rkSwitch:{
-height:31,
-width:51}});
+var RKSwitch=requireNativeComponent('AndroidSwitch',null);
 
-
-
-var RCTSwitch=requireNativeComponent('RCTSwitch',SwitchIOS,{
-nativeOnly:{onChange:true}});
-
-
-module.exports = SwitchIOS;
+module.exports = SwitchAndroid;
 });
-__d('TabBarIOS',["React","StyleSheet","TabBarItemIOS","View","requireNativeComponent"],function(global, require, module, exports) {  'use strict';
+__d('SwitchIOS',["React","StyleSheet","Text","View"],function(global, require, module, exports) {  'use strict';
 
 
 
@@ -40004,39 +40065,59 @@ __d('TabBarIOS',["React","StyleSheet","TabBarItemIOS","View","requireNativeCompo
 
 var React=require('React');
 var StyleSheet=require('StyleSheet');
-var TabBarItemIOS=require('TabBarItemIOS');
+var Text=require('Text');
 var View=require('View');
 
-var requireNativeComponent=require('requireNativeComponent');
-
-var TabBarIOS=React.createClass({displayName:'TabBarIOS',
-statics:{
-Item:TabBarItemIOS},
-
-
-propTypes:{
-style:View.propTypes.style,
-
-
-
-tintColor:React.PropTypes.string,
-
-
-
-barTintColor:React.PropTypes.string,
-
-
-
-translucent:React.PropTypes.bool},
-
-
+var DummySwitchIOS=React.createClass({displayName:'DummySwitchIOS',
 render:function(){
 return (
-React.createElement(RCTTabBar,{
-style:[styles.tabGroup,this.props.style],
-tintColor:this.props.tintColor,
-barTintColor:this.props.barTintColor,
-translucent:this.props.translucent !== false},
+React.createElement(View,{style:[styles.dummySwitchIOS,this.props.style]},
+React.createElement(Text,{style:styles.text},'SwitchIOS is not supported on this platform!')));}});
+
+
+
+
+
+var styles=StyleSheet.create({
+dummySwitchIOS:{
+width:120,
+height:50,
+backgroundColor:'#ffbcbc',
+borderWidth:1,
+borderColor:'red',
+alignItems:'center',
+justifyContent:'center'},
+
+text:{
+color:'#333333',
+margin:5,
+fontSize:10}});
+
+
+
+module.exports = DummySwitchIOS;
+});
+__d('TabBarIOS',["React","View","StyleSheet"],function(global, require, module, exports) {  'use strict';
+
+
+
+
+
+
+
+
+
+
+
+
+var React=require('React');
+var View=require('View');
+var StyleSheet=require('StyleSheet');
+
+var DummyTabBarIOS=React.createClass({displayName:'DummyTabBarIOS',
+render:function(){
+return (
+React.createElement(View,{style:[this.props.style,styles.tabGroup]},
 this.props.children));}});
 
 
@@ -40049,1239 +40130,7 @@ flex:1}});
 
 
 
-var RCTTabBar=requireNativeComponent('RCTTabBar',TabBarIOS);
-
-module.exports = TabBarIOS;
-});
-__d('TabBarItemIOS',["Image","React","StaticContainer.react","StyleSheet","View","requireNativeComponent"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
-
-
-
-
-
-
-
-
-
-
-
-var Image=require('Image');
-var React=require('React');
-var StaticContainer=require('StaticContainer.react');
-var StyleSheet=require('StyleSheet');
-var View=require('View');
-
-var requireNativeComponent=require('requireNativeComponent');
-
-var TabBarItemIOS=React.createClass({displayName:'TabBarItemIOS',
-propTypes:{
-
-
-
-badge:React.PropTypes.oneOfType([
-React.PropTypes.string,
-React.PropTypes.number]),
-
-
-
-
-
-
-systemIcon:React.PropTypes.oneOf([
-'bookmarks',
-'contacts',
-'downloads',
-'favorites',
-'featured',
-'history',
-'more',
-'most-recent',
-'most-viewed',
-'recents',
-'search',
-'top-rated']),
-
-
-
-
-icon:Image.propTypes.source,
-
-
-
-
-selectedIcon:Image.propTypes.source,
-
-
-
-
-onPress:React.PropTypes.func,
-
-
-
-
-selected:React.PropTypes.bool,
-
-
-
-style:View.propTypes.style,
-
-
-
-
-title:React.PropTypes.string},
-
-
-getInitialState:function(){
-return {
-hasBeenSelected:false};},
-
-
-
-componentWillMount:function(){
-if(this.props.selected){
-this.setState({hasBeenSelected:true});}},
-
-
-
-componentWillReceiveProps:function(nextProps){
-if(this.state.hasBeenSelected || nextProps.selected){
-this.setState({hasBeenSelected:true});}},
-
-
-
-render:function(){
-var tabContents=null;
-
-
-if(this.state.hasBeenSelected){
-tabContents = 
-React.createElement(StaticContainer,{shouldUpdate:this.props.selected},
-this.props.children);}else 
-
-{
-tabContents = React.createElement(View,null);}
-
-
-var badge=typeof this.props.badge === 'number'?
-'' + this.props.badge:
-this.props.badge;
-
-return (
-React.createElement(RCTTabBarItem,_extends({},
-this.props,{
-icon:this.props.systemIcon || this.props.icon,
-badge:badge,
-style:[styles.tab,this.props.style]}),
-tabContents));}});
-
-
-
-
-
-var styles=StyleSheet.create({
-tab:{
-position:'absolute',
-top:0,
-right:0,
-bottom:0,
-left:0}});
-
-
-
-var RCTTabBarItem=requireNativeComponent('RCTTabBarItem',TabBarItemIOS);
-
-module.exports = TabBarItemIOS;
-});
-__d('Text',["NativeMethodsMixin","Platform","React","ReactInstanceMap","ReactNativeViewAttributes","StyleSheetPropType","TextStylePropTypes","Touchable","createReactNativeComponentClass","merge"],function(global, require, module, exports) {  'use strict';
-
-
-
-
-
-
-
-
-
-
-
-
-var NativeMethodsMixin=require('NativeMethodsMixin');
-var Platform=require('Platform');
-var React=require('React');
-var ReactInstanceMap=require('ReactInstanceMap');
-var ReactNativeViewAttributes=require('ReactNativeViewAttributes');
-var StyleSheetPropType=require('StyleSheetPropType');
-var TextStylePropTypes=require('TextStylePropTypes');
-var Touchable=require('Touchable');
-
-var createReactNativeComponentClass=
-require('createReactNativeComponentClass');
-var merge=require('merge');
-
-var stylePropType=StyleSheetPropType(TextStylePropTypes);
-
-var viewConfig={
-validAttributes:merge(ReactNativeViewAttributes.UIView,{
-isHighlighted:true,
-numberOfLines:true,
-allowFontScaling:true}),
-
-uiViewClassName:'RCTText'};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var Text=React.createClass({displayName:'Text',
-
-mixins:[Touchable.Mixin,NativeMethodsMixin],
-
-propTypes:{
-
-
-
-
-
-numberOfLines:React.PropTypes.number,
-
-
-
-
-
-onLayout:React.PropTypes.func,
-
-
-
-onPress:React.PropTypes.func,
-
-
-
-
-
-suppressHighlighting:React.PropTypes.bool,
-style:stylePropType,
-
-
-
-testID:React.PropTypes.string,
-
-
-
-allowFontScaling:React.PropTypes.bool},
-
-
-viewConfig:viewConfig,
-
-getInitialState:function(){
-return merge(this.touchableGetInitialState(),{
-isHighlighted:false});},
-
-
-
-getDefaultProps:function(){
-return {
-allowFontScaling:true};},
-
-
-
-onStartShouldSetResponder:function(){
-var shouldSetFromProps=this.props.onStartShouldSetResponder && 
-this.props.onStartShouldSetResponder();
-return shouldSetFromProps || !!this.props.onPress;},
-
-
-
-
-
-handleResponderTerminationRequest:function(){
-
-
-var allowTermination=this.touchableHandleResponderTerminationRequest();
-if(allowTermination && this.props.onResponderTerminationRequest){
-allowTermination = this.props.onResponderTerminationRequest();}
-
-return allowTermination;},
-
-
-handleResponderGrant:function(e,dispatchID){
-this.touchableHandleResponderGrant(e,dispatchID);
-this.props.onResponderGrant && 
-this.props.onResponderGrant.apply(this,arguments);},
-
-
-handleResponderMove:function(e){
-this.touchableHandleResponderMove(e);
-this.props.onResponderMove && 
-this.props.onResponderMove.apply(this,arguments);},
-
-
-handleResponderRelease:function(e){
-this.touchableHandleResponderRelease(e);
-this.props.onResponderRelease && 
-this.props.onResponderRelease.apply(this,arguments);},
-
-
-handleResponderTerminate:function(e){
-this.touchableHandleResponderTerminate(e);
-this.props.onResponderTerminate && 
-this.props.onResponderTerminate.apply(this,arguments);},
-
-
-touchableHandleActivePressIn:function(){
-if(this.props.suppressHighlighting || !this.props.onPress){
-return;}
-
-this.setState({
-isHighlighted:true});},
-
-
-
-touchableHandleActivePressOut:function(){
-if(this.props.suppressHighlighting || !this.props.onPress){
-return;}
-
-this.setState({
-isHighlighted:false});},
-
-
-
-touchableHandlePress:function(){
-this.props.onPress && this.props.onPress();},
-
-
-touchableGetPressRectOffset:function(){
-return PRESS_RECT_OFFSET;},
-
-
-getChildContext:function(){
-return {isInAParentText:true};},
-
-
-childContextTypes:{
-isInAParentText:React.PropTypes.bool},
-
-
-render:function(){
-var props={};
-for(var key in this.props) {
-props[key] = this.props[key];}
-
-
-if(props.accessible !== false){
-props.accessible = true;}
-
-props.isHighlighted = this.state.isHighlighted;
-props.onStartShouldSetResponder = this.onStartShouldSetResponder;
-props.onResponderTerminationRequest = 
-this.handleResponderTerminationRequest;
-props.onResponderGrant = this.handleResponderGrant;
-props.onResponderMove = this.handleResponderMove;
-props.onResponderRelease = this.handleResponderRelease;
-props.onResponderTerminate = this.handleResponderTerminate;
-
-
-var context=ReactInstanceMap.get(this)._context;
-if(context.isInAParentText){
-return React.createElement(RCTVirtualText,props);}else 
-{
-return React.createElement(RCTText,props);}}});
-
-
-
-
-
-
-
-
-
-
-
-var PRESS_RECT_OFFSET={top:20,left:20,right:20,bottom:30};
-
-var RCTText=createReactNativeComponentClass(viewConfig);
-var RCTVirtualText=RCTText;
-
-if(Platform.OS === 'android'){
-RCTVirtualText = createReactNativeComponentClass({
-validAttributes:merge(ReactNativeViewAttributes.UIView,{
-isHighlighted:true}),
-
-uiViewClassName:'RCTVirtualText'});}
-
-
-
-module.exports = Text;
-});
-__d('Touchable',["BoundingDimensions","Position","TouchEventUtils","keyMirror","queryLayoutByID"],function(global, require, module, exports) {  'use strict';
-
-
-
-
-
-var BoundingDimensions=require('BoundingDimensions');
-var Position=require('Position');
-var TouchEventUtils=require('TouchEventUtils');
-
-var keyMirror=require('keyMirror');
-var queryLayoutByID=require('queryLayoutByID');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var States=keyMirror({
-NOT_RESPONDER:null,
-RESPONDER_INACTIVE_PRESS_IN:null,
-RESPONDER_INACTIVE_PRESS_OUT:null,
-RESPONDER_ACTIVE_PRESS_IN:null,
-RESPONDER_ACTIVE_PRESS_OUT:null,
-RESPONDER_ACTIVE_LONG_PRESS_IN:null,
-RESPONDER_ACTIVE_LONG_PRESS_OUT:null,
-ERROR:null});
-
-
-
-
-
-var IsActive={
-RESPONDER_ACTIVE_PRESS_OUT:true,
-RESPONDER_ACTIVE_PRESS_IN:true};
-
-
-
-
-
-
-var IsPressingIn={
-RESPONDER_INACTIVE_PRESS_IN:true,
-RESPONDER_ACTIVE_PRESS_IN:true,
-RESPONDER_ACTIVE_LONG_PRESS_IN:true};
-
-
-var IsLongPressingIn={
-RESPONDER_ACTIVE_LONG_PRESS_IN:true};
-
-
-
-
-
-var Signals=keyMirror({
-DELAY:null,
-RESPONDER_GRANT:null,
-RESPONDER_RELEASE:null,
-RESPONDER_TERMINATED:null,
-ENTER_PRESS_RECT:null,
-LEAVE_PRESS_RECT:null,
-LONG_PRESS_DETECTED:null});
-
-
-
-
-
-var Transitions={
-NOT_RESPONDER:{
-DELAY:States.ERROR,
-RESPONDER_GRANT:States.RESPONDER_INACTIVE_PRESS_IN,
-RESPONDER_RELEASE:States.ERROR,
-RESPONDER_TERMINATED:States.ERROR,
-ENTER_PRESS_RECT:States.ERROR,
-LEAVE_PRESS_RECT:States.ERROR,
-LONG_PRESS_DETECTED:States.ERROR},
-
-RESPONDER_INACTIVE_PRESS_IN:{
-DELAY:States.RESPONDER_ACTIVE_PRESS_IN,
-RESPONDER_GRANT:States.ERROR,
-RESPONDER_RELEASE:States.NOT_RESPONDER,
-RESPONDER_TERMINATED:States.NOT_RESPONDER,
-ENTER_PRESS_RECT:States.RESPONDER_INACTIVE_PRESS_IN,
-LEAVE_PRESS_RECT:States.RESPONDER_INACTIVE_PRESS_OUT,
-LONG_PRESS_DETECTED:States.ERROR},
-
-RESPONDER_INACTIVE_PRESS_OUT:{
-DELAY:States.RESPONDER_ACTIVE_PRESS_OUT,
-RESPONDER_GRANT:States.ERROR,
-RESPONDER_RELEASE:States.NOT_RESPONDER,
-RESPONDER_TERMINATED:States.NOT_RESPONDER,
-ENTER_PRESS_RECT:States.RESPONDER_INACTIVE_PRESS_IN,
-LEAVE_PRESS_RECT:States.RESPONDER_INACTIVE_PRESS_OUT,
-LONG_PRESS_DETECTED:States.ERROR},
-
-RESPONDER_ACTIVE_PRESS_IN:{
-DELAY:States.ERROR,
-RESPONDER_GRANT:States.ERROR,
-RESPONDER_RELEASE:States.NOT_RESPONDER,
-RESPONDER_TERMINATED:States.NOT_RESPONDER,
-ENTER_PRESS_RECT:States.RESPONDER_ACTIVE_PRESS_IN,
-LEAVE_PRESS_RECT:States.RESPONDER_ACTIVE_PRESS_OUT,
-LONG_PRESS_DETECTED:States.RESPONDER_ACTIVE_LONG_PRESS_IN},
-
-RESPONDER_ACTIVE_PRESS_OUT:{
-DELAY:States.ERROR,
-RESPONDER_GRANT:States.ERROR,
-RESPONDER_RELEASE:States.NOT_RESPONDER,
-RESPONDER_TERMINATED:States.NOT_RESPONDER,
-ENTER_PRESS_RECT:States.RESPONDER_ACTIVE_PRESS_IN,
-LEAVE_PRESS_RECT:States.RESPONDER_ACTIVE_PRESS_OUT,
-LONG_PRESS_DETECTED:States.ERROR},
-
-RESPONDER_ACTIVE_LONG_PRESS_IN:{
-DELAY:States.ERROR,
-RESPONDER_GRANT:States.ERROR,
-RESPONDER_RELEASE:States.NOT_RESPONDER,
-RESPONDER_TERMINATED:States.NOT_RESPONDER,
-ENTER_PRESS_RECT:States.RESPONDER_ACTIVE_LONG_PRESS_IN,
-LEAVE_PRESS_RECT:States.RESPONDER_ACTIVE_LONG_PRESS_OUT,
-LONG_PRESS_DETECTED:States.RESPONDER_ACTIVE_LONG_PRESS_IN},
-
-RESPONDER_ACTIVE_LONG_PRESS_OUT:{
-DELAY:States.ERROR,
-RESPONDER_GRANT:States.ERROR,
-RESPONDER_RELEASE:States.NOT_RESPONDER,
-RESPONDER_TERMINATED:States.NOT_RESPONDER,
-ENTER_PRESS_RECT:States.RESPONDER_ACTIVE_LONG_PRESS_IN,
-LEAVE_PRESS_RECT:States.RESPONDER_ACTIVE_LONG_PRESS_OUT,
-LONG_PRESS_DETECTED:States.ERROR},
-
-error:{
-DELAY:States.NOT_RESPONDER,
-RESPONDER_GRANT:States.RESPONDER_INACTIVE_PRESS_IN,
-RESPONDER_RELEASE:States.NOT_RESPONDER,
-RESPONDER_TERMINATED:States.NOT_RESPONDER,
-ENTER_PRESS_RECT:States.NOT_RESPONDER,
-LEAVE_PRESS_RECT:States.NOT_RESPONDER,
-LONG_PRESS_DETECTED:States.NOT_RESPONDER}};
-
-
-
-
-
-
-var HIGHLIGHT_DELAY_MS=130;
-
-var PRESS_EXPAND_PX=20;
-
-var LONG_PRESS_THRESHOLD=500;
-
-var LONG_PRESS_DELAY_MS=LONG_PRESS_THRESHOLD - HIGHLIGHT_DELAY_MS;
-
-var LONG_PRESS_ALLOWED_MOVEMENT=10;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var TouchableMixin={
-
-
-
-
-
-
-
-touchableGetInitialState:function(){
-return {
-touchable:{touchState:undefined,responderID:null}};},
-
-
-
-
-
-
-
-touchableHandleResponderTerminationRequest:function(){
-return !this.props.rejectResponderTermination;},
-
-
-
-
-
-touchableHandleStartShouldSetResponder:function(){
-return true;},
-
-
-
-
-
-touchableLongPressCancelsPress:function(){
-return true;},
-
-
-
-
-
-
-
-
-touchableHandleResponderGrant:function(e,dispatchID){
-
-
-
-e.persist();
-
-this.pressOutDelayTimeout && clearTimeout(this.pressOutDelayTimeout);
-this.pressOutDelayTimeout = null;
-
-this.state.touchable.touchState = States.NOT_RESPONDER;
-this.state.touchable.responderID = dispatchID;
-this._receiveSignal(Signals.RESPONDER_GRANT,e);
-var delayMS=
-this.touchableGetHighlightDelayMS !== undefined?
-Math.max(this.touchableGetHighlightDelayMS(),0):HIGHLIGHT_DELAY_MS;
-delayMS = isNaN(delayMS)?HIGHLIGHT_DELAY_MS:delayMS;
-if(delayMS !== 0){
-this.touchableDelayTimeout = setTimeout(
-this._handleDelay.bind(this,e),
-delayMS);}else 
-
-{
-this._handleDelay(e);}
-
-
-var longDelayMS=
-this.touchableGetLongPressDelayMS !== undefined?
-Math.max(this.touchableGetLongPressDelayMS(),10):LONG_PRESS_DELAY_MS;
-longDelayMS = isNaN(longDelayMS)?LONG_PRESS_DELAY_MS:longDelayMS;
-this.longPressDelayTimeout = setTimeout(
-this._handleLongDelay.bind(this,e),
-longDelayMS + delayMS);},
-
-
-
-
-
-
-touchableHandleResponderRelease:function(e){
-this._receiveSignal(Signals.RESPONDER_RELEASE,e);},
-
-
-
-
-
-touchableHandleResponderTerminate:function(e){
-this._receiveSignal(Signals.RESPONDER_TERMINATED,e);},
-
-
-
-
-
-touchableHandleResponderMove:function(e){
-
-
-if(this.state.touchable.touchState === States.RESPONDER_INACTIVE_PRESS_IN){
-return;}
-
-
-
-if(!this.state.touchable.positionOnActivate){
-return;}
-
-
-var positionOnActivate=this.state.touchable.positionOnActivate;
-var dimensionsOnActivate=this.state.touchable.dimensionsOnActivate;
-var pressRectOffset=this.touchableGetPressRectOffset?
-this.touchableGetPressRectOffset():null;
-var pressExpandLeft=
-pressRectOffset.left != null?pressRectOffset.left:PRESS_EXPAND_PX;
-var pressExpandTop=
-pressRectOffset.top != null?pressRectOffset.top:PRESS_EXPAND_PX;
-var pressExpandRight=
-pressRectOffset.right != null?pressRectOffset.right:PRESS_EXPAND_PX;
-var pressExpandBottom=
-pressRectOffset.bottom != null?pressRectOffset.bottom:PRESS_EXPAND_PX;
-
-var touch=TouchEventUtils.extractSingleTouch(e.nativeEvent);
-var pageX=touch && touch.pageX;
-var pageY=touch && touch.pageY;
-
-if(this.pressInLocation){
-var movedDistance=this._getDistanceBetweenPoints(pageX,pageY,this.pressInLocation.pageX,this.pressInLocation.pageY);
-if(movedDistance > LONG_PRESS_ALLOWED_MOVEMENT){
-this._cancelLongPressDelayTimeout();}}
-
-
-
-var isTouchWithinActive=
-pageX > positionOnActivate.left - pressExpandLeft && 
-pageY > positionOnActivate.top - pressExpandTop && 
-pageX < 
-positionOnActivate.left + 
-dimensionsOnActivate.width + 
-pressExpandRight && 
-pageY < 
-positionOnActivate.top + 
-dimensionsOnActivate.height + 
-pressExpandBottom;
-if(isTouchWithinActive){
-this._receiveSignal(Signals.ENTER_PRESS_RECT,e);}else 
-{
-this._cancelLongPressDelayTimeout();
-this._receiveSignal(Signals.LEAVE_PRESS_RECT,e);}},
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-_remeasureMetricsOnActivation:function(){
-queryLayoutByID(
-this.state.touchable.responderID,
-null,
-this._handleQueryLayout);},
-
-
-
-_handleQueryLayout:function(l,t,w,h,globalX,globalY){
-this.state.touchable.positionOnActivate && 
-Position.release(this.state.touchable.positionOnActivate);
-this.state.touchable.dimensionsOnActivate && 
-BoundingDimensions.release(this.state.touchable.dimensionsOnActivate);
-this.state.touchable.positionOnActivate = Position.getPooled(globalX,globalY);
-this.state.touchable.dimensionsOnActivate = BoundingDimensions.getPooled(w,h);},
-
-
-_handleDelay:function(e){
-this.touchableDelayTimeout = null;
-this._receiveSignal(Signals.DELAY,e);},
-
-
-_handleLongDelay:function(e){
-this.longPressDelayTimeout = null;
-this._receiveSignal(Signals.LONG_PRESS_DETECTED,e);},
-
-
-
-
-
-
-
-
-
-
-_receiveSignal:function(signal,e){
-var curState=this.state.touchable.touchState;
-if(!(Transitions[curState] && Transitions[curState][signal])){
-throw new Error(
-'Unrecognized signal `' + signal + '` or state `' + curState + 
-'` for Touchable responder `' + this.state.touchable.responderID + '`');}
-
-
-var nextState=Transitions[curState][signal];
-if(nextState === States.ERROR){
-throw new Error(
-'Touchable cannot transition from `' + curState + '` to `' + signal + 
-'` for responder `' + this.state.touchable.responderID + '`');}
-
-
-if(curState !== nextState){
-this._performSideEffectsForTransition(curState,nextState,signal,e);
-this.state.touchable.touchState = nextState;}},
-
-
-
-_cancelLongPressDelayTimeout:function(){
-this.longPressDelayTimeout && clearTimeout(this.longPressDelayTimeout);
-this.longPressDelayTimeout = null;},
-
-
-_isHighlight:function(state){
-return state === States.RESPONDER_ACTIVE_PRESS_IN || 
-state === States.RESPONDER_ACTIVE_LONG_PRESS_IN;},
-
-
-_savePressInLocation:function(e){
-var touch=TouchEventUtils.extractSingleTouch(e.nativeEvent);
-var pageX=touch && touch.pageX;
-var pageY=touch && touch.pageY;
-this.pressInLocation = {pageX:pageX,pageY:pageY};},
-
-
-_getDistanceBetweenPoints:function(aX,aY,bX,bY){
-var deltaX=aX - bX;
-var deltaY=aY - bY;
-return Math.sqrt(deltaX * deltaX + deltaY * deltaY);},
-
-
-
-
-
-
-
-
-
-
-
-
-
-_performSideEffectsForTransition:function(curState,nextState,signal,e){
-var curIsHighlight=this._isHighlight(curState);
-var newIsHighlight=this._isHighlight(nextState);
-
-var isFinalSignal=
-signal === Signals.RESPONDER_TERMINATED || 
-signal === Signals.RESPONDER_RELEASE;
-
-if(isFinalSignal){
-this._cancelLongPressDelayTimeout();}
-
-
-if(!IsActive[curState] && IsActive[nextState]){
-this._remeasureMetricsOnActivation();}
-
-
-if(IsPressingIn[curState] && signal === Signals.LONG_PRESS_DETECTED){
-this.touchableHandleLongPress && this.touchableHandleLongPress(e);}
-
-
-if(newIsHighlight && !curIsHighlight){
-this._savePressInLocation(e);
-this.touchableHandleActivePressIn && this.touchableHandleActivePressIn(e);}else 
-if(!newIsHighlight && curIsHighlight && this.touchableHandleActivePressOut){
-if(this.touchableGetPressOutDelayMS && this.touchableGetPressOutDelayMS()){
-this.pressOutDelayTimeout = this.setTimeout(function(){
-this.touchableHandleActivePressOut(e);},
-this.touchableGetPressOutDelayMS());}else 
-{
-this.touchableHandleActivePressOut(e);}}
-
-
-
-if(IsPressingIn[curState] && signal === Signals.RESPONDER_RELEASE){
-var hasLongPressHandler=!!this.props.onLongPress;
-var pressIsLongButStillCallOnPress=
-IsLongPressingIn[curState] && (
-!hasLongPressHandler || 
-!this.touchableLongPressCancelsPress());
-
-
-var shouldInvokePress=!IsLongPressingIn[curState] || pressIsLongButStillCallOnPress;
-if(shouldInvokePress && this.touchableHandlePress){
-this.touchableHandlePress(e);}}
-
-
-
-this.touchableDelayTimeout && clearTimeout(this.touchableDelayTimeout);
-this.touchableDelayTimeout = null;}};
-
-
-
-
-var Touchable={
-Mixin:TouchableMixin};
-
-
-module.exports = Touchable;
-});
-__d('BoundingDimensions',["PooledClass"],function(global, require, module, exports) {  "use strict";
-
-
-
-
-
-var PooledClass=require('PooledClass');
-
-var twoArgumentPooler=PooledClass.twoArgumentPooler;
-
-
-
-
-
-
-
-
-function BoundingDimensions(width,height){
-this.width = width;
-this.height = height;}
-
-
-
-
-
-
-BoundingDimensions.getPooledFromElement = function(element){
-return BoundingDimensions.getPooled(
-element.offsetWidth,
-element.offsetHeight);};
-
-
-
-PooledClass.addPoolingTo(BoundingDimensions,twoArgumentPooler);
-
-module.exports = BoundingDimensions;
-});
-__d('Position',["PooledClass"],function(global, require, module, exports) {  "use strict";
-
-
-
-
-
-var PooledClass=require('PooledClass');
-
-var twoArgumentPooler=PooledClass.twoArgumentPooler;
-
-
-
-
-
-
-
-
-
-function Position(left,top){
-this.left = left;
-this.top = top;}
-
-
-PooledClass.addPoolingTo(Position,twoArgumentPooler);
-
-module.exports = Position;
-});
-__d('TouchEventUtils',[],function(global, require, module, exports) {  var 
-
-
-
-
-
-
-
-
-
-
-TouchEventUtils={
-
-
-
-
-
-
-
-
-
-
-extractSingleTouch:function(nativeEvent){
-var touches=nativeEvent.touches;
-var changedTouches=nativeEvent.changedTouches;
-var hasTouches=touches && touches.length > 0;
-var hasChangedTouches=changedTouches && changedTouches.length > 0;
-
-return !hasTouches && hasChangedTouches?changedTouches[0]:
-hasTouches?touches[0]:
-nativeEvent;}};
-
-
-
-module.exports = TouchEventUtils;
-});
-__d('queryLayoutByID',["ReactNativeTagHandles","NativeModules"],function(global, require, module, exports) {  'use strict';
-
-
-
-
-
-
-
-
-
-
-
-
-var ReactNativeTagHandles=require('ReactNativeTagHandles');
-var RCTUIManager=require('NativeModules').UIManager;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var queryLayoutByID=function(
-rootNodeID,
-onError,
-onSuccess)
-{
-
-RCTUIManager.measure(
-ReactNativeTagHandles.rootNodeIDToTag[rootNodeID],
-onSuccess);};
-
-
-
-module.exports = queryLayoutByID;
+module.exports = DummyTabBarIOS;
 });
 __d('TextInput',["DocumentSelectionState","EventEmitter","NativeMethodsMixin","NativeModules","Platform","ReactPropTypes","React","ReactChildren","StyleSheet","Text","TextInputState","react-timer-mixin/TimerMixin.js","TouchableWithoutFeedback","createReactNativeComponentClass","emptyFunction","invariant","requireNativeComponent"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
 
@@ -42794,7 +41643,7 @@ props.delayLongPress < 0),
 
 module.exports = ensurePositiveDelayProps;
 });
-__d('ToastAndroid',["warning"],function(global, require, module, exports) {  'use strict';
+__d('ToastAndroid',["NativeModules"],function(global, require, module, exports) {  'use strict';
 
 
 
@@ -42806,22 +41655,34 @@ __d('ToastAndroid',["warning"],function(global, require, module, exports) {  'us
 
 
 
-var warning=require('warning');
+
+var RCTToastAndroid=require('NativeModules').ToastAndroid;
+
+
+
+
+
+
+
+
 
 var ToastAndroid={
+
+SHORT:RCTToastAndroid.SHORT,
+LONG:RCTToastAndroid.LONG,
 
 show:function(
 message,
 duration)
 {
-warning(false,'Cannot use ToastAndroid on iOS.');}};
+RCTToastAndroid.show(message,duration);}};
 
 
 
 
 module.exports = ToastAndroid;
 });
-__d('ToolbarAndroid',["UnimplementedView"],function(global, require, module, exports) {  'use strict';
+__d('ToolbarAndroid',["Image","NativeMethodsMixin","React","ReactNativeViewAttributes","ReactPropTypes","requireNativeComponent"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
 
 
 
@@ -42833,7 +41694,165 @@ __d('ToolbarAndroid',["UnimplementedView"],function(global, require, module, exp
 
 
 
-module.exports = require('UnimplementedView');
+
+var Image=require('Image');
+var NativeMethodsMixin=require('NativeMethodsMixin');
+var React=require('React');
+var ReactNativeViewAttributes=require('ReactNativeViewAttributes');
+var ReactPropTypes=require('ReactPropTypes');
+
+var requireNativeComponent=require('requireNativeComponent');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var ToolbarAndroid=React.createClass({displayName:'ToolbarAndroid',
+mixins:[NativeMethodsMixin],
+
+propTypes:{
+
+
+
+
+
+
+
+
+
+
+
+
+
+actions:ReactPropTypes.arrayOf(ReactPropTypes.shape({
+title:ReactPropTypes.string.isRequired,
+icon:Image.propTypes.source,
+show:ReactPropTypes.oneOf(['always','ifRoom','never']),
+showWithText:ReactPropTypes.bool})),
+
+
+
+
+logo:Image.propTypes.source,
+
+
+
+navIcon:Image.propTypes.source,
+
+
+
+
+onActionSelected:ReactPropTypes.func,
+
+
+
+onIconClicked:ReactPropTypes.func,
+
+
+
+subtitle:ReactPropTypes.string,
+
+
+
+subtitleColor:ReactPropTypes.string,
+
+
+
+title:ReactPropTypes.string,
+
+
+
+titleColor:ReactPropTypes.string,
+
+
+
+testID:ReactPropTypes.string},
+
+
+render:function(){
+var nativeProps=_extends({},
+this.props);
+
+if(this.props.logo){
+if(!this.props.logo.isStatic){
+throw 'logo prop should be a static image (obtained via ix)';}
+
+nativeProps.logo = this.props.logo.uri;}
+
+if(this.props.navIcon){
+if(!this.props.navIcon.isStatic){
+throw 'navIcon prop should be static image (obtained via ix)';}
+
+nativeProps.navIcon = this.props.navIcon.uri;}
+
+if(this.props.actions){
+nativeProps.actions = [];
+for(var i=0;i < this.props.actions.length;i++) {
+var action=_extends({},
+this.props.actions[i]);
+
+if(action.icon){
+if(!action.icon.isStatic){
+throw 'action icons should be static images (obtained via ix)';}
+
+action.icon = action.icon.uri;}
+
+nativeProps.actions.push(action);}}
+
+
+
+return React.createElement(NativeToolbar,_extends({onSelect:this._onSelect},nativeProps));},
+
+
+_onSelect:function(event){
+var position=event.nativeEvent.position;
+if(position === -1){
+this.props.onIconClicked && this.props.onIconClicked();}else 
+{
+this.props.onActionSelected && this.props.onActionSelected(position);}}});
+
+
+
+
+var toolbarAttributes=_extends({},
+ReactNativeViewAttributes.UIView,{
+actions:true,
+logo:true,
+navIcon:true,
+subtitle:true,
+subtitleColor:true,
+title:true,
+titleColor:true});
+
+
+var NativeToolbar=requireNativeComponent('ToolbarAndroid',null);
+
+module.exports = ToolbarAndroid;
 });
 __d('TouchableHighlight',["NativeMethodsMixin","React","ReactNativeViewAttributes","StyleSheet","react-timer-mixin/TimerMixin.js","Touchable","TouchableWithoutFeedback","View","cloneWithProps","ensureComponentIsNative","ensurePositiveDelayProps","keyOf","merge","onlyChild"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
 
@@ -43314,7 +42333,7 @@ component && typeof component.setNativeProps === 'function',
 
 module.exports = ensureComponentIsNative;
 });
-__d('TouchableNativeFeedback',["React","StyleSheet","Text","View"],function(global, require, module, exports) {  'use strict';
+__d('TouchableNativeFeedback',["ReactPropTypes","NativeModules","React","ReactNativeViewAttributes","Touchable","TouchableWithoutFeedback","createReactNativeComponentClass","createStrictShapeTypeChecker","ensurePositiveDelayProps","onlyChild","processColor"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
 
 
 
@@ -43326,40 +42345,214 @@ __d('TouchableNativeFeedback',["React","StyleSheet","Text","View"],function(glob
 
 
 
-
+var PropTypes=require('ReactPropTypes');
+var RCTUIManager=require('NativeModules').UIManager;
 var React=require('React');
-var StyleSheet=require('StyleSheet');
-var Text=require('Text');
-var View=require('View');
+var ReactNativeViewAttributes=require('ReactNativeViewAttributes');
+var Touchable=require('Touchable');
+var TouchableWithoutFeedback=require('TouchableWithoutFeedback');
 
-var DummyTouchableNativeFeedback=React.createClass({displayName:'DummyTouchableNativeFeedback',
+var createReactNativeComponentClass=require('createReactNativeComponentClass');
+var createStrictShapeTypeChecker=require('createStrictShapeTypeChecker');
+var ensurePositiveDelayProps=require('ensurePositiveDelayProps');
+var onlyChild=require('onlyChild');
+var processColor=require('processColor');
+
+var rippleBackgroundPropType=createStrictShapeTypeChecker({
+type:React.PropTypes.oneOf(['RippleAndroid']),
+color:PropTypes.string,
+borderless:PropTypes.bool});
+
+
+var themeAttributeBackgroundPropType=createStrictShapeTypeChecker({
+type:React.PropTypes.oneOf(['ThemeAttrAndroid']),
+attribute:PropTypes.string.isRequired});
+
+
+var backgroundPropType=PropTypes.oneOfType([
+rippleBackgroundPropType,
+themeAttributeBackgroundPropType]);
+
+
+var TouchableView=createReactNativeComponentClass({
+validAttributes:_extends({},
+ReactNativeViewAttributes.UIView,{
+nativeBackgroundAndroid:backgroundPropType}),
+
+uiViewClassName:'RCTView'});
+
+
+var PRESS_RECT_OFFSET={top:20,left:20,right:20,bottom:30};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var TouchableNativeFeedback=React.createClass({displayName:'TouchableNativeFeedback',
+propTypes:_extends({},
+TouchableWithoutFeedback.propTypes,{
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+background:backgroundPropType}),
+
+
+statics:{
+SelectableBackground:function(){
+return {type:'ThemeAttrAndroid',attribute:'selectableItemBackground'};},
+
+SelectableBackgroundBorderless:function(){
+return {type:'ThemeAttrAndroid',attribute:'selectableItemBackgroundBorderless'};},
+
+Ripple:function(color,borderless){
+return {type:'RippleAndroid',color:processColor(color),borderless:borderless};}},
+
+
+
+mixins:[Touchable.Mixin],
+
+getDefaultProps:function(){
+return {
+background:this.SelectableBackground()};},
+
+
+
+getInitialState:function(){
+return this.touchableGetInitialState();},
+
+
+componentDidMount:function(){
+ensurePositiveDelayProps(this.props);},
+
+
+componentWillReceiveProps:function(nextProps){
+ensurePositiveDelayProps(nextProps);},
+
+
+
+
+
+
+touchableHandleActivePressIn:function(){
+this.props.onPressIn && this.props.onPressIn();
+this._dispatchPressedStateChange(true);
+this._dispatchHotspotUpdate(this.pressInLocation.pageX,this.pressInLocation.pageY);},
+
+
+touchableHandleActivePressOut:function(){
+this.props.onPressOut && this.props.onPressOut();
+this._dispatchPressedStateChange(false);},
+
+
+touchableHandlePress:function(){
+this.props.onPress && this.props.onPress();},
+
+
+touchableHandleLongPress:function(){
+this.props.onLongPress && this.props.onLongPress();},
+
+
+touchableGetPressRectOffset:function(){
+return PRESS_RECT_OFFSET;},
+
+
+touchableGetHighlightDelayMS:function(){
+return this.props.delayPressIn;},
+
+
+touchableGetLongPressDelayMS:function(){
+return this.props.delayLongPress;},
+
+
+touchableGetPressOutDelayMS:function(){
+return this.props.delayPressOut;},
+
+
+_handleResponderMove:function(e){
+this.touchableHandleResponderMove(e);
+this._dispatchHotspotUpdate(e.nativeEvent.pageX,e.nativeEvent.pageY);},
+
+
+_dispatchHotspotUpdate:function(destX,destY){
+RCTUIManager.dispatchViewManagerCommand(
+React.findNodeHandle(this),
+RCTUIManager.RCTView.Commands.hotspotUpdate,
+[destX || 0,destY || 0]);},
+
+
+
+_dispatchPressedStateChange:function(pressed){
+RCTUIManager.dispatchViewManagerCommand(
+React.findNodeHandle(this),
+RCTUIManager.RCTView.Commands.setPressed,
+[pressed]);},
+
+
+
 render:function(){
-return (
-React.createElement(View,{style:[styles.container,this.props.style]},
-React.createElement(Text,{style:styles.info},'TouchableNativeFeedback is not supported on this platform!')));}});
+var childProps=_extends({},
+onlyChild(this.props.children).props,{
+nativeBackgroundAndroid:this.props.background,
+accessible:this.props.accessible !== false,
+accessibilityComponentType:this.props.accessibilityComponentType,
+accessibilityTraits:this.props.accessibilityTraits,
+testID:this.props.testID,
+onLayout:this.props.onLayout,
+onStartShouldSetResponder:this.touchableHandleStartShouldSetResponder,
+onResponderTerminationRequest:this.touchableHandleResponderTerminationRequest,
+onResponderGrant:this.touchableHandleResponderGrant,
+onResponderMove:this._handleResponderMove,
+onResponderRelease:this.touchableHandleResponderRelease,
+onResponderTerminate:this.touchableHandleResponderTerminate});
+
+return React.createElement(TouchableView,childProps);}});
 
 
 
-
-
-var styles=StyleSheet.create({
-container:{
-height:100,
-width:300,
-backgroundColor:'#ffbcbc',
-borderWidth:1,
-borderColor:'red',
-alignItems:'center',
-justifyContent:'center',
-margin:10},
-
-info:{
-color:'#333333',
-margin:20}});
-
-
-
-module.exports = DummyTouchableNativeFeedback;
+module.exports = TouchableNativeFeedback;
 });
 __d('TouchableOpacity',["Animated","NativeMethodsMixin","React","react-timer-mixin/TimerMixin.js","Touchable","TouchableWithoutFeedback","ensurePositiveDelayProps","flattenStyle","keyOf"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
 
@@ -45759,7 +44952,7 @@ global.msRequestAnimationFrame;
 
 module.exports = nativeRequestAnimationFrame;
 });
-__d('WebView',["ActivityIndicatorIOS","EdgeInsetsPropType","React","StyleSheet","Text","View","invariant","keyMirror","requireNativeComponent","NativeModules"],function(global, require, module, exports) {  'use strict';
+__d('WebView',["EdgeInsetsPropType","React","ReactNativeViewAttributes","StyleSheet","View","createReactNativeComponentClass","keyMirror","merge","NativeModules"],function(global, require, module, exports) {  'use strict';
 
 
 
@@ -45771,22 +44964,19 @@ __d('WebView',["ActivityIndicatorIOS","EdgeInsetsPropType","React","StyleSheet",
 
 
 
-
-var ActivityIndicatorIOS=require('ActivityIndicatorIOS');
 var EdgeInsetsPropType=require('EdgeInsetsPropType');
 var React=require('React');
+var ReactNativeViewAttributes=require('ReactNativeViewAttributes');
 var StyleSheet=require('StyleSheet');
-var Text=require('Text');
 var View=require('View');
 
-var invariant=require('invariant');
+var createReactNativeComponentClass=require('createReactNativeComponentClass');
 var keyMirror=require('keyMirror');
-var requireNativeComponent=require('requireNativeComponent');
+var merge=require('merge');
 
 var PropTypes=React.PropTypes;
-var RCTWebViewManager=require('NativeModules').WebViewManager;
+var RCTUIManager=require('NativeModules').UIManager;
 
-var BGWASH='rgba(255,255,255,0.8)';
 var RCT_WEBVIEW_REF='webview';
 
 var WebViewState=keyMirror({
@@ -45795,69 +44985,20 @@ LOADING:null,
 ERROR:null});
 
 
-var NavigationType={
-click:RCTWebViewManager.NavigationType.LinkClicked,
-formsubmit:RCTWebViewManager.NavigationType.FormSubmitted,
-backforward:RCTWebViewManager.NavigationType.BackForward,
-reload:RCTWebViewManager.NavigationType.Reload,
-formresubmit:RCTWebViewManager.NavigationType.FormResubmitted,
-other:RCTWebViewManager.NavigationType.Other};
-
-
-var JSNavigationScheme=RCTWebViewManager.JSNavigationScheme;
-
-
-
-
-
-
-
-
-
-var defaultRenderLoading=function(){return (
-React.createElement(View,{style:styles.loadingView},
-React.createElement(ActivityIndicatorIOS,null)));};
-
-
-var defaultRenderError=function(errorDomain,errorCode,errorDesc){return (
-React.createElement(View,{style:styles.errorContainer},
-React.createElement(Text,{style:styles.errorTextTitle},'Error loading page'),
-
-
-React.createElement(Text,{style:styles.errorText},
-'Domain: ' + errorDomain),
-
-React.createElement(Text,{style:styles.errorText},
-'Error Code: ' + errorCode),
-
-React.createElement(Text,{style:styles.errorText},
-'Description: ' + errorDesc)));};
-
-
-
-
 var WebView=React.createClass({displayName:'WebView',
-statics:{
-JSNavigationScheme:JSNavigationScheme,
-NavigationType:NavigationType},
-
 
 propTypes:{
-url:PropTypes.string,
-html:PropTypes.string,
 renderError:PropTypes.func,
 renderLoading:PropTypes.func,
-bounces:PropTypes.bool,
-scrollEnabled:PropTypes.bool,
+url:PropTypes.string,
+html:PropTypes.string,
 automaticallyAdjustContentInsets:PropTypes.bool,
 contentInset:EdgeInsetsPropType,
 onNavigationStateChange:PropTypes.func,
 startInLoadingState:PropTypes.bool,
 style:View.propTypes.style,
-
-
-
 javaScriptEnabledAndroid:PropTypes.bool,
+
 
 
 
@@ -45867,7 +45008,11 @@ injectedJavaScript:PropTypes.string,
 
 
 
-scalesPageToFit:PropTypes.bool},
+userAgent:PropTypes.string,
+
+
+
+testID:PropTypes.string},
 
 
 getInitialState:function(){
@@ -45888,25 +45033,18 @@ render:function(){
 var otherView=null;
 
 if(this.state.viewState === WebViewState.LOADING){
-otherView = (this.props.renderLoading || defaultRenderLoading)();}else 
+otherView = this.props.renderLoading && this.props.renderLoading();}else 
 if(this.state.viewState === WebViewState.ERROR){
 var errorEvent=this.state.lastErrorEvent;
-invariant(
-errorEvent != null,
-'lastErrorEvent expected to be non-null');
-
-otherView = (this.props.renderError || defaultRenderError)(
+otherView = this.props.renderError && this.props.renderError(
 errorEvent.domain,
 errorEvent.code,
 errorEvent.description);}else 
-
 if(this.state.viewState !== WebViewState.IDLE){
-console.error(
-'RCTWebView invalid state encountered: ' + this.state.loading);}
+console.error('RCTWebView invalid state encountered: ' + this.state.loading);}
 
 
-
-var webViewStyles=[styles.container,styles.webView,this.props.style];
+var webViewStyles=[styles.container,this.props.style];
 if(this.state.viewState === WebViewState.LOADING || 
 this.state.viewState === WebViewState.ERROR){
 
@@ -45921,14 +45059,14 @@ style:webViewStyles,
 url:this.props.url,
 html:this.props.html,
 injectedJavaScript:this.props.injectedJavaScript,
-bounces:this.props.bounces,
-scrollEnabled:this.props.scrollEnabled,
+userAgent:this.props.userAgent,
+javaScriptEnabledAndroid:this.props.javaScriptEnabledAndroid,
 contentInset:this.props.contentInset,
 automaticallyAdjustContentInsets:this.props.automaticallyAdjustContentInsets,
 onLoadingStart:this.onLoadingStart,
 onLoadingFinish:this.onLoadingFinish,
 onLoadingError:this.onLoadingError,
-scalesPageToFit:this.props.scalesPageToFit});
+testID:this.props.testID});
 
 
 return (
@@ -45940,15 +45078,27 @@ otherView));},
 
 
 goForward:function(){
-RCTWebViewManager.goForward(this.getWebViewHandle());},
+RCTUIManager.dispatchViewManagerCommand(
+this.getWebWiewHandle(),
+RCTUIManager.RCTWebView.Commands.goForward,
+null);},
+
 
 
 goBack:function(){
-RCTWebViewManager.goBack(this.getWebViewHandle());},
+RCTUIManager.dispatchViewManagerCommand(
+this.getWebWiewHandle(),
+RCTUIManager.RCTWebView.Commands.goBack,
+null);},
+
 
 
 reload:function(){
-RCTWebViewManager.reload(this.getWebViewHandle());},
+RCTUIManager.dispatchViewManagerCommand(
+this.getWebWiewHandle(),
+RCTUIManager.RCTWebView.Commands.reload,
+null);},
+
 
 
 
@@ -45961,7 +45111,7 @@ this.props.onNavigationStateChange(event.nativeEvent);}},
 
 
 
-getWebViewHandle:function(){
+getWebWiewHandle:function(){
 return React.findNodeHandle(this.refs[RCT_WEBVIEW_REF]);},
 
 
@@ -45971,7 +45121,7 @@ this.updateNavigationState(event);},
 
 onLoadingError:function(event){
 event.persist();
-console.warn('Encountered an error loading page',event.nativeEvent);
+console.error('Encountered an error loading page',event.nativeEvent);
 
 this.setState({
 lastErrorEvent:event.nativeEvent,
@@ -45987,46 +45137,24 @@ this.updateNavigationState(event);}});
 
 
 
-var RCTWebView=requireNativeComponent('RCTWebView',WebView,{
-nativeOnly:{
-onLoadingStart:true,
-onLoadingError:true,
-onLoadingFinish:true}});
+var RCTWebView=createReactNativeComponentClass({
+validAttributes:merge(ReactNativeViewAttributes.UIView,{
+html:true,
+injectedJavaScript:true,
+javaScriptEnabledAndroid:true,
+url:true,
+userAgent:true}),
 
+uiViewClassName:'RCTWebView'});
 
 
 var styles=StyleSheet.create({
 container:{
 flex:1},
 
-errorContainer:{
-flex:1,
-justifyContent:'center',
-alignItems:'center',
-backgroundColor:BGWASH},
-
-errorText:{
-fontSize:14,
-textAlign:'center',
-marginBottom:2},
-
-errorTextTitle:{
-fontSize:15,
-fontWeight:'500',
-marginBottom:10},
-
 hidden:{
 height:0,
-flex:0},
-
-loadingView:{
-backgroundColor:BGWASH,
-flex:1,
-justifyContent:'center',
-alignItems:'center'},
-
-webView:{
-backgroundColor:'#ffffff'}});
+flex:0}});
 
 
 
@@ -46328,7 +45456,7 @@ runnables[appKey].run(appParameters);}};
 
 module.exports = AppRegistry;
 });
-__d('renderApplication',["Inspector","RCTDeviceEventEmitter","React","StyleSheet","Subscribable","View","WarningBox","invariant","setupDevtools"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
+__d('renderApplication',["Inspector","Portal","RCTDeviceEventEmitter","React","StyleSheet","Subscribable","View","invariant","BackAndroid"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
 
 
 
@@ -46341,52 +45469,91 @@ __d('renderApplication',["Inspector","RCTDeviceEventEmitter","React","StyleSheet
 
 
 var Inspector=require('Inspector');
+var Portal=require('Portal');
 var RCTDeviceEventEmitter=require('RCTDeviceEventEmitter');
 var React=require('React');
 var StyleSheet=require('StyleSheet');
 var Subscribable=require('Subscribable');
 var View=require('View');
-var WarningBox=require('WarningBox');
 
 var invariant=require('invariant');
+
+
+require('BackAndroid');
 
 var AppContainer=React.createClass({displayName:'AppContainer',
 mixins:[Subscribable.Mixin],
 
 getInitialState:function(){
-return {inspector:null};},
+return {
+enabled:__DEV__,
+inspectorVisible:false,
+rootNodeHandle:null,
+rootImportanceForAccessibility:'auto'};},
+
 
 
 toggleElementInspector:function(){
-var inspector=this.state.inspector?
-null:
-React.createElement(Inspector,{
-rootTag:this.props.rootTag,
-inspectedViewTag:React.findNodeHandle(this.refs.main)});
+this.setState({
+inspectorVisible:!this.state.inspectorVisible,
+rootNodeHandle:React.findNodeHandle(this.refs.main)});},
 
-this.setState({inspector:inspector});},
 
 
 componentDidMount:function(){
 this.addListenerOn(
 RCTDeviceEventEmitter,
 'toggleElementInspector',
-this.toggleElementInspector);},
+this.toggleElementInspector);
+
+
+this._unmounted = false;},
+
+
+renderInspector:function(){
+return this.state.inspectorVisible?
+React.createElement(Inspector,{
+rootTag:this.props.rootTag,
+inspectedViewTag:this.state.rootNodeHandle}):
+
+null;},
+
+
+componentWillUnmount:function(){
+this._unmounted = true;},
+
+
+setRootAccessibility:function(modalVisible){
+if(this._unmounted){
+return;}
+
+
+this.setState({
+rootImportanceForAccessibility:modalVisible?'no-hide-descendants':'auto'});},
 
 
 
 render:function(){
-var shouldRenderWarningBox=__DEV__ && console.yellowBoxEnabled;
-var warningBox=shouldRenderWarningBox?React.createElement(WarningBox,null):null;
-return (
+var RootComponent=this.props.rootComponent;
+var appView=
+React.createElement(View,{
+ref:'main',
+collapsable:!this.state.inspectorVisible,
+style:styles.appContainer},
+React.createElement(RootComponent,_extends({},
+this.props.initialProps,{
+rootTag:this.props.rootTag,
+importantForAccessibility:this.state.rootImportanceForAccessibility})),
+React.createElement(Portal,{
+onModalVisibilityChanged:this.setRootAccessibility}));
+
+
+return this.state.enabled?
 React.createElement(View,{style:styles.appContainer},
-React.createElement(View,{collapsible:false,style:styles.appContainer,ref:'main'},
-this.props.children),
+appView,
+this.renderInspector()):
 
-warningBox,
-this.state.inspector));}});
-
-
+appView;}});
 
 
 
@@ -46399,23 +45566,18 @@ invariant(
 rootTag,
 'Expect to have a valid rootTag, instead got ',rootTag);
 
-
-if(__DEV__ && !window.document){
-var setupDevtools=require('setupDevtools');
-setupDevtools();}
-
 React.render(
-React.createElement(AppContainer,{rootTag:rootTag},
-React.createElement(RootComponent,_extends({},
-initialProps,{
-rootTag:rootTag}))),
-
-
+React.createElement(AppContainer,{
+rootComponent:RootComponent,
+initialProps:initialProps,
+rootTag:rootTag}),
 rootTag);}
 
 
 
 var styles=StyleSheet.create({
+
+
 appContainer:{
 position:'absolute',
 left:0,
@@ -47382,7 +46544,7 @@ paddingRight:100}});
 
 module.exports = PerformanceOverlay;
 });
-__d('WarningBox',["AsyncStorage","EventEmitter","Map","PanResponder","React","StyleSheet","Text","TouchableOpacity","View","invariant","rebound/rebound.js","stringifySafe","Dimensions"],function(global, require, module, exports) {  'use strict';var _extends=Object.assign || function(target){for(var i=1;i < arguments.length;i++) {var source=arguments[i];for(var key in source) {if(Object.prototype.hasOwnProperty.call(source,key)){target[key] = source[key];}}}return target;};
+__d('Portal',["Platform","React","NativeModules","StyleSheet","View"],function(global, require, module, exports) {  'use strict';
 
 
 
@@ -47390,33 +46552,16 @@ __d('WarningBox',["AsyncStorage","EventEmitter","Map","PanResponder","React","St
 
 
 
-
-
-
-
-var AsyncStorage=require('AsyncStorage');
-var EventEmitter=require('EventEmitter');
-var Map=require('Map');
-var PanResponder=require('PanResponder');
+var Platform=require('Platform');
 var React=require('React');
+var RCTUIManager=require('NativeModules').UIManager;
 var StyleSheet=require('StyleSheet');
-var Text=require('Text');
-var TouchableOpacity=require('TouchableOpacity');
 var View=require('View');
 
-var invariant=require('invariant');
-var rebound=require('rebound/rebound.js');
-var stringifySafe=require('stringifySafe');
+var _portalRef;
 
-var SCREEN_WIDTH=require('Dimensions').get('window').width;
-var IGNORED_WARNINGS_KEY='__DEV_WARNINGS_IGNORED';
 
-var consoleWarn=console.warn.bind(console);
-
-var warningCounts=new Map();
-var ignoredWarnings=[];
-var totalWarningCount=0;
-var warningCountEvents=new EventEmitter();
+var lastUsedTag=0;
 
 
 
@@ -47430,6 +46575,16 @@ var warningCountEvents=new EventEmitter();
 
 
 
+var Portal=React.createClass({displayName:'Portal',
+statics:{
+
+
+
+
+
+
+allocateTag:function(){
+return '__modal_' + ++lastUsedTag;},
 
 
 
@@ -47438,345 +46593,137 @@ var warningCountEvents=new EventEmitter();
 
 
 
-
-
-if(__DEV__){
-console.warn = function(){
-consoleWarn.apply(null,arguments);
-if(!console.yellowBoxEnabled){
+showModal:function(tag,component){
+if(!_portalRef){
+console.error('Calling showModal but no Portal has been rendered.');
 return;}
 
-var warning=Array.prototype.map.call(arguments,stringifySafe).join(' ');
-if(!console.yellowBoxResetIgnored && 
-ignoredWarnings.indexOf(warning) !== -1){
+_portalRef._showModal(tag,component);},
+
+
+
+
+
+
+
+closeModal:function(tag){
+if(!_portalRef){
+console.error('Calling closeModal but no Portal has been rendered.');
 return;}
 
-var count=warningCounts.has(warning)?warningCounts.get(warning) + 1:1;
-warningCounts.set(warning,count);
-totalWarningCount += 1;
-warningCountEvents.emit('count',totalWarningCount);};}
-
-
-
-function saveIgnoredWarnings(){
-AsyncStorage.setItem(
-IGNORED_WARNINGS_KEY,
-JSON.stringify(ignoredWarnings),
-function(err){
-if(err){
-console.warn('Could not save ignored warnings.',err);}});}
+_portalRef._closeModal(tag);},
 
 
 
 
 
-AsyncStorage.getItem(IGNORED_WARNINGS_KEY,function(err,data){
-if(!err && data && !console.yellowBoxResetIgnored){
-ignoredWarnings = JSON.parse(data);}});
+getOpenModals:function(){
+if(!_portalRef){
+console.error('Calling getOpenModals but no Portal has been rendered.');
+return [];}
+
+return _portalRef._getOpenModals();},
 
 
-
-var WarningRow=React.createClass({displayName:'WarningRow',
-componentWillMount:function(){var _this=this;
-this.springSystem = new rebound.SpringSystem();
-this.dismissalSpring = this.springSystem.createSpring();
-this.dismissalSpring.setRestSpeedThreshold(0.05);
-this.dismissalSpring.setCurrentValue(0);
-this.dismissalSpring.addListener({
-onSpringUpdate:function(){
-var val=_this.dismissalSpring.getCurrentValue();
-_this.text && _this.text.setNativeProps({
-left:SCREEN_WIDTH * val});
-
-_this.container && _this.container.setNativeProps({
-opacity:1 - val});
-
-_this.closeButton && _this.closeButton.setNativeProps({
-opacity:1 - val * 5});},
-
-
-onSpringAtRest:function(){
-if(_this.dismissalSpring.getCurrentValue()){
-_this.collapseSpring.setEndValue(1);}}});
-
-
-
-this.collapseSpring = this.springSystem.createSpring();
-this.collapseSpring.setRestSpeedThreshold(0.05);
-this.collapseSpring.setCurrentValue(0);
-this.collapseSpring.getSpringConfig().friction = 20;
-this.collapseSpring.getSpringConfig().tension = 200;
-this.collapseSpring.addListener({
-onSpringUpdate:function(){
-var val=_this.collapseSpring.getCurrentValue();
-_this.container && _this.container.setNativeProps({
-height:Math.abs(46 - val * 46)});},
-
-
-onSpringAtRest:function(){
-_this.props.onDismissed();}});
-
-
-this.panGesture = PanResponder.create({
-onStartShouldSetPanResponder:function(){
-return !!_this.dismissalSpring.getCurrentValue();},
-
-onMoveShouldSetPanResponder:function(){return true;},
-onPanResponderGrant:function(){
-_this.isResponderOnlyToBlockTouches = 
-!!_this.dismissalSpring.getCurrentValue();},
-
-onPanResponderMove:function(e,gestureState){
-if(_this.isResponderOnlyToBlockTouches){
+notifyAccessibilityService:function(){
+if(!_portalRef){
+console.error('Calling closeModal but no Portal has been rendered.');
 return;}
 
-_this.dismissalSpring.setCurrentValue(gestureState.dx / SCREEN_WIDTH);},
-
-onPanResponderRelease:function(e,gestureState){
-if(_this.isResponderOnlyToBlockTouches){
-return;}
-
-var gestureCompletion=gestureState.dx / SCREEN_WIDTH;
-var doesGestureRelease=gestureState.vx + gestureCompletion > 0.5;
-_this.dismissalSpring.setEndValue(doesGestureRelease?1:0);}});},
+_portalRef._notifyAccessibilityService();}},
 
 
 
-render:function(){var _this2=this;
-var countText;
-if(warningCounts.get(this.props.warning) > 1){
-countText = 
-React.createElement(Text,{style:styles.bold},'(',
-warningCounts.get(this.props.warning),')'," ");}
-
-
-
-return (
-React.createElement(View,_extends({
-style:styles.warningBox,
-ref:function(container){_this2.container = container;}},
-this.panGesture.panHandlers),
-React.createElement(TouchableOpacity,{
-onPress:this.props.onOpened},
-React.createElement(Text,{
-style:styles.warningText,
-numberOfLines:2,
-ref:function(text){_this2.text = text;}},
-countText,
-this.props.warning)),
-
-
-React.createElement(View,{
-ref:function(closeButton){_this2.closeButton = closeButton;},
-style:styles.closeButton},
-React.createElement(TouchableOpacity,{
-onPress:function(){
-_this2.dismissalSpring.setEndValue(1);}},
-
-React.createElement(Text,{style:styles.closeButtonText},'✕')))));}});
-
-
-
-
-
-
-
-var WarningBoxOpened=React.createClass({displayName:'WarningBoxOpened',
-render:function(){
-var countText;
-if(warningCounts.get(this.props.warning) > 1){
-countText = 
-React.createElement(Text,{style:styles.bold},'(',
-warningCounts.get(this.props.warning),')'," ");}
-
-
-
-return (
-React.createElement(TouchableOpacity,{
-activeOpacity:0.9,
-onPress:this.props.onClose,
-style:styles.yellowBox},
-React.createElement(Text,{style:styles.yellowBoxText},
-countText,
-this.props.warning),
-
-React.createElement(View,{style:styles.yellowBoxButtons},
-React.createElement(TouchableOpacity,{
-onPress:this.props.onDismissed,
-style:styles.yellowBoxButton},
-React.createElement(Text,{style:styles.yellowBoxButtonText},'Dismiss')),
-
-
-
-React.createElement(TouchableOpacity,{
-onPress:this.props.onIgnored,
-style:styles.yellowBoxButton},
-React.createElement(Text,{style:styles.yellowBoxButtonText},'Ignore')))));}});
-
-
-
-
-
-
-
-
-
-var canMountWarningBox=true;
-
-var WarningBox=React.createClass({displayName:'WarningBox',
 getInitialState:function(){
-return {
-totalWarningCount:totalWarningCount,
-openWarning:null};},
+return {modals:{}};},
 
 
-componentWillMount:function(){
-if(console.yellowBoxResetIgnored){
-AsyncStorage.setItem(IGNORED_WARNINGS_KEY,'[]',function(err){
-if(err){
-console.warn('Could not reset ignored warnings.',err);}});
+_showModal:function(tag,component){
 
 
-ignoredWarnings = [];}},
-
-
-componentDidMount:function(){
-invariant(
-canMountWarningBox,
-'There can only be one WarningBox');
-
-canMountWarningBox = false;
-warningCountEvents.addListener(
-'count',
-this._onWarningCount);},
-
-
-componentWillUnmount:function(){
-warningCountEvents.removeAllListeners();
-canMountWarningBox = true;},
-
-_onWarningCount:function(totalWarningCount){var _this3=this;
-
-
-setImmediate(function(){
-_this3.setState({totalWarningCount:totalWarningCount});});},
-
-
-_onDismiss:function(warning){
-warningCounts.delete(warning);
-this.setState({
-openWarning:null});},
-
-
-render:function(){var _this4=this;
-if(warningCounts.size === 0){
-return React.createElement(View,null);}
-
-if(this.state.openWarning){
-return (
-React.createElement(WarningBoxOpened,{
-warning:this.state.openWarning,
-onClose:function(){
-_this4.setState({openWarning:null});},
-
-onDismissed:this._onDismiss.bind(this,this.state.openWarning),
-onIgnored:function(){
-ignoredWarnings.push(_this4.state.openWarning);
-saveIgnoredWarnings();
-_this4._onDismiss(_this4.state.openWarning);}}));}
+if(this._getOpenModals().length === 0){
+this.props.onModalVisibilityChanged(true);}
 
 
 
-
-var warningRows=[];
-warningCounts.forEach(function(count,warning){
-warningRows.push(
-React.createElement(WarningRow,{
-key:warning,
-onOpened:function(){
-_this4.setState({openWarning:warning});},
-
-onDismissed:_this4._onDismiss.bind(_this4,warning),
-warning:warning}));});
+this.setState(function(state){
+var modals=state.modals;
+modals[tag] = component;
+return {modals:modals};});},
 
 
+
+_closeModal:function(tag){
+if(!this.state.modals.hasOwnProperty(tag)){
+return;}
+
+
+
+if(this._getOpenModals().length === 1){
+this.props.onModalVisibilityChanged(false);}
+
+
+
+this.setState(function(state){
+var modals=state.modals;
+delete modals[tag];
+return {modals:modals};});},
+
+
+
+_getOpenModals:function(){
+return Object.keys(this.state.modals);},
+
+
+_notifyAccessibilityService:function(){var _this=this;
+if(Platform.OS === 'android'){
+
+
+setTimeout(function(){
+if(_this._getOpenModals().length > 0){
+RCTUIManager.sendAccessibilityEvent(
+React.findNodeHandle(_this),
+RCTUIManager.AccessibilityEventTypes.typeWindowStateChanged);}},
+
+0);}},
+
+
+
+render:function(){
+_portalRef = this;
+if(!this.state.modals){
+return null;}
+
+var modals=[];
+for(var tag in this.state.modals) {
+modals.push(this.state.modals[tag]);}
+
+if(modals.length === 0){
+return null;}
 
 return (
-React.createElement(View,{style:styles.warningContainer},
-warningRows));}});
+React.createElement(View,{
+style:styles.modalsContainer,
+importantForAccessibility:'yes'},
+modals));}});
 
 
 
 
 
 var styles=StyleSheet.create({
-bold:{
-fontWeight:'bold'},
-
-closeButton:{
-position:'absolute',
-right:0,
-height:46,
-width:46},
-
-closeButtonText:{
-color:'white',
-fontSize:32,
-position:'relative',
-left:8},
-
-warningContainer:{
+modalsContainer:{
 position:'absolute',
 left:0,
-right:0,
-bottom:0},
-
-warningBox:{
-position:'relative',
-backgroundColor:'rgba(171, 124, 36, 0.9)',
-flex:1,
-height:46},
-
-warningText:{
-color:'white',
-position:'absolute',
-left:0,
-marginLeft:15,
-marginRight:46,
-top:7},
-
-yellowBox:{
-backgroundColor:'rgba(171, 124, 36, 0.9)',
-position:'absolute',
-left:0,
-right:0,
 top:0,
-bottom:0,
-padding:15,
-paddingTop:35},
-
-yellowBoxText:{
-color:'white',
-fontSize:20},
-
-yellowBoxButtons:{
-flexDirection:'row',
-position:'absolute',
-bottom:0},
-
-yellowBoxButton:{
-flex:1,
-padding:25},
-
-yellowBoxButtonText:{
-color:'white',
-fontSize:16}});
+right:0,
+bottom:0}});
 
 
 
-module.exports = WarningBox;
+module.exports = Portal;
 });
-__d('AsyncStorage',["NativeModules"],function(global, require, module, exports) {  'use strict';
+__d('BackAndroid',["Set","NativeModules","RCTDeviceEventEmitter"],function(global, require, module, exports) {  'use strict';
 
 
 
@@ -47789,367 +46736,69 @@ __d('AsyncStorage',["NativeModules"],function(global, require, module, exports) 
 
 
 
-var NativeModules=require('NativeModules');
-var RCTAsyncLocalStorage=NativeModules.AsyncLocalStorage;
-var RCTAsyncRocksDBStorage=NativeModules.AsyncRocksDBStorage;
+var Set=require('Set');
+var DeviceEventManager=require('NativeModules').DeviceEventManager;
+var RCTDeviceEventEmitter=require('RCTDeviceEventEmitter');
 
-
-var RCTAsyncStorage=RCTAsyncRocksDBStorage || RCTAsyncLocalStorage;
-
-
+var DEVICE_BACK_EVENT='hardwareBackPress';
 
 
 
 
 
+var _backPressSubscriptions=new Set();
+
+RCTDeviceEventEmitter.addListener(DEVICE_BACK_EVENT,function(){
+var invokeDefault=true;
+_backPressSubscriptions.forEach(function(subscription){
+if(subscription()){
+invokeDefault = false;}});
+
+
+if(invokeDefault){
+BackAndroid.exitApp();}});
 
 
 
 
 
 
-var AsyncStorage={
 
 
 
 
-getItem:function(
-key,
-callback)
+
+
+
+
+
+
+
+
+
+var BackAndroid={
+
+exitApp:function(){
+DeviceEventManager.invokeDefaultBackPressHandler();},
+
+
+addEventListener:function(
+eventName,
+handler)
 {
-return new Promise(function(resolve,reject){
-RCTAsyncStorage.multiGet([key],function(errors,result){
+_backPressSubscriptions.add(handler);},
 
-var value=result && result[0] && result[0][1]?result[0][1]:null;
-callback && callback(errors && convertError(errors[0]) || null,value);
-if(errors){
-reject(convertError(errors[0]));}else 
+
+removeEventListener:function(
+eventName,
+handler)
 {
-resolve(value);}});});},
+_backPressSubscriptions.delete(handler);}};
 
 
 
 
-
-
-
-
-
-setItem:function(
-key,
-value,
-callback)
-{
-return new Promise(function(resolve,reject){
-RCTAsyncStorage.multiSet([[key,value]],function(errors){
-callback && callback(errors && convertError(errors[0]) || null);
-if(errors){
-reject(convertError(errors[0]));}else 
-{
-resolve(null);}});});},
-
-
-
-
-
-
-
-removeItem:function(
-key,
-callback)
-{
-return new Promise(function(resolve,reject){
-RCTAsyncStorage.multiRemove([key],function(errors){
-callback && callback(errors && convertError(errors[0]) || null);
-if(errors){
-reject(convertError(errors[0]));}else 
-{
-resolve(null);}});});},
-
-
-
-
-
-
-
-
-
-
-mergeItem:function(
-key,
-value,
-callback)
-{
-return new Promise(function(resolve,reject){
-RCTAsyncStorage.multiMerge([[key,value]],function(errors){
-callback && callback(errors && convertError(errors[0]) || null);
-if(errors){
-reject(convertError(errors[0]));}else 
-{
-resolve(null);}});});},
-
-
-
-
-
-
-
-
-
-
-clear:function(callback){
-return new Promise(function(resolve,reject){
-RCTAsyncStorage.clear(function(error){
-callback && callback(convertError(error));
-if(error && convertError(error)){
-reject(convertError(error));}else 
-{
-resolve(null);}});});},
-
-
-
-
-
-
-
-
-getAllKeys:function(callback){
-return new Promise(function(resolve,reject){
-RCTAsyncStorage.getAllKeys(function(error,keys){
-callback && callback(convertError(error),keys);
-if(error){
-reject(convertError(error));}else 
-{
-resolve(keys);}});});},
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-multiGet:function(
-keys,
-callback)
-{
-return new Promise(function(resolve,reject){
-RCTAsyncStorage.multiGet(keys,function(errors,result){
-var error=errors && errors.map(function(error){return convertError(error);}) || null;
-callback && callback(error,result);
-if(errors){
-reject(error);}else 
-{
-resolve(result);}});});},
-
-
-
-
-
-
-
-
-
-
-
-multiSet:function(
-keyValuePairs,
-callback)
-{
-return new Promise(function(resolve,reject){
-RCTAsyncStorage.multiSet(keyValuePairs,function(errors){
-var error=errors && errors.map(function(error){return convertError(error);}) || null;
-callback && callback(error);
-if(errors){
-reject(error);}else 
-{
-resolve(null);}});});},
-
-
-
-
-
-
-
-
-multiRemove:function(
-keys,
-callback)
-{
-return new Promise(function(resolve,reject){
-RCTAsyncStorage.multiRemove(keys,function(errors){
-var error=errors && errors.map(function(error){return convertError(error);}) || null;
-callback && callback(error);
-if(errors){
-reject(error);}else 
-{
-resolve(null);}});});},
-
-
-
-
-
-
-
-
-
-
-
-multiMerge:function(
-keyValuePairs,
-callback)
-{
-return new Promise(function(resolve,reject){
-RCTAsyncStorage.multiMerge(keyValuePairs,function(errors){
-var error=errors && errors.map(function(error){return convertError(error);}) || null;
-callback && callback(error);
-if(errors){
-reject(error);}else 
-{
-resolve(null);}});});}};
-
-
-
-
-
-
-
-if(!RCTAsyncStorage.multiMerge){
-delete AsyncStorage.mergeItem;
-delete AsyncStorage.multiMerge;}
-
-
-function convertError(error){
-if(!error){
-return null;}
-
-var out=new Error(error.message);
-out.key = error.key;
-return out;}
-
-
-module.exports = AsyncStorage;
-});
-__d('setupDevtools',["flattenStyle","ReactCurrentOwner","ReactInstanceHandles","ReactNativeMount","ReactReconciler","ReactNativeTextComponent"],function(global, require, module, exports) {  'use strict';
-
-
-
-
-
-
-
-
-
-
-
-
-function setupDevtools(){
-var messageListeners=[];
-var closeListeners=[];
-var ws=new window.WebSocket('ws://localhost:8081/devtools');
-
-var FOR_BACKEND={
-resolveRNStyle:require('flattenStyle'),
-wall:{
-listen:function(fn){
-messageListeners.push(fn);},
-
-onClose:function(fn){
-closeListeners.push(fn);},
-
-send:function(data){
-ws.send(JSON.stringify(data));}}};
-
-
-
-ws.onclose = function(){
-console.warn('devtools socket closed');
-closeListeners.forEach(function(fn){return fn();});};
-
-ws.onerror = function(error){
-console.warn('devtools socket errored',error);
-closeListeners.forEach(function(fn){return fn();});};
-
-ws.onopen = function(){
-tryToConnect();};
-
-
-function tryToConnect(){
-ws.send('attach:agent');
-var _interval=setInterval(function(){return ws.send('attach:agent');},500);
-ws.onmessage = function(evt){
-if(evt.data.indexOf('eval:') === 0){
-clearInterval(_interval);
-initialize(evt.data.slice('eval:'.length));}};}
-
-
-
-
-function initialize(text){
-try{
-
-eval(text);}
-catch(e) {
-console.error('Failed to eval' + e.message);
-return;}
-
-window.__REACT_DEVTOOLS_GLOBAL_HOOK__.inject({
-CurrentOwner:require('ReactCurrentOwner'),
-InstanceHandles:require('ReactInstanceHandles'),
-Mount:require('ReactNativeMount'),
-Reconciler:require('ReactReconciler'),
-TextComponent:require('ReactNativeTextComponent')});
-
-ws.onmessage = handleMessage;}
-
-
-function handleMessage(evt){
-
-
-var data;
-try{
-data = JSON.parse(evt.data);}
-catch(e) {
-return console.error('failed to parse json: ' + evt.data);}
-
-
-if(data.$close || data.$error){
-closeListeners.forEach(function(fn){return fn();});
-window.__REACT_DEVTOOLS_GLOBAL_HOOK__.emit('shutdown');
-tryToConnect();
-return;}
-
-if(data.$open){
-return;}
-
-messageListeners.forEach(function(fn){
-try{
-fn(data);}
-catch(e) {
-
-
-
-console.log(data);
-throw e;}});}}
-
-
-
-
-
-module.exports = setupDevtools;
+module.exports = BackAndroid;
 });
 __d('RCTRenderingPerf',["ReactDefaultPerf","invariant"],function(global, require, module, exports) {  'use strict';
 
@@ -51029,7 +49678,7 @@ isTagValidWithParent(tag,parentTag) &&
 
 module.exports = validateDOMNesting;
 });
-__d('AppStateIOS',["Map","NativeModules","RCTDeviceEventEmitter","logError","invariant"],function(global, require, module, exports) {  'use strict';
+__d('AppStateIOS',["warning"],function(global, require, module, exports) {  'use strict';var _createClass=(function(){function defineProperties(target,props){for(var i=0;i < props.length;i++) {var descriptor=props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if('value' in descriptor)descriptor.writable = true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};})();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function');}}
 
 
 
@@ -51042,138 +49691,155 @@ __d('AppStateIOS',["Map","NativeModules","RCTDeviceEventEmitter","logError","inv
 
 
 
-var Map=require('Map');
-var NativeModules=require('NativeModules');
-var RCTDeviceEventEmitter=require('RCTDeviceEventEmitter');
-var RCTAppState=NativeModules.AppState;
+var warning=require('warning');var 
 
-var logError=require('logError');
-var invariant=require('invariant');
+AppStateIOS=(function(){function AppStateIOS(){_classCallCheck(this,AppStateIOS);}_createClass(AppStateIOS,null,[{key:'addEventListener',value:
 
-var _eventHandlers={
-change:new Map(),
-memoryWarning:new Map()};
+function addEventListener(type,handler){
+warning(false,'Cannot listen to AppStateIOS events on Android.');}},{key:'removeEventListener',value:
 
 
+function removeEventListener(type,handler){
+warning(false,'Cannot remove AppStateIOS listener on Android.');}}]);return AppStateIOS;})();
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var AppStateIOS={
-
-
-
-
-
-addEventListener:function(
-type,
-handler)
-{
-invariant(
-['change','memoryWarning'].indexOf(type) !== -1,
-'Trying to subscribe to unknown event: "%s"',type);
-
-if(type === 'change'){
-_eventHandlers[type].set(handler,RCTDeviceEventEmitter.addListener(
-'appStateDidChange',
-function(appStateData){
-handler(appStateData.app_state);}));}else 
-
-
-if(type === 'memoryWarning'){
-_eventHandlers[type].set(handler,RCTDeviceEventEmitter.addListener(
-'memoryWarning',
-handler));}},
-
-
-
-
-
-
-
-removeEventListener:function(
-type,
-handler)
-{
-invariant(
-['change','memoryWarning'].indexOf(type) !== -1,
-'Trying to remove listener for unknown event: "%s"',type);
-
-if(!_eventHandlers[type].has(handler)){
-return;}
-
-_eventHandlers[type].get(handler).remove();
-_eventHandlers[type].delete(handler);},
-
-
-currentState:RCTAppState && RCTAppState.initialAppState};
-
-
-
-RCTDeviceEventEmitter.addListener(
-'appStateDidChange',
-function(appStateData){
-AppStateIOS.currentState = appStateData.app_state;});
-
-
-
-RCTAppState.getCurrentAppState(
-function(appStateData){
-AppStateIOS.currentState = appStateData.app_state;},
-
-logError);
-
+AppStateIOS.currentState = null;
 
 module.exports = AppStateIOS;
 });
-__d('BackAndroid',["warning"],function(global, require, module, exports) {  'use strict';
+__d('AsyncStorage',["NativeModules"],function(global, require, module, exports) {  'use strict';
+
+
+
+
+
+
+
+
+
+
+
+
+var RCTAsyncStorage=require('NativeModules').AsyncSQLiteDBStorage;
+
+
+
+
+
+
+
+
+
+
+var AsyncStorage={
+
+
+
+
+getItem:function(
+key,
+callback)
+{
+return new Promise(function(resolve,reject){
+RCTAsyncStorage.multiGet([key],function(error,result){
+var value=result && result[0] && result[0][1]?result[0][1]:null;
+callback && callback(error && convertError(error) || null,value);
+if(error){
+reject(convertError(error));}else 
+{
+resolve(value);}});});},
+
+
+
+
+
+
+
+
+setItem:function(
+key,
+value,
+callback)
+{
+return new Promise(function(resolve,reject){
+RCTAsyncStorage.multiSet([[key,value]],function(error){
+callback && callback(error && convertError(error) || null);
+if(error){
+reject(convertError(error));}else 
+{
+resolve(null);}});});},
+
+
+
+
+
+
+
+removeItem:function(
+key,
+callback)
+{
+return new Promise(function(resolve,reject){
+RCTAsyncStorage.multiRemove([key],function(error){
+callback && callback(error && convertError(error) || null);
+if(error){
+reject(convertError(error));}else 
+{
+resolve(null);}});});},
+
+
+
+
+
+
+
+
+mergeItem:function(
+key,
+value,
+callback)
+{
+return new Promise(function(resolve,reject){
+RCTAsyncStorage.multiMerge([[key,value]],function(error){
+callback && callback(error && convertError(error) || null);
+if(error){
+reject(convertError(error));}else 
+{
+resolve(null);}});});},
+
+
+
+
+
+
+
+
+
+clear:function(callback){
+return new Promise(function(resolve,reject){
+RCTAsyncStorage.clear(function(error){
+callback && callback(convertError(error) || null);
+if(error){
+reject(convertError(error));}else 
+{
+resolve(null);}});});},
+
+
+
+
+
+
+
+getAllKeys:function(callback){
+return new Promise(function(resolve,reject){
+RCTAsyncStorage.getAllKeys(function(error,keys){
+callback && callback(error && convertError(error) || null,keys);
+if(error){
+reject(convertError(error));}else 
+{
+resolve(keys);}});});},
 
 
 
@@ -51188,19 +49854,94 @@ __d('BackAndroid',["warning"],function(global, require, module, exports) {  'use
 
 
 
-var warning=require('warning');
-
-function platformWarn(){
-warning(false,'BackAndroid is not supported on this platform.');}
 
 
-var BackAndroid={
-exitApp:platformWarn,
-addEventListener:platformWarn,
-removeEventListener:platformWarn};
 
 
-module.exports = BackAndroid;
+multiGet:function(
+keys,
+callback)
+{
+return new Promise(function(resolve,reject){
+RCTAsyncStorage.multiGet(keys,function(error,result){
+callback && callback(error && convertError(error) || null,result);
+if(error){
+reject(convertError(error));}else 
+{
+resolve(result);}});});},
+
+
+
+
+
+
+
+
+
+
+multiSet:function(
+keyValuePairs,
+callback)
+{
+return new Promise(function(resolve,reject){
+RCTAsyncStorage.multiSet(keyValuePairs,function(error){
+callback && callback(error && convertError(error) || null);
+if(error){
+reject(convertError(error));}else 
+{
+resolve(null);}});});},
+
+
+
+
+
+
+
+multiRemove:function(
+keys,
+callback)
+{
+return new Promise(function(resolve,reject){
+RCTAsyncStorage.multiRemove(keys,function(error){
+callback && callback(error && convertError(error) || null);
+if(error){
+reject(convertError(error));}else 
+{
+resolve(null);}});});},
+
+
+
+
+
+
+
+
+multiMerge:function(
+keyValuePairs,
+callback)
+{
+return new Promise(function(resolve,reject){
+RCTAsyncStorage.multiMerge(keyValuePairs,function(error){
+callback && callback(error && convertError(error) || null);
+if(error){
+reject(convertError(error));}else 
+{
+resolve(null);}});});}};
+
+
+
+
+
+
+function convertError(error){
+if(!error){
+return null;}
+
+var out=new Error(error.message);
+return [out];}
+
+
+module.exports = AsyncStorage;
 });
 __d('CameraRoll',["ReactPropTypes","NativeModules","createStrictShapeTypeChecker","deepFreezeAndThrowOnMutationInDev","invariant"],function(global, require, module, exports) {  'use strict';var _createClass=(function(){function defineProperties(target,props){for(var i=0;i < props.length;i++) {var descriptor=props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if('value' in descriptor)descriptor.writable = true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};})();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function');}}
 
@@ -52257,7 +50998,7 @@ return this._data;}}]);return PushNotificationIOS;})();
 
 module.exports = PushNotificationIOS;
 });
-__d('Settings',["RCTDeviceEventEmitter","NativeModules","invariant"],function(global, require, module, exports) {  'use strict';
+__d('Settings',[],function(global, require, module, exports) {  'use strict';
 
 
 
@@ -52269,72 +51010,30 @@ __d('Settings',["RCTDeviceEventEmitter","NativeModules","invariant"],function(gl
 
 
 
-
-var RCTDeviceEventEmitter=require('RCTDeviceEventEmitter');
-var RCTSettingsManager=require('NativeModules').SettingsManager;
-
-var invariant=require('invariant');
-
-var subscriptions=[];
 
 var Settings={
-_settings:RCTSettingsManager && RCTSettingsManager.settings,
-
 get:function(key){
-return this._settings[key];},
+console.warn('Settings is not yet supported on Android');
+return null;},
 
 
 set:function(settings){
-this._settings = Object.assign(this._settings,settings);
-RCTSettingsManager.setValues(settings);},
+console.warn('Settings is not yet supported on Android');},
 
 
 watchKeys:function(keys,callback){
-if(typeof keys === 'string'){
-keys = [keys];}
-
-
-invariant(
-Array.isArray(keys),
-'keys should be a string or array of strings');
-
-
-var sid=subscriptions.length;
-subscriptions.push({keys:keys,callback:callback});
-return sid;},
+console.warn('Settings is not yet supported on Android');
+return -1;},
 
 
 clearWatch:function(watchId){
-if(watchId < subscriptions.length){
-subscriptions[watchId] = {keys:[],callback:null};}},
+console.warn('Settings is not yet supported on Android');}};
 
-
-
-_sendObservations:function(body){var _this=this;
-Object.keys(body).forEach(function(key){
-var newValue=body[key];
-var didChange=_this._settings[key] !== newValue;
-_this._settings[key] = newValue;
-
-if(didChange){
-subscriptions.forEach(function(sub){
-if(sub.keys.indexOf(key) !== -1 && sub.callback){
-sub.callback();}});}});}};
-
-
-
-
-
-
-
-RCTDeviceEventEmitter.addListener(
-'settingsUpdated',
-Settings._sendObservations.bind(Settings));
 
 
 module.exports = Settings;
 });
-__d('StatusBarIOS',["NativeModules"],function(global, require, module, exports) {  'use strict';
+__d('StatusBarIOS',[],function(global, require, module, exports) {  'use strict';
 
 
 
@@ -52347,39 +51046,9 @@ __d('StatusBarIOS',["NativeModules"],function(global, require, module, exports) 
 
 
 
-var RCTStatusBarManager=require('NativeModules').StatusBarManager;
-
-
-
-
-
-
-
-
-
-
-
-
-var StatusBarIOS={
-
-setStyle:function(style,animated){
-animated = animated || false;
-RCTStatusBarManager.setStyle(style,animated);},
-
-
-setHidden:function(hidden,animation){
-animation = animation || 'none';
-RCTStatusBarManager.setHidden(hidden,animation);},
-
-
-setNetworkActivityIndicatorVisible:function(visible){
-RCTStatusBarManager.setNetworkActivityIndicatorVisible(visible);}};
-
-
-
-module.exports = StatusBarIOS;
+module.exports = null;
 });
-__d('VibrationIOS',["NativeModules","invariant"],function(global, require, module, exports) {  'use strict';
+__d('VibrationIOS',["warning"],function(global, require, module, exports) {  'use strict';
 
 
 
@@ -52392,28 +51061,12 @@ __d('VibrationIOS',["NativeModules","invariant"],function(global, require, modul
 
 
 
-var RCTVibration=require('NativeModules').Vibration;
 
-var invariant=require('invariant');
-
-
-
-
-
-
-
-
-
-
-
+var warning=require('warning');
 
 var VibrationIOS={
 vibrate:function(){
-invariant(
-arguments[0] === undefined,
-'Vibration patterns not supported.');
-
-RCTVibration.vibrate();}};
+warning('VibrationIOS is not supported on this platform!');}};
 
 
 
@@ -55082,7 +53735,7 @@ action.userId,user(state[action.userId],action)));
 default:
 return state;}}
 });
-__d('soundreduxNative/src/components/scene.js',["react-redux/native.js","soundreduxNative/src/actions/playlists.js","soundreduxNative/src/components/Header.js","soundreduxNative/src/components/Player.js","react-native/Libraries/react-native/react-native.js","soundreduxNative/src/components/Songs.js"],function(global, require, module, exports) {  Object.defineProperty(exports,'__esModule',{value:true});var _createClass=(function(){function defineProperties(target,props){for(var i=0;i < props.length;i++) {var descriptor=props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if('value' in descriptor)descriptor.writable = true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};})();var _get=function get(object,property,receiver){if(object === null)object = Function.prototype;var desc=Object.getOwnPropertyDescriptor(object,property);if(desc === undefined){var parent=Object.getPrototypeOf(object);if(parent === null){return undefined;}else {return get(parent,property,receiver);}}else if('value' in desc){return desc.value;}else {var getter=desc.get;if(getter === undefined){return undefined;}return getter.call(receiver);}};function _interopRequireDefault(obj){return obj && obj.__esModule?obj:{'default':obj};}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function');}}function _inherits(subClass,superClass){if(typeof superClass !== 'function' && superClass !== null){throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__ = superClass;}var _reactReduxNative=require(
+__d('soundreduxNative/src/components/scene.js',["react-redux/native.js","soundreduxNative/src/actions/playlists.js","soundreduxNative/src/components/Header.js","soundreduxNative/src/components/Player.js","soundreduxNative/src/components/Songs.js","react-native/Libraries/react-native/react-native.js"],function(global, require, module, exports) {  Object.defineProperty(exports,'__esModule',{value:true});var _createClass=(function(){function defineProperties(target,props){for(var i=0;i < props.length;i++) {var descriptor=props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if('value' in descriptor)descriptor.writable = true;Object.defineProperty(target,descriptor.key,descriptor);}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor;};})();var _get=function get(object,property,receiver){if(object === null)object = Function.prototype;var desc=Object.getOwnPropertyDescriptor(object,property);if(desc === undefined){var parent=Object.getPrototypeOf(object);if(parent === null){return undefined;}else {return get(parent,property,receiver);}}else if('value' in desc){return desc.value;}else {var getter=desc.get;if(getter === undefined){return undefined;}return getter.call(receiver);}};function _interopRequireDefault(obj){return obj && obj.__esModule?obj:{'default':obj};}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function');}}function _inherits(subClass,superClass){if(typeof superClass !== 'function' && superClass !== null){throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass);}subClass.prototype = Object.create(superClass && superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__ = superClass;}var _reactReduxNative=require(
 
 
 
@@ -55781,5 +54434,5 @@ fontSize:10}});exports.default =
 
 Songs;module.exports = exports.default;
 });
-;require("soundreduxNative/index.ios.js");
-//@ sourceMappingURL=/index.ios.map?platform=ios&dev=false
+;require("soundreduxNative/index.android.js");
+//@ sourceMappingURL=/index.android.map?platform=android
