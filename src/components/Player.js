@@ -7,20 +7,45 @@ var {
   Image,
   TouchableHighlight
 } = React;
-var AudioPlayer = require('react-native-audio-player');
+var RCTAudio = require('react-native-player');
+var RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
+var Subscribable = require('Subscribable');
 
 var deviceWidth = Dimensions.get('window').width;
 
-class Player extends React.Component {
-  constructor (props) {
-    super(props)
-  }
+var Player = React.createClass({
+
+  mixins: [Subscribable.Mixin],
+
+  componentWillMount: function() {
+      this.addListenerOn(RCTDeviceEventEmitter,
+                       'error',
+                       this.onError);
+      this.addListenerOn(RCTDeviceEventEmitter,
+                       'end',
+                       this.onEnd);
+      this.addListenerOn(RCTDeviceEventEmitter,
+                       'ready',
+                       this.onReady);
+  },
 
   playSong () {
-    AudioPlayer.play('https://api.soundcloud.com/tracks/131831400/stream?client_id=f4323c6f7c0cd73d2d786a2b1cdae80c')
-  }
+    RCTAudio.prepare('https://api.soundcloud.com/tracks/131831400/stream?client_id=f4323c6f7c0cd73d2d786a2b1cdae80c', true)
+  },
 
-  render () {
+  onError: function(err) {
+    console.log(err)
+  },
+
+  onEnd: function() {
+    console.log("end")
+  },
+
+  onReady: function() {
+    RCTAudio.start()
+  },
+
+  render: function() {
     return (
       <View style={styles.container}>
         <View style={styles.card}>
@@ -40,7 +65,7 @@ class Player extends React.Component {
       </View>
     )
   }
-}
+})
 
 var styles = StyleSheet.create({
   container: {
