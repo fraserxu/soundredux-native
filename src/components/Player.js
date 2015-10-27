@@ -46,6 +46,9 @@ var Player = React.createClass({
   },
 
   render: function() {
+
+    console.log('show player...')
+
     return (
       <View style={styles.container}>
         <View style={styles.card}>

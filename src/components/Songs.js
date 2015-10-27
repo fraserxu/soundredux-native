@@ -13,9 +13,17 @@ var ProgressBar = require('ProgressBarAndroid');
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 
+import {playSong} from '../actions/player';
+import {fetchSongsIfNeeded} from '../actions/playlists';
+
 class Songs extends React.Component {
   constructor (props) {
     super(props)
+  }
+
+  componentWillMount() {
+      const {dispatch, playlist} = this.props;
+      dispatch(fetchSongsIfNeeded(playlist));
   }
 
   renderSong (song) {
@@ -28,41 +36,58 @@ class Songs extends React.Component {
     )
   }
 
+  playSong(i) {
+      const {playlist, dispatch} = this.props;
+      dispatch(playSong(playlist, i));
+  }
+
   render () {
-    const { playlists, activePlaylist } = this.props
-    const songs = playlists[activePlaylist]
+    const {dispatch, playlist, playlists, playingSongId, sticky, time, songs} = this.props;
+
+    console.log('this.props', this.props, playingSongId)
+
+    const isFetching = playlist in playlists ? playlists[playlist].isFetching : false;
+
+    // const songs = playlists[activePlaylist]
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
-    var dataSource
-    if (playlists[activePlaylist] && !playlists[activePlaylist].isFetching) {
-      dataSource = ds.cloneWithRows(songs.items)
-    }
+    // let dataSource = []
+    // if (playlists[activePlaylist] && !playlists[activePlaylist].isFetching) {
+    //   dataSource = ds.cloneWithRows(songs.items)
+    // }
+    var dataSource = playlist in playlists ? ds.cloneWithRows(playlists[playlist].items) : ds.cloneWithRows([]);
 
     return (
-      <View style={styles.container}>
-        { playlists[activePlaylist] && playlists[activePlaylist].isFetching &&
+      <View style={{
+        'width': deviceWidth,
+        'height': playingSongId ? deviceHeight - 145 : deviceHeight - 70,
+        'backgroundColor': '#fff'
+      }}>
+        { isFetching &&
           <View style={styles.progressbar}>
             <ProgressBar />
           </View>
         }
-        { playlists[activePlaylist] && !playlists[activePlaylist].isFetching  &&
+        { !isFetching  &&
           <ListView
             dataSource={dataSource}
-            renderRow={(song) => {
+            renderRow={(song, sectionId, rowId) => {
               return (
-                <View style={styles.card}>
-                  <View>
-                    <Image
-                      key={song['artwork_url']}
-                      style={styles.avatar}
-                      source={{uri: song['artwork_url']}}
-                    />
+                <TouchableHighlight onPress={this.playSong.bind(this, rowId)}>
+                  <View style={styles.card}>
+                    <View>
+                      <Image
+                        key={songs[song]['artwork_url']}
+                        style={styles.avatar}
+                        source={{uri: songs[song]['artwork_url']}}
+                      />
+                    </View>
+                    <View style={styles.description}>
+                      <Text style={styles.username}>{songs[song].user.username}</Text>
+                      <Text style={styles.title}>{songs[song].title}</Text>
+                      <Text style={styles.count}>Played: {songs[song].playback_count}</Text>
+                    </View>
                   </View>
-                  <View style={styles.description}>
-                    <Text style={styles.username}>{song.user.username}</Text>
-                    <Text style={styles.title}>{song.title}</Text>
-                    <Text style={styles.count}>Played: {song.playback_count}</Text>
-                  </View>
-                </View>
+                </TouchableHighlight>
               )
             }}
           />
@@ -75,7 +100,7 @@ class Songs extends React.Component {
 var styles = StyleSheet.create({
   container: {
     width: deviceWidth,
-    height: deviceHeight - 150,
+    height: deviceHeight - 50,
     backgroundColor: '#fff'
   },
   progressbar: {

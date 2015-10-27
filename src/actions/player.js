@@ -61,6 +61,8 @@ export function playSong(playlist, songIndex) {
         if (len === 0 || selectedPlaylists[len - 1] !== playlist) {
             dispatch(changeSelectedPlaylists(selectedPlaylists, playlist));
         }
+        console.log('songIndex', songIndex)
+
         dispatch(changePlayingSong(songIndex));
     };
 }

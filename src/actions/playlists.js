@@ -1,25 +1,20 @@
+import {arrayOf, normalize} from 'normalizr';
 import * as types from '../constants/ActionTypes';
-import {constructUrl} from '../helpers/SongsHelper';
-
-export function changeActivePlaylist(playlist) {
-    return (dispatch, getState) => {
-        const {playlists} = getState();
-        dispatch(setActivePlaylist(playlist));
-        if (!(playlist in playlists) || playlists[playlist].items.length === 0) {
-            dispatch(fetchSongsIfNeeded(playlist));
-        }
-    }
-}
+import {songSchema} from '../constants/Schemas';
+import {constructUrl} from '../utils/SongUtils';
 
 function fetchSongs(url, playlist) {
     return (dispatch, getState) => {
         dispatch(requestSongs(playlist));
-
         return fetch(url)
-            .then((response) => response.json())
-            .then((json) => dispatch(receiveSongs(json, playlist)))
-            .catch((error) => console.log(error))
-            .done();
+            .then(response => response.json())
+            .then(json => {
+                const songs = json.collection.filter(song => song.streamable && song.duration < 600000 );
+                const nextUrl = json.next_href;
+                const normalized = normalize(songs, arrayOf(songSchema));
+                dispatch(receiveSongs(normalized.entities, normalized.result, nextUrl, playlist));
+            })
+            .catch(error => console.log(error));
     };
 }
 
@@ -41,12 +36,13 @@ function getNextUrl(playlists, playlist) {
     return activePlaylist.nextUrl;
 }
 
-function receiveSongs(json, playlist) {
+function receiveSongs(entities, songs, nextUrl, playlist) {
     return {
         type: types.RECEIVE_SONGS,
-        nextUrl: json.next_href,
-        playlist: playlist,
-        songs: json.collection.filter(song => song.streamable && song.duration < 600000 )
+        entities,
+        nextUrl,
+        playlist,
+        songs
     };
 }
 
@@ -54,13 +50,6 @@ function requestSongs(playlist) {
     return {
         type: types.REQUEST_SONGS,
         playlist: playlist
-    };
-}
-
-function setActivePlaylist(playlist) {
-    return {
-        type: types.CHANGE_ACTIVE_PLAYLIST,
-        playlist
     };
 }
 
