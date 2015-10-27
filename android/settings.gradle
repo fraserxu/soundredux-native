@@ -1,3 +1,4 @@
 rootProject.name = 'soundreduxNative'
 
-include ':app'
+include ':RNAudioPlayer', ':app'
+project(':RNAudioPlayer').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-audio-player/android')

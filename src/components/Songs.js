@@ -9,6 +9,7 @@ var {
   TouchableHighlight
 } = React;
 
+var ProgressBar = require('ProgressBarAndroid');
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 
@@ -39,13 +40,14 @@ class Songs extends React.Component {
     return (
       <View style={styles.container}>
         { playlists[activePlaylist] && playlists[activePlaylist].isFetching &&
-          <Text style={styles.title}>Loading...</Text>
+          <View style={styles.progressbar}>
+            <ProgressBar />
+          </View>
         }
         { playlists[activePlaylist] && !playlists[activePlaylist].isFetching  &&
           <ListView
             dataSource={dataSource}
             renderRow={(song) => {
-              console.log('song', song)
               return (
                 <View style={styles.card}>
                   <View>
@@ -75,6 +77,9 @@ var styles = StyleSheet.create({
     width: deviceWidth,
     height: deviceHeight - 150,
     backgroundColor: '#fff'
+  },
+  progressbar: {
+    alignItems: 'center'
   },
   card: {
     flexDirection: 'row',

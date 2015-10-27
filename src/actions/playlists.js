@@ -1,11 +1,5 @@
 import * as types from '../constants/ActionTypes';
 import {constructUrl} from '../helpers/SongsHelper';
-import xhr from 'xhr'
-
-var HEADERS = {
-  'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6',
-  'Referer': 'http://music.163.com/'
-}
 
 export function changeActivePlaylist(playlist) {
     return (dispatch, getState) => {

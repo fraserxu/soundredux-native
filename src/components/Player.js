@@ -4,8 +4,10 @@ var {
   View,
   Text,
   Dimensions,
-  Image
+  Image,
+  TouchableHighlight
 } = React;
+var AudioPlayer = require('react-native-audio-player');
 
 var deviceWidth = Dimensions.get('window').width;
 
@@ -13,15 +15,22 @@ class Player extends React.Component {
   constructor (props) {
     super(props)
   }
+
+  playSong () {
+    AudioPlayer.play('https://api.soundcloud.com/tracks/131831400/stream?client_id=f4323c6f7c0cd73d2d786a2b1cdae80c')
+  }
+
   render () {
     return (
       <View style={styles.container}>
         <View style={styles.card}>
           <View>
-            <Image
-              style={styles.avatar}
-              source={{uri: 'https://i1.sndcdn.com/artworks-000061103371-2wqlsw-large.jpg'}}
-            />
+            <TouchableHighlight onPress={this.playSong}>
+              <Image
+                style={styles.avatar}
+                source={{uri: 'https://i1.sndcdn.com/artworks-000061103371-2wqlsw-large.jpg'}}
+              />
+            </TouchableHighlight>
           </View>
           <View style={styles.description}>
             <Text style={styles.username}>Jamie xx - Lound Places (feat. Romy)</Text>
