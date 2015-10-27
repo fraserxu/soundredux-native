@@ -42,7 +42,7 @@ class Songs extends React.Component {
   }
 
   render () {
-    const {dispatch, playlist, playlists, playingSongId, sticky, time, songs} = this.props;
+    const {dispatch, playlist, playlists, playingSongId, sticky, time, songs, users} = this.props;
 
     console.log('this.props', this.props, playingSongId)
 
@@ -82,7 +82,7 @@ class Songs extends React.Component {
                       />
                     </View>
                     <View style={styles.description}>
-                      <Text style={styles.username}>{songs[song].user.username}</Text>
+                      <Text style={styles.username}>{users[songs[song].user_id].username}</Text>
                       <Text style={styles.title}>{songs[song].title}</Text>
                       <Text style={styles.count}>Played: {songs[song].playback_count}</Text>
                     </View>

@@ -81,14 +81,6 @@ Scene.propTypes = {
 
 function mapStateToProps(state) {
     const {entities, height, navigator, player, playlists} = state;
-
-    console.log('state', state)
-
-    if (player.currentSongIndex !== null) {
-      console.log('playlist', playlists[player.selectedPlaylists[player.selectedPlaylists.length - 1]].items)
-      console.log('songid', playlists[player.selectedPlaylists[player.selectedPlaylists.length - 1]].items[player.currentSongIndex])
-    }
-
     const playingSongId = player.currentSongIndex !== null ? playlists[player.selectedPlaylists[player.selectedPlaylists.length - 1]].items[player.currentSongIndex] : null;
 
     return {

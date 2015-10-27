@@ -11,11 +11,19 @@ var RCTAudio = require('react-native-player');
 var RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 var Subscribable = require('Subscribable');
 
+import {formatSeconds, formatStreamUrl} from '../utils/FormatUtils';
 var deviceWidth = Dimensions.get('window').width;
 
 var Player = React.createClass({
 
   mixins: [Subscribable.Mixin],
+
+  getInitialState: function() {
+    return {
+      isPlaying: false,
+      isPaused: false
+    }
+  },
 
   componentWillMount: function() {
       this.addListenerOn(RCTDeviceEventEmitter,
@@ -29,8 +37,36 @@ var Player = React.createClass({
                        this.onReady);
   },
 
-  playSong () {
-    RCTAudio.prepare('https://api.soundcloud.com/tracks/131831400/stream?client_id=f4323c6f7c0cd73d2d786a2b1cdae80c', true)
+  componentDidUpdate(prevProps) {
+      const {dispatch, player, playingSongId, songs, users} = this.props;
+      const song = songs[playingSongId];
+      if (prevProps.playingSongId && prevProps.playingSongId === this.props.playingSongId) {
+          return;
+      }
+
+      RCTAudio.stop()
+      this.playSong(formatStreamUrl(song.stream_url))
+  },
+
+  playSong: function(url) {
+    console.log('this.state', this.state)
+    if (this.state.isPlaying) {
+      RCTAudio.pause()
+      this.setState({
+        isPlaying: false,
+        isPaused: true
+      })
+    } else {
+      if (this.state.isPaused) {
+        RCTAudio.resume()
+        this.setState({
+          isPlaying: true,
+          isPaused: false
+        })
+      } else {
+        RCTAudio.prepare(url, true)
+      }
+    }
   },
 
   onError: function(err) {
@@ -46,23 +82,24 @@ var Player = React.createClass({
   },
 
   render: function() {
-
-    console.log('show player...')
+    const {dispatch, player, playingSongId, songs, users} = this.props;
+    const song = songs[playingSongId];
+    const user = users[song.user_id];
 
     return (
       <View style={styles.container}>
         <View style={styles.card}>
           <View>
-            <TouchableHighlight onPress={this.playSong}>
+            <TouchableHighlight onPress={this.playSong(formatStreamUrl(song.stream_url))}>
               <Image
                 style={styles.avatar}
-                source={{uri: 'https://i1.sndcdn.com/artworks-000061103371-2wqlsw-large.jpg'}}
+                source={{uri: song.artwork_url}}
               />
             </TouchableHighlight>
           </View>
           <View style={styles.description}>
-            <Text style={styles.username}>Jamie xx - Lound Places (feat. Romy)</Text>
-            <Text style={styles.title}>[Eekkoo Edit]</Text>
+            <Text style={styles.username}>{user.username}</Text>
+            <Text style={styles.title}>{song.title}</Text>
           </View>
         </View>
       </View>
