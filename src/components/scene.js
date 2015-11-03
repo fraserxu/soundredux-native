@@ -3,7 +3,8 @@ var {
   StyleSheet,
   View,
   Dimensions,
-  PropTypes
+  PropTypes,
+  ToolbarAndroid
 } = React;
 import {connect} from 'react-redux/native';
 
@@ -55,7 +56,11 @@ class Scene extends React.Component {
   render () {
     return (
       <View style={styles.container}>
-        <Header />
+        <ToolbarAndroid
+          style={styles.toolbar}
+          titleColor='#fff'
+          title={'Sound Redux Native'}
+        />
         {this.renderContent()}
         {this.renderPlayer()}
       </View>
@@ -68,6 +73,11 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column'
   },
+  toolbar: {
+    backgroundColor: '#3a3f41',
+    height: 50,
+    color: '#fff'
+  }
 });
 
 Scene.propTypes = {
@@ -77,7 +87,6 @@ Scene.propTypes = {
     playingSongId: PropTypes.number,
     playlists: PropTypes.object.isRequired,
 };
-
 
 function mapStateToProps(state) {
     const {entities, height, navigator, player, playlists} = state;

@@ -19,6 +19,12 @@ import {fetchSongsIfNeeded} from '../actions/playlists';
 class Songs extends React.Component {
   constructor (props) {
     super(props)
+
+    this.state = {
+      isFetchingTail: false
+    }
+
+    this.onEndReached = this.onEndReached.bind(this);
   }
 
   componentWillMount() {
@@ -41,20 +47,20 @@ class Songs extends React.Component {
       dispatch(playSong(playlist, i));
   }
 
+  onEndReached() {
+    this.props.dispatch(this.props.scrollFunc())
+  }
+
   render () {
     const {dispatch, playlist, playlists, playingSongId, sticky, time, songs, users} = this.props;
 
-    console.log('this.props', this.props, playingSongId)
+    console.log('this.props', this.props)
 
     const isFetching = playlist in playlists ? playlists[playlist].isFetching : false;
 
     // const songs = playlists[activePlaylist]
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
-    // let dataSource = []
-    // if (playlists[activePlaylist] && !playlists[activePlaylist].isFetching) {
-    //   dataSource = ds.cloneWithRows(songs.items)
-    // }
-    var dataSource = playlist in playlists ? ds.cloneWithRows(playlists[playlist].items) : ds.cloneWithRows([]);
+    let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
+    let dataSource = playlist in playlists ? ds.cloneWithRows(playlists[playlist].items) : ds.cloneWithRows([]);
 
     return (
       <View style={{
@@ -64,7 +70,7 @@ class Songs extends React.Component {
       }}>
         { isFetching &&
           <View style={styles.progressbar}>
-            <ProgressBar />
+            <ProgressBar styleAttr="Small" />
           </View>
         }
         { !isFetching  &&
@@ -104,6 +110,7 @@ var styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   progressbar: {
+    marginTop: 10,
     alignItems: 'center'
   },
   card: {
