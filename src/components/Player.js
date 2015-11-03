@@ -11,6 +11,8 @@ var RCTPlayer = require('react-native-player');
 var RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 var Subscribable = require('Subscribable');
 
+console.log('RCTPlayer', RCTPlayer)
+
 var Modal = require('react-native-modalbox');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 // var Icon = require('react-native-vector-icons/Ionicons');
@@ -32,6 +34,7 @@ var Player = React.createClass({
       this.addListenerOn(RCTDeviceEventEmitter, 'error', this.onError);
       this.addListenerOn(RCTDeviceEventEmitter, 'end', this.onEnd);
       this.addListenerOn(RCTDeviceEventEmitter, 'ready', this.onReady);
+      this.addListenerOn(RCTDeviceEventEmitter, 'prepare', this.onReady);
   },
 
   componentDidMount: function() {
@@ -58,11 +61,13 @@ var Player = React.createClass({
   },
 
   playSong: function(url) {
-      RCTPlayer.prepare(url, true)
+    RCTPlayer.prepare(url, true)
+    this.setState({
+      isPlaying: true
+    })
   },
 
   pause: function() {
-    console.log('pause')
     RCTPlayer.pause();
     this.setState({
       isPlaying: false
@@ -70,7 +75,6 @@ var Player = React.createClass({
   },
 
   resume: function() {
-    console.log('resume')
     RCTPlayer.resume();
     this.setState({
       isPlaying: true
@@ -101,10 +105,7 @@ var Player = React.createClass({
   },
 
   onReady: function() {
-    this.setState({
-      isPlaying: true
-    })
-    RCTPlayer.start()
+    // RCTPlayer.start?()
   },
 
   render: function() {
