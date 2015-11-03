@@ -11,11 +11,8 @@ var RCTPlayer = require('react-native-player');
 var RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 var Subscribable = require('Subscribable');
 
-console.log('RCTPlayer', RCTPlayer)
-
 var Modal = require('react-native-modalbox');
 var Icon = require('react-native-vector-icons/MaterialIcons');
-// var Icon = require('react-native-vector-icons/Ionicons');
 import {formatSeconds, formatStreamUrl} from '../utils/FormatUtils';
 var deviceWidth = Dimensions.get('window').width;
 

@@ -13,6 +13,7 @@ var ProgressBar = require('ProgressBarAndroid');
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 
+import Toolbar from './Toolbar'
 import {playSong} from '../actions/player';
 import {fetchSongsIfNeeded} from '../actions/playlists';
 
@@ -53,9 +54,6 @@ class Songs extends React.Component {
 
   render () {
     const {dispatch, playlist, playlists, playingSongId, sticky, time, songs, users} = this.props;
-
-    console.log('this.props', this.props)
-
     const isFetching = playlist in playlists ? playlists[playlist].isFetching : false;
 
     // const songs = playlists[activePlaylist]
@@ -63,11 +61,10 @@ class Songs extends React.Component {
     let dataSource = playlist in playlists ? ds.cloneWithRows(playlists[playlist].items) : ds.cloneWithRows([]);
 
     return (
-      <View style={{
-        'width': deviceWidth,
-        'height': playingSongId ? deviceHeight - 145 : deviceHeight - 70,
-        'backgroundColor': '#fff'
-      }}>
+      <View style={[styles.container, {
+        height: playingSongId ? deviceHeight - 145 : deviceHeight - 70,
+      }]}>
+        <Toolbar dispatch={dispatch} playlist={playlist} />
         { isFetching &&
           <View style={styles.progressbar}>
             <ProgressBar styleAttr="Small" />
@@ -105,8 +102,7 @@ class Songs extends React.Component {
 var styles = StyleSheet.create({
   container: {
     width: deviceWidth,
-    height: deviceHeight - 50,
-    backgroundColor: '#fff'
+    backgroundColor: '#f4f4f4'
   },
   progressbar: {
     marginTop: 10,
