@@ -73,31 +73,30 @@ class Songs extends React.Component {
             <ProgressBar styleAttr="Small" />
           </View>
         }
-        { !isFetching  &&
-          <ListView
-            dataSource={dataSource}
-            renderRow={(song, sectionId, rowId) => {
-              return (
-                <TouchableHighlight onPress={this.playSong.bind(this, rowId)}>
-                  <View style={styles.card}>
-                    <View>
-                      <Image
-                        key={songs[song]['artwork_url']}
-                        style={styles.avatar}
-                        source={{uri: songs[song]['artwork_url']}}
-                      />
-                    </View>
-                    <View style={styles.description}>
-                      <Text style={styles.username}>{users[songs[song].user_id].username}</Text>
-                      <Text style={styles.title}>{songs[song].title}</Text>
-                      <Text style={styles.count}>Played: {songs[song].playback_count}</Text>
-                    </View>
+        <ListView
+          dataSource={dataSource}
+          onEndReached={this.onEndReached}
+          renderRow={(song, sectionId, rowId) => {
+            return (
+              <TouchableHighlight onPress={this.playSong.bind(this, rowId)}>
+                <View style={styles.card}>
+                  <View>
+                    <Image
+                      key={songs[song]['artwork_url']}
+                      style={styles.avatar}
+                      source={{uri: songs[song]['artwork_url']}}
+                    />
                   </View>
-                </TouchableHighlight>
-              )
-            }}
-          />
-        }
+                  <View style={styles.description}>
+                    <Text style={styles.username}>{users[songs[song].user_id].username}</Text>
+                    <Text style={styles.title}>{songs[song].title}</Text>
+                    <Text style={styles.count}>Played: {songs[song].playback_count}</Text>
+                  </View>
+                </View>
+              </TouchableHighlight>
+            )
+          }}
+        />
       </View>
     )
   }
