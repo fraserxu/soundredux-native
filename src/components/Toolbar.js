@@ -40,9 +40,6 @@ class Toolbar extends React.Component {
 
 var styles = StyleSheet.create({
   container: {
-    // flexDirection: 'row',
-    // justifyContent: 'space-between',
-    // width: deviceWidth,
     height: 40,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
