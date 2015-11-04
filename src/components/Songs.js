@@ -6,7 +6,7 @@ var {
   Dimensions,
   Image,
   ListView,
-  TouchableHighlight
+  TouchableOpacity
 } = React;
 
 var ProgressBar = require('ProgressBarAndroid');
@@ -29,8 +29,17 @@ class Songs extends React.Component {
   }
 
   componentWillMount() {
-      const {dispatch, playlist} = this.props;
-      dispatch(fetchSongsIfNeeded(playlist));
+    const {dispatch, playlist} = this.props;
+    dispatch(fetchSongsIfNeeded(playlist));
+  }
+
+  componentWillReceiveProps(nextProps) {
+      const {dispatch, playlist, playlists} = this.props;
+      if (playlist !== nextProps.playlist) {
+          if (!(nextProps.playlist in playlists) || playlists[nextProps.playlist].items.length === 0) {
+              dispatch(fetchSongsIfNeeded(nextProps.playlist));
+          }
+      }
   }
 
   renderSong (song) {
@@ -75,7 +84,7 @@ class Songs extends React.Component {
           onEndReached={this.onEndReached}
           renderRow={(song, sectionId, rowId) => {
             return (
-              <TouchableHighlight onPress={this.playSong.bind(this, rowId)}>
+              <TouchableOpacity onPress={this.playSong.bind(this, rowId)}>
                 <View style={styles.card}>
                   <View>
                     <Image
@@ -90,7 +99,7 @@ class Songs extends React.Component {
                     <Text style={styles.count}>Played: {songs[song].playback_count}</Text>
                   </View>
                 </View>
-              </TouchableHighlight>
+              </TouchableOpacity>
             )
           }}
         />

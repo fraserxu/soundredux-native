@@ -30,7 +30,7 @@ Feedback, issues, etc. are more than welcome!
 ### TODO
 
 - [x] InfinteScroll to load more songs
-- [ ] To be able to switch genre
+- [x] To be able to switch genre
 - [ ] Clean up code
 - [ ] A modal to display song detail like the official client
 - [ ] iOS

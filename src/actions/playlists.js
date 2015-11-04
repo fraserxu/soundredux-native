@@ -61,3 +61,10 @@ function shouldFetchSongs(playlists, playlist) {
 
     return false;
 }
+
+export function changePlaylist(playlist) {
+    return {
+        type: types.CHANGE_PLAYLIST,
+        playlist: playlist
+    };
+}

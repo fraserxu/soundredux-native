@@ -9,10 +9,7 @@ export const GENRES = [
     'deep',
     'dubstep',
     'house',
-    'progressive',
-    'tech',
-    'trance',
-    'tropical'
+    'tech'
 ];
 
 export const GENRES_MAP = (function(){

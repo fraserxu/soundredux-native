@@ -36,6 +36,7 @@ export default function playlists(state = {}, action) {
         return Object.assign({}, state, {
             [action.playlist]: playlist(state[action.playlist], action)
         });
+
     default:
         return state;
     }

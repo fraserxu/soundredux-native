@@ -25,31 +25,29 @@ class Scene extends React.Component {
   }
 
   renderContent () {
-    const {dispatch, height, navigator, player, playingSongId, playlists, songs, users} = this.props;
-    let playlist = 'house';
-
+    const {playlist, dispatch, height, navigator, player, playingSongId, playlists, songs, users} = this.props;
     return (
-        <Songs
-            {...this.props}
-            playlist={playlist}
-            scrollFunc={fetchSongsIfNeeded.bind(null, playlist)} />
+      <Songs
+        {...this.props}
+        playlist={playlist}
+        scrollFunc={fetchSongsIfNeeded.bind(null, playlist)} />
     );
   }
 
   renderPlayer () {
     const {dispatch, player, playingSongId, playlists, songs, users} = this.props;
     if (playingSongId === null) {
-        return;
+      return;
     }
 
     return (
-        <Player
-            dispatch={dispatch}
-            player={player}
-            playingSongId={playingSongId}
-            playlists={playlists}
-            songs={songs}
-            users={users} />
+      <Player
+        dispatch={dispatch}
+        player={player}
+        playingSongId={playingSongId}
+        playlists={playlists}
+        songs={songs}
+        users={users} />
     );
   }
 
@@ -85,11 +83,12 @@ Scene.propTypes = {
     navigator: PropTypes.object.isRequired,
     player: PropTypes.object.isRequired,
     playingSongId: PropTypes.number,
+    playlist: PropTypes.string,
     playlists: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
-    const {entities, height, navigator, player, playlists} = state;
+    const {entities, height, navigator, playlist, player, playlists} = state;
     const playingSongId = player.currentSongIndex !== null ? playlists[player.selectedPlaylists[player.selectedPlaylists.length - 1]].items[player.currentSongIndex] : null;
 
     return {
@@ -98,6 +97,7 @@ function mapStateToProps(state) {
         player,
         playingSongId,
         playlists,
+        playlist,
         songs: entities.songs,
         users: entities.users
     };
