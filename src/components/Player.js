@@ -1,20 +1,20 @@
-var React = require('react-native');
+var React = require('react-native')
 var {
   StyleSheet,
   View,
   Text,
   Dimensions,
   Image,
-  TouchableHighlight
-} = React;
-var RCTPlayer = require('react-native-player');
-var RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
-var Subscribable = require('Subscribable');
+  TouchableOpacity
+} = React
+var RCTPlayer = require('react-native-player')
+var RCTDeviceEventEmitter = require('RCTDeviceEventEmitter')
+var Subscribable = require('Subscribable')
 
-var Modal = require('react-native-modalbox');
-var Icon = require('react-native-vector-icons/MaterialIcons');
-import {formatSeconds, formatStreamUrl} from '../utils/FormatUtils';
-var deviceWidth = Dimensions.get('window').width;
+import Song from './Song'
+import Icon from 'react-native-vector-icons/MaterialIcons'
+import {formatSeconds, formatStreamUrl} from '../utils/FormatUtils'
+var deviceWidth = Dimensions.get('window').width
 
 var Player = React.createClass({
 
@@ -28,33 +28,33 @@ var Player = React.createClass({
   },
 
   componentWillMount: function() {
-      this.addListenerOn(RCTDeviceEventEmitter, 'error', this.onError);
-      this.addListenerOn(RCTDeviceEventEmitter, 'end', this.onEnd);
-      this.addListenerOn(RCTDeviceEventEmitter, 'ready', this.onReady);
-      this.addListenerOn(RCTDeviceEventEmitter, 'prepare', this.onReady);
+    this.addListenerOn(RCTDeviceEventEmitter, 'error', this.onError)
+    this.addListenerOn(RCTDeviceEventEmitter, 'end', this.onEnd)
+    this.addListenerOn(RCTDeviceEventEmitter, 'ready', this.onReady)
+    this.addListenerOn(RCTDeviceEventEmitter, 'prepare', this.onReady)
   },
 
   componentDidMount: function() {
-    const {dispatch, player, playingSongId, songs, users} = this.props;
-    const song = songs[playingSongId];
+    const {dispatch, player, playingSongId, songs, users} = this.props
+    const song = songs[playingSongId]
     if (song) {
       this.playSong(formatStreamUrl(song.stream_url))
     }
   },
 
   componentDidUpdate: function(prevProps) {
-      const {dispatch, player, playingSongId, songs, users} = this.props;
-      const song = songs[playingSongId];
-      if (prevProps.playingSongId && prevProps.playingSongId === this.props.playingSongId) {
-          return;
-      }
+    const {dispatch, player, playingSongId, songs, users} = this.props
+    const song = songs[playingSongId]
+    if (prevProps.playingSongId && prevProps.playingSongId === this.props.playingSongId) {
+      return
+    }
 
-      // new song and is playing
-      if (this.state.isPlaying) {
-        RCTPlayer.stop()
-      }
+    // new song and is playing
+    if (this.state.isPlaying) {
+      RCTPlayer.stop()
+    }
 
-      this.playSong(formatStreamUrl(song.stream_url))
+    this.playSong(formatStreamUrl(song.stream_url))
   },
 
   playSong: function(url) {
@@ -65,14 +65,14 @@ var Player = React.createClass({
   },
 
   pause: function() {
-    RCTPlayer.pause();
+    RCTPlayer.pause()
     this.setState({
       isPlaying: false
     })
   },
 
   resume: function() {
-    RCTPlayer.resume();
+    RCTPlayer.resume()
     this.setState({
       isPlaying: true
     })
@@ -89,26 +89,27 @@ var Player = React.createClass({
     console.log("end")
   },
 
-  openModal: function() {
-    this.setState({
-      isModalOpen: true
-    })
-  },
-
-  closeModal: function() {
-    this.setState({
-      isModalOpen: false
-    })
-  },
-
   onReady: function() {
     // RCTPlayer.start?()
   },
 
+  showSongDetail: function(song, user) {
+    const { navigator } = this.props
+
+    navigator.push({
+      component: Song,
+      name: 'Song Detail',
+      passProps: {
+        song: song,
+        user: user
+      }
+    })
+  },
+
   render: function() {
-    const {dispatch, player, playingSongId, songs, users} = this.props;
-    const song = songs[playingSongId];
-    const user = users[song.user_id];
+    const {dispatch, player, playingSongId, songs, users} = this.props
+    const song = songs[playingSongId]
+    const user = users[song.user_id]
 
     let {isPlaying, isModalOpen} = this.state
 
@@ -117,25 +118,23 @@ var Player = React.createClass({
         <View style={styles.card}>
           <View style={styles.player}>
             { isPlaying &&
-              <TouchableHighlight onPress={this.pause}>
+              <TouchableOpacity onPress={this.pause}>
                 <Icon name="pause" size={30} color="#FFF" />
-              </TouchableHighlight>
+              </TouchableOpacity>
             }
             { !isPlaying &&
-              <TouchableHighlight onPress={this.resume}>
+              <TouchableOpacity onPress={this.resume}>
                 <Icon name="play-arrow" size={30} color="#FFF" />
-              </TouchableHighlight>
+              </TouchableOpacity>
             }
           </View>
-          <View style={styles.description}>
-            <Text style={styles.username}>{user.username}</Text>
-            <Text style={styles.title}>{song.title}</Text>
-          </View>
+          <TouchableOpacity onPress={this.showSongDetail.bind(this, song, user)}>
+            <View style={styles.description}>
+              <Text style={styles.username}>{user.username}</Text>
+              <Text style={styles.title}>{song.title}</Text>
+            </View>
+          </TouchableOpacity>
         </View>
-
-        <Modal isOpen={isModalOpen} onClosed={this.closeModal} style={styles.modal} position={"center"}>
-          <Text style={styles.text}>Modal with backdrop content</Text>
-        </Modal>
 
       </View>
     )
@@ -176,16 +175,7 @@ var styles = StyleSheet.create({
     flexWrap: 'wrap',
     color: '#fff',
     fontSize: 12
-  },
-  modal: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 400
-  },
-  text: {
-    color: "black",
-    fontSize: 22
   }
-});
+})
 
 export default Player

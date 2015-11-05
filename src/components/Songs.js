@@ -16,6 +16,7 @@ var deviceHeight = Dimensions.get('window').height;
 import Toolbar from './Toolbar'
 import {playSong} from '../actions/player';
 import {fetchSongsIfNeeded} from '../actions/playlists';
+import Song from './Song'
 
 class Songs extends React.Component {
   constructor (props) {
@@ -52,9 +53,19 @@ class Songs extends React.Component {
     )
   }
 
-  playSong(i) {
-      const {playlist, dispatch} = this.props;
-      dispatch(playSong(playlist, i));
+  playSong(i, song, user) {
+    const {playlist, dispatch, navigator} = this.props;
+
+    navigator.push({
+      component: Song,
+      name: 'Song Detail',
+      passProps: {
+        song: song,
+        user: user
+      }
+    })
+
+    dispatch(playSong(playlist, i));
   }
 
   onEndReached() {
@@ -84,7 +95,7 @@ class Songs extends React.Component {
           onEndReached={this.onEndReached}
           renderRow={(song, sectionId, rowId) => {
             return (
-              <TouchableOpacity onPress={this.playSong.bind(this, rowId)}>
+              <TouchableOpacity onPress={this.playSong.bind(this, rowId, songs[song], users[songs[song].user_id])}>
                 <View style={styles.card}>
                   <View>
                     <Image

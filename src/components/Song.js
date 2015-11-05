@@ -6,41 +6,36 @@ var {
   Dimensions,
   Image,
   ListView,
-  TouchableHighlight
+  TouchableOpacity
 } = React;
 
-var ProgressBar = require('ProgressBarAndroid');
+import Icon from 'react-native-vector-icons/MaterialIcons'
+
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 
-class Songs extends React.Component {
+class Song extends React.Component {
   constructor (props) {
     super(props)
   }
   render () {
-    const { playlists, activePlaylist } = this.props
-    const songs = playlists[activePlaylist]
+    console.log('this.props', this.props)
+    let { song, user } = this.props
 
     return (
       <View style={styles.container}>
-        { playlists[activePlaylist] && playlists[activePlaylist].isFetching &&
-          <ProgressBar styleAttr="Small" />
-        }
-        { playlists[activePlaylist] && !playlists[activePlaylist].isFetching  &&
-          <View>
-            {
-              songs.items.map((song, key) => {
-                return (
-                  <Image
-                    key={key}
-                    style={styles.avatar}
-                    source={{uri: song['artwork_url']}}
-                  />
-                )
-              })
-            }
+        <Image
+          source={{uri: song['artwork_url']}}
+          style={styles.backgroundImage}
+        >
+          <TouchableOpacity onPress={() => this.props.navigator.pop()}>
+            <Icon name="expand-more" size={40} color="#FFF" />
+          </TouchableOpacity>
+          <View style={styles.description}>
+            <Text style={styles.username}>{user.username}</Text>
+            <Text style={styles.title}>{song.title}</Text>
           </View>
-        }
+        </Image>
       </View>
     )
   }
@@ -48,18 +43,47 @@ class Songs extends React.Component {
 
 var styles = StyleSheet.create({
   container: {
-    width: deviceWidth,
-    height: deviceHeight - 150,
-    backgroundColor: '#fff'
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: '#3a3f41',
+    backgroundColor: '#3a3f41',
+    borderTopWidth: 2,
+    borderTopColor: '#f50'
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    width: null,
+    height: null
+  },
+  description: {
+    flex: 1,
+    marginLeft: 10,
+    marginTop: 40,
+    flexDirection: 'column'
+  },
+  back: {
+    flex: 1,
+    fontSize: 12,
+    color: '#E2E2E2',
+    margin: 20
+  },
+  username: {
+    fontSize: 12,
+    width: 50,
+    margin: 10,
+    padding: 10,
+    color: '#E2E2E2',
+    backgroundColor: '#000'
   },
   title: {
-    textAlign: 'center',
-    fontWeight: 'bold',
-    color: '#333',
-    height: 50,
-    marginTop: 15,
-    lineHeight: 50,
+    flexWrap: 'wrap',
+    color: '#fff',
+    margin: 10,
+    padding: 10,
+    fontSize: 12,
+    backgroundColor: '#000'
   }
 });
 
-export default Songs
+export default Song

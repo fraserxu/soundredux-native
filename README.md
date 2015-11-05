@@ -32,7 +32,7 @@ Feedback, issues, etc. are more than welcome!
 - [x] InfinteScroll to load more songs
 - [x] To be able to switch genre
 - [ ] Clean up code
-- [ ] A modal to display song detail like the official client
+- [x] A modal to display song detail like the official client
 - [ ] iOS
 
 ### Notes:

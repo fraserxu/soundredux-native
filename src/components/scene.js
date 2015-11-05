@@ -25,7 +25,7 @@ class Scene extends React.Component {
   }
 
   renderContent () {
-    const {playlist, dispatch, height, navigator, player, playingSongId, playlists, songs, users} = this.props;
+    const {playlist, dispatch, height, player, playingSongId, playlists, songs, users} = this.props;
     return (
       <Songs
         {...this.props}
@@ -35,7 +35,7 @@ class Scene extends React.Component {
   }
 
   renderPlayer () {
-    const {dispatch, player, playingSongId, playlists, songs, users} = this.props;
+    const {dispatch, player, navigator, playingSongId, playlists, songs, users} = this.props;
     if (playingSongId === null) {
       return;
     }
@@ -43,6 +43,7 @@ class Scene extends React.Component {
     return (
       <Player
         dispatch={dispatch}
+        navigator={navigator}
         player={player}
         playingSongId={playingSongId}
         playlists={playlists}
@@ -79,28 +80,26 @@ var styles = StyleSheet.create({
 });
 
 Scene.propTypes = {
-    dispatch: PropTypes.func.isRequired,
-    navigator: PropTypes.object.isRequired,
-    player: PropTypes.object.isRequired,
-    playingSongId: PropTypes.number,
-    playlist: PropTypes.string,
-    playlists: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  player: PropTypes.object.isRequired,
+  playingSongId: PropTypes.number,
+  playlist: PropTypes.string,
+  playlists: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
-    const {entities, height, navigator, playlist, player, playlists} = state;
-    const playingSongId = player.currentSongIndex !== null ? playlists[player.selectedPlaylists[player.selectedPlaylists.length - 1]].items[player.currentSongIndex] : null;
+  const {entities, height, playlist, player, playlists} = state;
+  const playingSongId = player.currentSongIndex !== null ? playlists[player.selectedPlaylists[player.selectedPlaylists.length - 1]].items[player.currentSongIndex] : null;
 
-    return {
-        height,
-        navigator,
-        player,
-        playingSongId,
-        playlists,
-        playlist,
-        songs: entities.songs,
-        users: entities.users
-    };
+  return {
+    height,
+    player,
+    playingSongId,
+    playlists,
+    playlist,
+    songs: entities.songs,
+    users: entities.users
+  };
 }
 
 export default connect(mapStateToProps)(Scene)
