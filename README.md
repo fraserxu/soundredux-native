@@ -6,7 +6,8 @@ In an effort to learn es6 and [redux](https://github.com/rackt/redux), [react-na
 
 This repo is stolen from the awesome [soundredux](https://soundredux.io/) project by @andrewngu , I've been using it instead of the official Soundclould client for a week.
 
-![soundredux-native](https://cloud.githubusercontent.com/assets/1183541/10914547/e0eba9e2-828d-11e5-99f2-096946a0fb93.gif)
+![soundredux-native](https://cloud.githubusercontent.com/assets/1183541/10974966/70e8f288-841f-11e5-9284-c8efd53c4f75.gif)
+
 
 ### What I've learned
 
