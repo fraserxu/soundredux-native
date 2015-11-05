@@ -43,4 +43,4 @@ To run it on a real device, bundle the jsfile into the apk by running:
 * create an assets folder under `android/app/src/main`
 * curl "http://localhost:8081/index.android.bundle?platform=android" -o "android/app/src/main/assets/index.android.bundle"
 
-Thanks to my awesome colleague @xeodou who build the native Android player module on top of ExoPlayer.
+Thanks to my awesome colleague [@xeodou](https://github.com/xeodou) who build the native Android player [react-native-player](https://github.com/xeodou/react-native-player)module on top of ExoPlayer.
