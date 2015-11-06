@@ -19,7 +19,6 @@ class Song extends React.Component {
     super(props)
   }
   render () {
-    console.log('this.props', this.props)
     let { song, user } = this.props
 
     return (

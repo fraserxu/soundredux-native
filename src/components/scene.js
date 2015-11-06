@@ -1,48 +1,47 @@
-var React = require('react-native');
+var React = require('react-native')
 var {
   StyleSheet,
   View,
   Dimensions,
   PropTypes,
   ToolbarAndroid
-} = React;
-import {connect} from 'react-redux/native';
+} = React
+import {connect} from 'react-redux/native'
 
-var deviceWidth = Dimensions.get('window').width;
+var deviceWidth = Dimensions.get('window').width
 
-import {fetchSongsIfNeeded} from '../actions/playlists';
-import {parseUrl} from '../utils/RouteUtils';
+import {fetchSongsIfNeeded} from '../actions/playlists'
+import {parseUrl} from '../utils/RouteUtils'
 
-import Player from './Player';
-import Songs from './Songs';
-
-console.log('ToolbarAndroid', ToolbarAndroid)
+import Player from './Player'
+import Songs from './Songs'
+import Search from './Search'
 
 let toolbarActions = [
-  {title: 'Create', show: 'always'},
-  {title: 'Filter'},
-  {title: 'Settings', show: 'always'},
+  {title: 'Search', icon: require('../../assets/search100.png'), show: 'always'}
 ]
 
 class Scene extends React.Component {
   constructor (props) {
     super(props)
+
+    this.onActionSelected = this.onActionSelected.bind(this)
   }
 
   renderContent () {
-    const {playlist, dispatch, height, player, playingSongId, playlists, songs, users} = this.props;
+    const {playlist, dispatch, height, player, playingSongId, playlists, songs, users} = this.props
     return (
       <Songs
         {...this.props}
         playlist={playlist}
         scrollFunc={fetchSongsIfNeeded.bind(null, playlist)} />
-    );
+    )
   }
 
   renderPlayer () {
-    const {dispatch, player, navigator, playingSongId, playlists, songs, users} = this.props;
+    const {dispatch, player, navigator, playingSongId, playlists, songs, users} = this.props
     if (playingSongId === null) {
-      return;
+      return
     }
 
     return (
@@ -54,11 +53,18 @@ class Scene extends React.Component {
         playlists={playlists}
         songs={songs}
         users={users} />
-    );
+    )
   }
 
   onActionSelected (position) {
-    console.log('position', position)
+    const { navigator } = this.props
+    if (position === 0) {
+      navigator.push({
+        component: Search,
+        name: 'Search',
+        passProps: this.props
+      })
+    }
   }
 
   render () {
@@ -88,7 +94,7 @@ var styles = StyleSheet.create({
     height: 50,
     color: '#fff'
   }
-});
+})
 
 Scene.propTypes = {
   dispatch: PropTypes.func.isRequired,
@@ -96,11 +102,11 @@ Scene.propTypes = {
   playingSongId: PropTypes.number,
   playlist: PropTypes.string,
   playlists: PropTypes.object.isRequired,
-};
+}
 
 function mapStateToProps(state) {
-  const {entities, height, playlist, player, playlists} = state;
-  const playingSongId = player.currentSongIndex !== null ? playlists[player.selectedPlaylists[player.selectedPlaylists.length - 1]].items[player.currentSongIndex] : null;
+  const {entities, height, playlist, player, playlists} = state
+  const playingSongId = player.currentSongIndex !== null ? playlists[player.selectedPlaylists[player.selectedPlaylists.length - 1]].items[player.currentSongIndex] : null
 
   return {
     height,
@@ -110,7 +116,7 @@ function mapStateToProps(state) {
     playlist,
     songs: entities.songs,
     users: entities.users
-  };
+  }
 }
 
 export default connect(mapStateToProps)(Scene)

@@ -6,7 +6,7 @@ let {
 } = React;
 
 import Scene from '../components/Scene'
-
+import Search from '../components/Search'
 
 class App extends React.Component {
   constructor(props) {
