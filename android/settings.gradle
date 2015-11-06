@@ -1,5 +1,9 @@
 rootProject.name = 'soundreduxNative'
 
-include ':react-native-vector-icons', ':react-native-player', ':app'
+include ':app'
+
+include ':react-native-player'
 project(':react-native-player').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-player/android/player')
+
+include ':react-native-vector-icons'
 project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vector-icons/android')

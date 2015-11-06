@@ -13,11 +13,16 @@ var deviceWidth = Dimensions.get('window').width;
 import {fetchSongsIfNeeded} from '../actions/playlists';
 import {parseUrl} from '../utils/RouteUtils';
 
-import Header from './Header';
 import Player from './Player';
-// import Song from './Song';
 import Songs from './Songs';
-// import User from './User';
+
+console.log('ToolbarAndroid', ToolbarAndroid)
+
+let toolbarActions = [
+  {title: 'Create', show: 'always'},
+  {title: 'Filter'},
+  {title: 'Settings', show: 'always'},
+]
 
 class Scene extends React.Component {
   constructor (props) {
@@ -52,11 +57,17 @@ class Scene extends React.Component {
     );
   }
 
+  onActionSelected (position) {
+    console.log('position', position)
+  }
+
   render () {
     return (
       <View style={styles.container}>
         <ToolbarAndroid
           style={styles.toolbar}
+          actions={toolbarActions}
+          onActionSelected={this.onActionSelected}
           titleColor='#fff'
           title={'Sound Redux Native'}
         />
