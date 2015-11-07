@@ -53,19 +53,17 @@ class Songs extends React.Component {
     )
   }
 
-  playSong(i, song, user) {
+  playSong(i) {
     const {playlist, dispatch, navigator} = this.props;
+    dispatch(playSong(playlist, i));
+
+    console.log('this.props', this.props)
 
     navigator.push({
       component: Song,
       name: 'Song Detail',
-      passProps: {
-        song: song,
-        user: user
-      }
+      passProps: this.props
     })
-
-    dispatch(playSong(playlist, i));
   }
 
   onEndReached() {
@@ -95,7 +93,7 @@ class Songs extends React.Component {
           onEndReached={this.onEndReached}
           renderRow={(song, sectionId, rowId) => {
             return (
-              <TouchableOpacity onPress={this.playSong.bind(this, rowId, songs[song], users[songs[song].user_id])}>
+              <TouchableOpacity onPress={this.playSong.bind(this, rowId)}>
                 <View style={styles.card}>
                   <View>
                     <Image

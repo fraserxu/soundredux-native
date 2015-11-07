@@ -1,6 +1,7 @@
-var React = require('react-native')
-var {
+import React from 'react-native'
+let {
   StyleSheet,
+  PropTypes,
   View,
   Text,
   Dimensions,
@@ -8,21 +9,46 @@ var {
   ListView,
   TouchableOpacity
 } = React
+import {connect} from 'react-redux/native'
+import RCTPlayer from 'react-native-player'
 
 import Icon from 'react-native-vector-icons/MaterialIcons'
-// import RCTPlayer from 'react-native-player'
 
-// console.log('RCTPlayer', RCTPlayer.isPlaying())
-
-var deviceWidth = Dimensions.get('window').width
-var deviceHeight = Dimensions.get('window').height
+import { changeSong, changePlayerStatus } from '../actions/player'
+import { CHANGE_TYPES, PLAY_STATUS } from '../constants/SongConstants'
+let deviceWidth = Dimensions.get('window').width
+let deviceHeight = Dimensions.get('window').height
 
 class Song extends React.Component {
   constructor (props) {
     super(props)
+
+    this.changeSong = this.changeSong.bind(this)
+    this.pause = this.pause.bind(this)
+    this.resume = this.resume.bind(this)
   }
+
+  changeSong (changeType) {
+    const {dispatch} = this.props
+    dispatch(changeSong(changeType))
+  }
+
+  pause () {
+    RCTPlayer.pause()
+    const {dispatch} = this.props
+    dispatch(changePlayerStatus(PLAY_STATUS.PAUSED))
+  }
+
+  resume () {
+    RCTPlayer.resume()
+    const {dispatch} = this.props
+    dispatch(changePlayerStatus(PLAY_STATUS.PLAYING))
+  }
+
   render () {
-    let { song, user } = this.props
+    const {dispatch, player, playingSongId, songs, users} = this.props
+    const song = songs[playingSongId]
+    const user = users[song.user_id]
 
     return (
       <View style={styles.container}>
@@ -42,13 +68,22 @@ class Song extends React.Component {
             </View>
           </View>
           <View style={styles.player}>
-            <TouchableOpacity onPress={() => {return}}>
+            <TouchableOpacity onPress={this.changeSong.bind(this, CHANGE_TYPES.PREV)}>
               <Icon style={styles.button} name="fast-rewind" size={40} color="#FFF" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => {return}}>
-              <Icon style={styles.button} name="pause" size={40} color="#FFF" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => {return}}>
+
+            { player.status === PLAY_STATUS.PLAYING &&
+              <TouchableOpacity onPress={this.pause}>
+                <Icon style={styles.button} name="pause" size={40} color="#FFF" />
+              </TouchableOpacity>
+            }
+            { player.status === (PLAY_STATUS.PAUSED || PLAY_STATUS.INIT) &&
+              <TouchableOpacity onPress={this.resume}>
+                <Icon style={styles.button} name="play-arrow" size={40} color="#FFF" />
+              </TouchableOpacity>
+            }
+
+            <TouchableOpacity onPress={this.changeSong.bind(this, CHANGE_TYPES.NEXT)}>
               <Icon style={styles.button} name="fast-forward" size={40} color="#FFF" />
             </TouchableOpacity>
           </View>
@@ -58,7 +93,7 @@ class Song extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
@@ -111,4 +146,26 @@ var styles = StyleSheet.create({
   }
 })
 
-export default Song
+Song.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  player: PropTypes.object.isRequired,
+  playingSongId: PropTypes.number,
+  playlist: PropTypes.string,
+  playlists: PropTypes.object.isRequired,
+}
+
+function mapStateToProps(state) {
+  const {entities, playlist, player, playlists} = state
+  const playingSongId = player.currentSongIndex !== null ? playlists[player.selectedPlaylists[player.selectedPlaylists.length - 1]].items[player.currentSongIndex] : null
+
+  return {
+    player,
+    playingSongId,
+    playlists,
+    playlist,
+    songs: entities.songs,
+    users: entities.users
+  }
+}
+
+export default connect(mapStateToProps)(Song)

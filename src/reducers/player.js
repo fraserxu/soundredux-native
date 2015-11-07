@@ -4,6 +4,7 @@ export default function player(state = {
     currentSongIndex: null,
     currentTime: 0,
     selectedPlaylists: [],
+    status: 'init'
 }, action) {
     switch(action.type) {
     case types.CHANGE_CURRENT_TIME:
@@ -20,6 +21,11 @@ export default function player(state = {
         return Object.assign({}, state, {
             selectedPlaylists: action.playlists
         });
+
+    case types.CHAANGE_PLAYER_STATUS:
+        return Object.assign({}, state, {
+            status: action.status
+        })
 
     default:
         return state;

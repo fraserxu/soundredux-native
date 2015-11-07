@@ -1,6 +1,13 @@
 import * as types from '../constants/ActionTypes';
 import {CHANGE_TYPES} from '../constants/SongConstants';
 
+export function changePlayerStatus (status) {
+    return {
+        type: types.CHAANGE_PLAYER_STATUS,
+        status
+    }
+}
+
 export function changeCurrentTime(time) {
     return {
         type: types.CHANGE_CURRENT_TIME,

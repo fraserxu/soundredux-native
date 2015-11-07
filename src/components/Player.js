@@ -14,18 +14,13 @@ var Subscribable = require('Subscribable')
 import Song from './Song'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import {formatSeconds, formatStreamUrl} from '../utils/FormatUtils'
+import { changeSong, changePlayerStatus } from '../actions/player'
+import { CHANGE_TYPES, PLAY_STATUS } from '../constants/SongConstants'
 var deviceWidth = Dimensions.get('window').width
 
 var Player = React.createClass({
 
   mixins: [Subscribable.Mixin],
-
-  getInitialState: function() {
-    return {
-      isPlaying: false,
-      isModalOpen: false
-    }
-  },
 
   componentWillMount: function() {
     this.addListenerOn(RCTDeviceEventEmitter, 'error', this.onError)
@@ -50,32 +45,26 @@ var Player = React.createClass({
     }
 
     // new song and is playing
-    if (this.state.isPlaying) {
-      RCTPlayer.stop()
-    }
-
+    RCTPlayer.stop()
     this.playSong(formatStreamUrl(song.stream_url))
   },
 
   playSong: function(url) {
     RCTPlayer.prepare(url, true)
-    this.setState({
-      isPlaying: true
-    })
+    const {dispatch} = this.props
+    dispatch(changePlayerStatus(PLAY_STATUS.PLAYING))
   },
 
   pause: function() {
     RCTPlayer.pause()
-    this.setState({
-      isPlaying: false
-    })
+    const {dispatch} = this.props
+    dispatch(changePlayerStatus(PLAY_STATUS.PAUSED))
   },
 
   resume: function() {
     RCTPlayer.resume()
-    this.setState({
-      isPlaying: true
-    })
+    const {dispatch} = this.props
+    dispatch(changePlayerStatus(PLAY_STATUS.PLAYING))
   },
 
   onError: function(err) {
@@ -83,26 +72,21 @@ var Player = React.createClass({
   },
 
   onEnd: function() {
-    this.setState({
-      isPlaying: false
-    })
-    console.log("end")
+    const {dispatch} = this.props
+    dispatch(changeSong(CHANGE_TYPES.NEXT))
   },
 
   onReady: function() {
     // RCTPlayer.start?()
   },
 
-  showSongDetail: function(song, user) {
+  showSongDetail: function() {
     const { navigator } = this.props
 
     navigator.push({
       component: Song,
       name: 'Song Detail',
-      passProps: {
-        song: song,
-        user: user
-      }
+      passProps: this.props
     })
   },
 
@@ -111,18 +95,16 @@ var Player = React.createClass({
     const song = songs[playingSongId]
     const user = users[song.user_id]
 
-    let {isPlaying, isModalOpen} = this.state
-
     return (
       <View style={styles.container}>
         <View style={styles.card}>
           <View style={styles.player}>
-            { isPlaying &&
+            { player.status === PLAY_STATUS.PLAYING &&
               <TouchableOpacity onPress={this.pause}>
                 <Icon name="pause" size={30} color="#FFF" />
               </TouchableOpacity>
             }
-            { !isPlaying &&
+            { player.status === (PLAY_STATUS.PAUSED || PLAY_STATUS.INIT) &&
               <TouchableOpacity onPress={this.resume}>
                 <Icon name="play-arrow" size={30} color="#FFF" />
               </TouchableOpacity>

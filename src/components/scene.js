@@ -105,11 +105,10 @@ Scene.propTypes = {
 }
 
 function mapStateToProps(state) {
-  const {entities, height, playlist, player, playlists} = state
+  const {entities, playlist, player, playlists} = state
   const playingSongId = player.currentSongIndex !== null ? playlists[player.selectedPlaylists[player.selectedPlaylists.length - 1]].items[player.currentSongIndex] : null
 
   return {
-    height,
     player,
     playingSongId,
     playlists,
