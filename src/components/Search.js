@@ -1,54 +1,79 @@
-var React = require('react-native');
-var {
+let React = require('react-native')
+let {
   StyleSheet,
   View,
   Text,
   Dimensions,
   TouchableOpacity,
   TextInput
-} = React;
+} = React
+import {connect} from 'react-redux/native'
 
+import Result from './Result'
+import {fetchSongsIfNeeded, changePlaylist} from '../actions/playlists'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-var deviceWidth = Dimensions.get('window').width;
+let deviceWidth = Dimensions.get('window').width
 
 class Search extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      text: ''
+      text: '',
+      newPlayList: ''
     }
+
+    this.onSubmitEditing = this.onSubmitEditing.bind(this)
   }
 
-  onSubmitEditing (e) {
-    console.log('value', this.state.text)
+  renderContent () {
+    const {playlist, dispatch, height, player, playingSongId, playlists, songs, users} = this.props
+    return (
+      <Result
+        {...this.props}
+        playlist={this.state.newPlayList || ''}
+        scrollFunc={fetchSongsIfNeeded.bind(null, this.state.newPlayList || '')} />
+    )
+  }
+
+  onSubmitEditing () {
+    this.setState({
+      newPlayList: this.state.text
+    })
   }
 
   render () {
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={() => this.props.navigator.pop()}>
-          <Icon name="keyboard-backspace" style={styles.backIcon} size={30} color="#FFF" />
-        </TouchableOpacity>
-        <Icon name="search" style={styles.search} size={30} color="#FFF" />
-        <TextInput
-          style={styles.input}
-          onChangeText={(text) => this.setState({text})}
-          placeholder={'Search SoundCloud'}
-          placeholderTextColor={'#E2E2E2'}
-          underlineColorAndroid={'#3a3f41'}
-          onSubmitEditing={this.onSubmitEditing}
-          autoFocus={true}
-          autoCorrect={false}
-          value={this.state.text}
-        />
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => this.props.navigator.pop()}>
+            <Icon name="keyboard-backspace" style={styles.backIcon} size={30} color="#FFF" />
+          </TouchableOpacity>
+          <Icon name="search" style={styles.search} size={30} color="#FFF" />
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => this.setState({text})}
+            placeholder={'Search SoundCloud'}
+            placeholderTextColor={'#E2E2E2'}
+            underlineColorAndroid={'#3a3f41'}
+            onSubmitEditing={this.onSubmitEditing}
+            autoFocus={true}
+            autoCorrect={false}
+            value={this.state.text}
+          />
+        </View>
+        {this.renderContent()}
       </View>
     )
   }
 }
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container: {
+    flex: 1,
+    flexDirection: 'column'
+  },
+  header: {
     flexDirection: 'row',
     width: deviceWidth,
     height: 50,
@@ -78,6 +103,20 @@ var styles = StyleSheet.create({
     marginTop: 15,
     lineHeight: 50,
   }
-});
+})
 
-export default Search
+function mapStateToProps(state) {
+  const {entities, playlist, player, playlists} = state
+  const playingSongId = player.currentSongIndex !== null ? playlists[player.selectedPlaylists[player.selectedPlaylists.length - 1]].items[player.currentSongIndex] : null
+
+  return {
+    player,
+    playingSongId,
+    playlists,
+    playlist,
+    songs: entities.songs,
+    users: entities.users
+  }
+}
+
+export default connect(mapStateToProps)(Search)

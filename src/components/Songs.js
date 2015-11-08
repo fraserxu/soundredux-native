@@ -1,5 +1,5 @@
-var React = require('react-native');
-var {
+let React = require('react-native')
+let {
   StyleSheet,
   View,
   Text,
@@ -7,15 +7,15 @@ var {
   Image,
   ListView,
   TouchableOpacity
-} = React;
+} = React
 
-var ProgressBar = require('ProgressBarAndroid');
-var deviceWidth = Dimensions.get('window').width;
-var deviceHeight = Dimensions.get('window').height;
+let ProgressBar = require('ProgressBarAndroid')
+let deviceWidth = Dimensions.get('window').width
+let deviceHeight = Dimensions.get('window').height
 
 import Toolbar from './Toolbar'
-import {playSong} from '../actions/player';
-import {fetchSongsIfNeeded} from '../actions/playlists';
+import {playSong} from '../actions/player'
+import {fetchSongsIfNeeded} from '../actions/playlists'
 import Song from './Song'
 
 class Songs extends React.Component {
@@ -26,38 +26,26 @@ class Songs extends React.Component {
       isFetchingTail: false
     }
 
-    this.onEndReached = this.onEndReached.bind(this);
+    this.onEndReached = this.onEndReached.bind(this)
   }
 
   componentWillMount() {
-    const {dispatch, playlist} = this.props;
-    dispatch(fetchSongsIfNeeded(playlist));
+    const {dispatch, playlist} = this.props
+    dispatch(fetchSongsIfNeeded(playlist))
   }
 
   componentWillReceiveProps(nextProps) {
-      const {dispatch, playlist, playlists} = this.props;
-      if (playlist !== nextProps.playlist) {
-          if (!(nextProps.playlist in playlists) || playlists[nextProps.playlist].items.length === 0) {
-              dispatch(fetchSongsIfNeeded(nextProps.playlist));
-          }
+    const {dispatch, playlist, playlists} = this.props
+    if (playlist !== nextProps.playlist) {
+      if (!(nextProps.playlist in playlists) || playlists[nextProps.playlist].items.length === 0) {
+        dispatch(fetchSongsIfNeeded(nextProps.playlist))
       }
-  }
-
-  renderSong (song) {
-    return (
-      <Image
-        key={song['artwork_url']}
-        style={styles.avatar}
-        source={{uri: song['artwork_url']}}
-      />
-    )
+    }
   }
 
   playSong(i) {
-    const {playlist, dispatch, navigator} = this.props;
-    dispatch(playSong(playlist, i));
-
-    console.log('this.props', this.props)
+    const {playlist, dispatch, navigator} = this.props
+    dispatch(playSong(playlist, i))
 
     navigator.push({
       component: Song,
@@ -71,18 +59,20 @@ class Songs extends React.Component {
   }
 
   render () {
-    const {dispatch, playlist, playlists, playingSongId, sticky, time, songs, users} = this.props;
-    const isFetching = playlist in playlists ? playlists[playlist].isFetching : false;
+    const {dispatch, playlist, playlists, playingSongId, songs, users} = this.props
+    const isFetching = playlist in playlists ? playlists[playlist].isFetching : false
 
     // const songs = playlists[activePlaylist]
     let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
-    let dataSource = playlist in playlists ? ds.cloneWithRows(playlists[playlist].items) : ds.cloneWithRows([]);
+    let dataSource = playlist in playlists ? ds.cloneWithRows(playlists[playlist].items) : ds.cloneWithRows([])
 
     return (
       <View style={[styles.container, {
         height: playingSongId ? deviceHeight - 145 : deviceHeight - 70,
       }]}>
+
         <Toolbar dispatch={dispatch} playlist={playlist} />
+
         { isFetching &&
           <View style={styles.progressbar}>
             <ProgressBar styleAttr="Small" />
@@ -117,7 +107,7 @@ class Songs extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container: {
     width: deviceWidth,
     backgroundColor: '#f4f4f4'
@@ -156,6 +146,6 @@ var styles = StyleSheet.create({
   count: {
     fontSize: 10
   }
-});
+})
 
 export default Songs

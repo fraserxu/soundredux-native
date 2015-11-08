@@ -40,7 +40,8 @@ class App extends React.Component {
         configureScene={this.configureScene}
         renderScene={this.renderScene}
         initialRoute={{
-          component: Scene
+          component: Scene,
+          name: 'Songs'
         }}
       />
 

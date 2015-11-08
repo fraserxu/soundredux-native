@@ -61,8 +61,7 @@ class Scene extends React.Component {
     if (position === 0) {
       navigator.push({
         component: Search,
-        name: 'Search',
-        passProps: this.props
+        name: 'Search'
       })
     }
   }

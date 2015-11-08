@@ -1,16 +1,16 @@
-var React = require('react-native');
-var {
+let React = require('react-native')
+let {
   StyleSheet,
   View,
   Text,
   Dimensions,
   ScrollView,
   TouchableOpacity
-} = React;
+} = React
 
-import {changePlaylist} from '../actions/playlists';
-import {GENRES, GENRES_MAP} from '../constants/SongConstants';
-var deviceWidth = Dimensions.get('window').width;
+import {changePlaylist} from '../actions/playlists'
+import {GENRES, GENRES_MAP} from '../constants/SongConstants'
+let deviceWidth = Dimensions.get('window').width
 
 class Toolbar extends React.Component {
   constructor (props) {
@@ -18,8 +18,8 @@ class Toolbar extends React.Component {
   }
 
   onPress (g) {
-    const {dispatch} = this.props;
-    dispatch(changePlaylist(g));
+    const {dispatch} = this.props
+    dispatch(changePlaylist(g))
   }
 
   render () {
@@ -50,7 +50,7 @@ class Toolbar extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container: {
     height: 40,
     width: deviceWidth,
@@ -70,6 +70,6 @@ var styles = StyleSheet.create({
     fontSize: 11,
     color: '#adadad',
   }
-});
+})
 
 export default Toolbar
