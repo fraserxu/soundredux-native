@@ -103,18 +103,4 @@ Scene.propTypes = {
   playlists: PropTypes.object.isRequired,
 }
 
-function mapStateToProps(state) {
-  const {entities, playlist, player, playlists} = state
-  const playingSongId = player.currentSongIndex !== null ? playlists[player.selectedPlaylists[player.selectedPlaylists.length - 1]].items[player.currentSongIndex] : null
-
-  return {
-    player,
-    playingSongId,
-    playlists,
-    playlist,
-    songs: entities.songs,
-    users: entities.users
-  }
-}
-
-export default connect(mapStateToProps)(Scene)
+export default Scene

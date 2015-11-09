@@ -7,9 +7,10 @@ let {
   TouchableOpacity,
   TextInput
 } = React
-import {connect} from 'react-redux/native'
 
-import Result from './Result'
+import Player from './Player'
+import Songs from './Songs'
+
 import {fetchSongsIfNeeded, changePlaylist} from '../actions/playlists'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 let deviceWidth = Dimensions.get('window').width
@@ -19,27 +20,43 @@ class Search extends React.Component {
     super(props)
 
     this.state = {
-      text: '',
-      newPlayList: ''
+      text: ''
     }
 
     this.onSubmitEditing = this.onSubmitEditing.bind(this)
   }
 
   renderContent () {
-    const {playlist, dispatch, height, player, playingSongId, playlists, songs, users} = this.props
+    let { playlist } = this.props
     return (
-      <Result
+      <Songs
         {...this.props}
-        playlist={this.state.newPlayList || ''}
-        scrollFunc={fetchSongsIfNeeded.bind(null, this.state.newPlayList || '')} />
+        playlist={playlist || ''}
+        scrollFunc={fetchSongsIfNeeded.bind(null, playlist || '')} />
+    )
+  }
+
+  renderPlayer () {
+    const {dispatch, player, navigator, playingSongId, playlists, songs, users} = this.props
+    if (playingSongId === null) {
+      return
+    }
+
+    return (
+      <Player
+        dispatch={dispatch}
+        navigator={navigator}
+        player={player}
+        playingSongId={playingSongId}
+        playlists={playlists}
+        songs={songs}
+        users={users} />
     )
   }
 
   onSubmitEditing () {
-    this.setState({
-      newPlayList: this.state.text
-    })
+    const {dispatch} = this.props
+    dispatch(changePlaylist(this.state.text))
   }
 
   render () {
@@ -63,6 +80,7 @@ class Search extends React.Component {
           />
         </View>
         {this.renderContent()}
+        {this.renderPlayer()}
       </View>
     )
   }
@@ -105,18 +123,4 @@ let styles = StyleSheet.create({
   }
 })
 
-function mapStateToProps(state) {
-  const {entities, playlist, player, playlists} = state
-  const playingSongId = player.currentSongIndex !== null ? playlists[player.selectedPlaylists[player.selectedPlaylists.length - 1]].items[player.currentSongIndex] : null
-
-  return {
-    player,
-    playingSongId,
-    playlists,
-    playlist,
-    songs: entities.songs,
-    users: entities.users
-  }
-}
-
-export default connect(mapStateToProps)(Search)
+export default Search

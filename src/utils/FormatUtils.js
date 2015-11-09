@@ -28,6 +28,11 @@ export function formatStreamUrl(str) {
     return `${str}?client_id=${CLIENT_ID}`;
 }
 
+// https://developers.soundcloud.com/docs/api/reference#tracks
+export function getLargeImage(str) {
+    return str.replace('large', 't500x500')
+}
+
 export function getSocialIcon(service) {
     switch(service) {
     case 'facebook':

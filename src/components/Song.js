@@ -9,13 +9,13 @@ let {
   ListView,
   TouchableOpacity
 } = React
-import {connect} from 'react-redux/native'
 import RCTPlayer from 'react-native-player'
 
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import { changeSong, changePlayerStatus } from '../actions/player'
 import { CHANGE_TYPES, PLAY_STATUS } from '../constants/SongConstants'
+import { getLargeImage } from '../utils/FormatUtils'
 let deviceWidth = Dimensions.get('window').width
 let deviceHeight = Dimensions.get('window').height
 
@@ -53,7 +53,7 @@ class Song extends React.Component {
     return (
       <View style={styles.container}>
         <Image
-          source={{uri: song['artwork_url']}}
+          source={{uri: song['artwork_url'] ? getLargeImage(song['artwork_url']) : getLargeImage(user['avatar_url'])}}
           style={styles.backgroundImage}
         >
           <TouchableOpacity onPress={() => this.props.navigator.pop()}>
@@ -77,7 +77,7 @@ class Song extends React.Component {
                 <Icon style={styles.button} name="pause" size={40} color="#FFF" />
               </TouchableOpacity>
             }
-            { player.status === (PLAY_STATUS.PAUSED || PLAY_STATUS.INIT) &&
+            { (player.status === PLAY_STATUS.PAUSED || player.status === PLAY_STATUS.INIT) &&
               <TouchableOpacity onPress={this.resume}>
                 <Icon style={styles.button} name="play-arrow" size={40} color="#FFF" />
               </TouchableOpacity>
@@ -154,18 +154,4 @@ Song.propTypes = {
   playlists: PropTypes.object.isRequired,
 }
 
-function mapStateToProps(state) {
-  const {entities, playlist, player, playlists} = state
-  const playingSongId = player.currentSongIndex !== null ? playlists[player.selectedPlaylists[player.selectedPlaylists.length - 1]].items[player.currentSongIndex] : null
-
-  return {
-    player,
-    playingSongId,
-    playlists,
-    playlist,
-    songs: entities.songs,
-    users: entities.users
-  }
-}
-
-export default connect(mapStateToProps)(Song)
+export default Song

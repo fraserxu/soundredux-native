@@ -45,12 +45,14 @@ class Songs extends React.Component {
 
   playSong(i) {
     const {playlist, dispatch, navigator} = this.props
+
+    console.log('playlist', playlist, i)
+
     dispatch(playSong(playlist, i))
 
     navigator.push({
       component: Song,
-      name: 'Song Detail',
-      passProps: this.props
+      name: 'Song'
     })
   }
 
@@ -59,7 +61,7 @@ class Songs extends React.Component {
   }
 
   render () {
-    const {dispatch, playlist, playlists, playingSongId, songs, users} = this.props
+    const {dispatch, playlist, playlists, playingSongId, songs, users, route} = this.props
     const isFetching = playlist in playlists ? playlists[playlist].isFetching : false
 
     // const songs = playlists[activePlaylist]
@@ -71,7 +73,9 @@ class Songs extends React.Component {
         height: playingSongId ? deviceHeight - 145 : deviceHeight - 70,
       }]}>
 
-        <Toolbar dispatch={dispatch} playlist={playlist} />
+        { route.name === 'Songs' &&
+          <Toolbar dispatch={dispatch} playlist={playlist} />
+        }
 
         { isFetching &&
           <View style={styles.progressbar}>
@@ -89,7 +93,7 @@ class Songs extends React.Component {
                     <Image
                       key={songs[song]['artwork_url']}
                       style={styles.avatar}
-                      source={{uri: songs[song]['artwork_url']}}
+                      source={{uri: songs[song]['artwork_url'] || users[songs[song].user_id].avatar_url }}
                     />
                   </View>
                   <View style={styles.description}>

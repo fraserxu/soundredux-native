@@ -2,8 +2,10 @@ import React from 'react-native'
 
 let {
   StyleSheet,
-  Navigator
-} = React;
+  Navigator,
+  PropTypes
+} = React
+import {connect} from 'react-redux/native'
 
 import Scene from '../components/Scene'
 import Search from '../components/Search'
@@ -13,14 +15,13 @@ class App extends React.Component {
     super(props)
 
     this.renderScene = this.renderScene.bind(this)
-    this.configureScene = this.configureScene.bind(this)
   }
 
   renderScene(route, navigator) {
     let Component = route.component
 
     return (
-      <Component navigator={navigator} route={route} {...route.passProps} />
+      <Component navigator={navigator} route={route} {...this.props} />
     )
   }
 
@@ -41,12 +42,20 @@ class App extends React.Component {
         renderScene={this.renderScene}
         initialRoute={{
           component: Scene,
-          name: 'Songs'
+          name: 'Songs',
+          passProps: this.props
         }}
       />
-
     )
   }
+}
+
+App.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  player: PropTypes.object.isRequired,
+  playingSongId: PropTypes.number,
+  playlist: PropTypes.string,
+  playlists: PropTypes.object.isRequired,
 }
 
 let styles = StyleSheet.create({
@@ -55,4 +64,18 @@ let styles = StyleSheet.create({
   }
 })
 
-export default App
+function mapStateToProps(state) {
+  const {entities, playlist, player, playlists} = state
+  const playingSongId = player.currentSongIndex !== null ? playlists[player.selectedPlaylists[player.selectedPlaylists.length - 1]].items[player.currentSongIndex] : null
+
+  return {
+    player,
+    playingSongId,
+    playlists,
+    playlist,
+    songs: entities.songs,
+    users: entities.users
+  }
+}
+
+export default connect(mapStateToProps)(App)
