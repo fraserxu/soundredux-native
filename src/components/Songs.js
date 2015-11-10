@@ -8,6 +8,7 @@ let {
   ListView,
   TouchableOpacity
 } = React
+import Icon from 'react-native-vector-icons/MaterialIcons'
 
 let ProgressBar = require('ProgressBarAndroid')
 let deviceWidth = Dimensions.get('window').width
@@ -27,6 +28,7 @@ class Songs extends React.Component {
     }
 
     this.onEndReached = this.onEndReached.bind(this)
+    this.playSong = this.playSong.bind(this)
   }
 
   componentWillMount() {
@@ -45,15 +47,18 @@ class Songs extends React.Component {
 
   playSong(i) {
     const {playlist, dispatch, navigator} = this.props
-
-    console.log('playlist', playlist, i)
-
     dispatch(playSong(playlist, i))
 
     navigator.push({
       component: Song,
       name: 'Song'
     })
+  }
+
+  millisToMinutesAndSeconds(millis) {
+    let minutes = Math.floor(millis / 60000);
+    let seconds = ((millis % 60000) / 1000).toFixed(0)
+    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds
   }
 
   onEndReached() {
@@ -79,7 +84,7 @@ class Songs extends React.Component {
 
         { isFetching &&
           <View style={styles.progressbar}>
-            <ProgressBar styleAttr="Small" />
+            <ProgressBar styleAttr='Small' />
           </View>
         }
         <ListView
@@ -97,9 +102,15 @@ class Songs extends React.Component {
                     />
                   </View>
                   <View style={styles.description}>
-                    <Text style={styles.username}>{users[songs[song].user_id].username}</Text>
+                    <View style={styles.firstRow}>
+                      <Text style={styles.username}>{users[songs[song].user_id].username}</Text>
+                      <Text style={styles.username}>{this.millisToMinutesAndSeconds(songs[song].duration)}</Text>
+                    </View>
                     <Text style={styles.title}>{songs[song].title}</Text>
-                    <Text style={styles.count}>Played: {songs[song].playback_count}</Text>
+                    <View style={styles.countContainer}>
+                      <Icon name='play-arrow' size={14} />
+                      <Text style={styles.count}>{songs[song].playback_count}</Text>
+                    </View>
                   </View>
                 </View>
               </TouchableOpacity>
@@ -138,6 +149,10 @@ let styles = StyleSheet.create({
     marginLeft: 10,
     flexDirection: 'column'
   },
+  firstRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
   username: {
     fontSize: 10
   },
@@ -146,6 +161,9 @@ let styles = StyleSheet.create({
     flexWrap: 'wrap',
     color: '#000',
     fontSize: 12
+  },
+  countContainer: {
+    flexDirection: 'row'
   },
   count: {
     fontSize: 10
