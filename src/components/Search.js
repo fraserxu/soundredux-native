@@ -8,7 +8,7 @@ let {
   TextInput
 } = React
 
-import PlayerContainer from '../contianers/PlayerContainer'
+import PlayerContainer from '../containers/PlayerContainer'
 import Songs from './Songs'
 
 import {fetchSongsIfNeeded, changePlaylist} from '../actions/playlists'

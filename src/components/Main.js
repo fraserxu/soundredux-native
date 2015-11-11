@@ -13,7 +13,7 @@ var deviceWidth = Dimensions.get('window').width
 import {fetchSongsIfNeeded} from '../actions/playlists'
 import {parseUrl} from '../utils/RouteUtils'
 
-import PlayerContainer from '../contianers/PlayerContainer'
+import PlayerContainer from '../containers/PlayerContainer'
 import Songs from './Songs'
 import Search from './Search'
 
@@ -29,11 +29,10 @@ class Main extends React.Component {
   }
 
   renderContent () {
-    const {playlist, dispatch, height, player, playingSongId, playlists, songs, users} = this.props
+    const { playlist } = this.props
     return (
       <Songs
         {...this.props}
-        playlist={playlist}
         scrollFunc={fetchSongsIfNeeded.bind(null, playlist)} />
     )
   }

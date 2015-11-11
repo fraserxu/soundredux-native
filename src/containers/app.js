@@ -6,7 +6,7 @@ let {
   PropTypes
 } = React
 
-import Main from '../components/Main'
+import MainContainer from './MainContainer'
 
 class App extends React.Component {
   constructor(props) {
@@ -37,8 +37,8 @@ class App extends React.Component {
         configureScene={this.configureScene}
         renderScene={this.renderScene}
         initialRoute={{
-          component: Main,
-          name: 'Songs'
+          component: MainContainer,
+          name: 'Main'
         }}
       />
     )

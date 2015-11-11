@@ -6,32 +6,28 @@ let {
 } = React
 import {connect} from 'react-redux/native'
 
-import Player from '../components/Player'
+import Main from '../components/Main'
 
-class PlayerContainer extends Component {
+class MainContainer extends Component {
   render() {
-    const { playingSongId } = this.props
-
-    if (playingSongId === null) {
-      return <View />
-    }
-
     return (
-      <Player {...this.props} />
+      <Main {...this.props} />
     )
   }
 }
 
 function mapStateToProps(state) {
-  const { entities, player, playlists } = state
+  const { playlist, playlists, entities, player } = state
   const playingSongId = player.currentSongIndex !== null ? playlists[player.selectedPlaylists[player.selectedPlaylists.length - 1]].items[player.currentSongIndex] : null
 
   return {
     player,
     playingSongId,
+    playlist,
+    playlists,
     songs: entities.songs,
     users: entities.users
   }
 }
 
-export default connect(mapStateToProps)(PlayerContainer)
+export default connect(mapStateToProps)(MainContainer)

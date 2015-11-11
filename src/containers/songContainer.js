@@ -8,7 +8,7 @@ import {connect} from 'react-redux/native'
 
 import Song from '../components/Song'
 
-class songContainer extends Component {
+class SongContainer extends Component {
   render() {
     return (
       <Song {...this.props} />
@@ -17,7 +17,7 @@ class songContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  const { entities, player } = state
+  const { entities, player, playlists } = state
   const playingSongId = player.currentSongIndex !== null ? playlists[player.selectedPlaylists[player.selectedPlaylists.length - 1]].items[player.currentSongIndex] : null
 
   return {
@@ -28,4 +28,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(songContainer)
+export default connect(mapStateToProps)(SongContainer)

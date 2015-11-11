@@ -17,7 +17,7 @@ let deviceHeight = Dimensions.get('window').height
 import Toolbar from './Toolbar'
 import {playSong} from '../actions/player'
 import {fetchSongsIfNeeded} from '../actions/playlists'
-import Song from './Song'
+import SongContainer from '../containers/SongContainer'
 
 class Songs extends React.Component {
   constructor (props) {
@@ -50,7 +50,7 @@ class Songs extends React.Component {
     dispatch(playSong(playlist, i))
 
     navigator.push({
-      component: Song,
+      component: SongContainer,
       name: 'Song'
     })
   }
@@ -78,7 +78,7 @@ class Songs extends React.Component {
         height: playingSongId ? deviceHeight - 145 : deviceHeight - 70,
       }]}>
 
-        { route.name === 'Songs' &&
+        { route.name === 'Main' &&
           <Toolbar dispatch={dispatch} playlist={playlist} />
         }
 
