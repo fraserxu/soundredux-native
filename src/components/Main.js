@@ -13,7 +13,7 @@ var deviceWidth = Dimensions.get('window').width
 import {fetchSongsIfNeeded} from '../actions/playlists'
 import {parseUrl} from '../utils/RouteUtils'
 
-import Player from './Player'
+import PlayerContainer from '../contianers/PlayerContainer'
 import Songs from './Songs'
 import Search from './Search'
 
@@ -21,7 +21,7 @@ let toolbarActions = [
   {title: 'Search', icon: require('../../assets/search100.png'), show: 'always'}
 ]
 
-class Scene extends React.Component {
+class Main extends React.Component {
   constructor (props) {
     super(props)
 
@@ -39,20 +39,12 @@ class Scene extends React.Component {
   }
 
   renderPlayer () {
-    const {dispatch, player, navigator, playingSongId, playlists, songs, users} = this.props
-    if (playingSongId === null) {
-      return
-    }
+    const {dispatch, navigator} = this.props
 
     return (
-      <Player
+      <PlayerContainer
         dispatch={dispatch}
-        navigator={navigator}
-        player={player}
-        playingSongId={playingSongId}
-        playlists={playlists}
-        songs={songs}
-        users={users} />
+        navigator={navigator} />
     )
   }
 
@@ -95,7 +87,7 @@ var styles = StyleSheet.create({
   }
 })
 
-Scene.propTypes = {
+Main.propTypes = {
   dispatch: PropTypes.func.isRequired,
   player: PropTypes.object.isRequired,
   playingSongId: PropTypes.number,
@@ -103,4 +95,4 @@ Scene.propTypes = {
   playlists: PropTypes.object.isRequired,
 }
 
-export default Scene
+export default Main

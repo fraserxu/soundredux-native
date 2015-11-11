@@ -7,21 +7,18 @@ let {
 } = React
 import {connect} from 'react-redux/native'
 
-import Scene from '../components/Scene'
-import Search from '../components/Search'
+import Main from '../components/Main'
 
 class App extends React.Component {
   constructor(props) {
     super(props)
-
-    this.renderScene = this.renderScene.bind(this)
   }
 
   renderScene(route, navigator) {
     let Component = route.component
 
     return (
-      <Component navigator={navigator} route={route} {...this.props} />
+      <Component navigator={navigator} route={route} />
     )
   }
 
@@ -41,9 +38,8 @@ class App extends React.Component {
         configureScene={this.configureScene}
         renderScene={this.renderScene}
         initialRoute={{
-          component: Scene,
-          name: 'Songs',
-          passProps: this.props
+          component: Main,
+          name: 'Songs'
         }}
       />
     )
