@@ -8,7 +8,7 @@ let {
   TextInput
 } = React
 
-import Player from './Player'
+import PlayerContainer from '../contianers/PlayerContainer'
 import Songs from './Songs'
 
 import {fetchSongsIfNeeded, changePlaylist} from '../actions/playlists'
@@ -37,20 +37,12 @@ class Search extends React.Component {
   }
 
   renderPlayer () {
-    const {dispatch, player, navigator, playingSongId, playlists, songs, users} = this.props
-    if (playingSongId === null) {
-      return
-    }
+    const {dispatch, navigator} = this.props
 
     return (
-      <Player
+      <PlayerContainer
         dispatch={dispatch}
-        navigator={navigator}
-        player={player}
-        playingSongId={playingSongId}
-        playlists={playlists}
-        songs={songs}
-        users={users} />
+        navigator={navigator} />
     )
   }
 

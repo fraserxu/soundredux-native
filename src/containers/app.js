@@ -5,7 +5,6 @@ let {
   Navigator,
   PropTypes
 } = React
-import {connect} from 'react-redux/native'
 
 import Main from '../components/Main'
 
@@ -46,32 +45,10 @@ class App extends React.Component {
   }
 }
 
-App.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  player: PropTypes.object.isRequired,
-  playingSongId: PropTypes.number,
-  playlist: PropTypes.string,
-  playlists: PropTypes.object.isRequired,
-}
-
 let styles = StyleSheet.create({
   navigator: {
     flex: 1
   }
 })
 
-function mapStateToProps(state) {
-  const {entities, playlist, player, playlists} = state
-  const playingSongId = player.currentSongIndex !== null ? playlists[player.selectedPlaylists[player.selectedPlaylists.length - 1]].items[player.currentSongIndex] : null
-
-  return {
-    player,
-    playingSongId,
-    playlists,
-    playlist,
-    songs: entities.songs,
-    users: entities.users
-  }
-}
-
-export default connect(mapStateToProps)(App)
+export default App

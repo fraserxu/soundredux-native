@@ -6,18 +6,12 @@ let {
 } = React
 import {connect} from 'react-redux/native'
 
-import Player from '../components/Player'
+import Song from '../components/Song'
 
-class PlayerContainer extends Component {
+class songContainer extends Component {
   render() {
-    const { playingSongId } = this.props
-
-    if (playingSongId === null) {
-      return <View />
-    }
-
     return (
-      <Player {...this.props} />
+      <Song {...this.props} />
     )
   }
 }
@@ -34,4 +28,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(PlayerContainer)
+export default connect(mapStateToProps)(songContainer)

@@ -85,13 +85,12 @@ var Player = React.createClass({
 
     navigator.push({
       component: Song,
-      name: 'Song Detail',
-      passProps: this.props
+      name: 'Song'
     })
   },
 
   render: function() {
-    const {dispatch, player, playingSongId, songs, users} = this.props
+    const {player, playingSongId, songs, users} = this.props
     const song = songs[playingSongId]
     const user = users[song.user_id]
 
@@ -117,7 +116,6 @@ var Player = React.createClass({
             </View>
           </TouchableOpacity>
         </View>
-
       </View>
     )
   }
