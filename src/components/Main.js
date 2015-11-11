@@ -14,8 +14,8 @@ import {fetchSongsIfNeeded} from '../actions/playlists'
 import {parseUrl} from '../utils/RouteUtils'
 
 import PlayerContainer from '../containers/PlayerContainer'
+import SearchContainer from '../containers/SearchContainer'
 import Songs from './Songs'
-import Search from './Search'
 
 let toolbarActions = [
   {title: 'Search', icon: require('../../assets/search100.png'), show: 'always'}
@@ -51,7 +51,7 @@ class Main extends React.Component {
     const { navigator } = this.props
     if (position === 0) {
       navigator.push({
-        component: Search,
+        component: SearchContainer,
         name: 'Search'
       })
     }

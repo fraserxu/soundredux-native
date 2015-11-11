@@ -150,8 +150,7 @@ Song.propTypes = {
   dispatch: PropTypes.func.isRequired,
   player: PropTypes.object.isRequired,
   playingSongId: PropTypes.number,
-  playlist: PropTypes.string,
-  playlists: PropTypes.object.isRequired,
+  playlist: PropTypes.string
 }
 
 export default Song

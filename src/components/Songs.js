@@ -92,7 +92,7 @@ class Songs extends React.Component {
           onEndReached={this.onEndReached}
           renderRow={(song, sectionId, rowId) => {
             return (
-              <TouchableOpacity onPress={this.playSong.bind(this, rowId)}>
+              <TouchableOpacity onPress={this.playSong.bind(this, parseInt(rowId))}>
                 <View style={styles.card}>
                   <View>
                     <Image
