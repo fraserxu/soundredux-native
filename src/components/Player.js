@@ -11,7 +11,9 @@ let {
 } = React
 let RCTPlayer = require('react-native-player')
 
-import Song from './Song'
+import InteractionManager from 'InteractionManager'
+
+import SongContainer from '../containers/SongContainer'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import {formatSeconds, formatStreamUrl} from '../utils/FormatUtils'
 import { changeSong, changePlayerStatus } from '../actions/player'
@@ -27,6 +29,7 @@ class Player extends Component {
     this.pause = this.pause.bind(this)
     this.resume = this.resume.bind(this)
     this.onEnd = this.onEnd.bind(this)
+    this.showSongDetail = this.showSongDetail.bind(this)
   }
 
   componentWillMount () {
@@ -106,11 +109,12 @@ class Player extends Component {
 
   showSongDetail () {
     const { navigator } = this.props
-
+    // InteractionManager.runAfterInteractions(() => {
     navigator.push({
-      component: Song,
+      component: SongContainer,
       name: 'Song'
     })
+    // })
   }
 
   render () {
@@ -133,7 +137,7 @@ class Player extends Component {
               </TouchableOpacity>
             }
           </View>
-          <TouchableOpacity onPress={this.showSongDetail.bind(this, song, user)}>
+          <TouchableOpacity onPress={this.showSongDetail.bind(this)}>
             <View style={styles.description}>
               <Text style={styles.username}>{user.username}</Text>
               <Text style={styles.title}>{song.title}</Text>

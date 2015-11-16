@@ -7,12 +7,12 @@ let {
   Image,
   ListView,
   TouchableOpacity,
-  Component,
-  InteractionManager
+  Component
 } = React
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
-let ProgressBar = require('ProgressBarAndroid')
+import InteractionManager from 'InteractionManager'
+import ProgressBar from 'ProgressBarAndroid'
 let deviceWidth = Dimensions.get('window').width
 let deviceHeight = Dimensions.get('window').height
 
@@ -49,13 +49,15 @@ class Songs extends Component {
 
   playSong(i) {
     const {playlist, dispatch, navigator} = this.props
-    // InteractionManager.runAfterInteractions(() => {
+    InteractionManager.runAfterInteractions(() => {
       dispatch(playSong(playlist, i))
+      // this.requestAnimationFrame(() => {
       navigator.push({
         component: SongContainer,
         name: 'Song'
       })
-    // })
+      // })
+    })
   }
 
   millisToMinutesAndSeconds(millis) {
