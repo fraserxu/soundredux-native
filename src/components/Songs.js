@@ -6,7 +6,9 @@ let {
   Dimensions,
   Image,
   ListView,
-  TouchableOpacity
+  TouchableOpacity,
+  Component,
+  InteractionManager
 } = React
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
@@ -19,7 +21,7 @@ import {playSong} from '../actions/player'
 import {fetchSongsIfNeeded} from '../actions/playlists'
 import SongContainer from '../containers/SongContainer'
 
-class Songs extends React.Component {
+class Songs extends Component {
   constructor (props) {
     super(props)
 
@@ -47,12 +49,13 @@ class Songs extends React.Component {
 
   playSong(i) {
     const {playlist, dispatch, navigator} = this.props
-    dispatch(playSong(playlist, i))
-
-    navigator.push({
-      component: SongContainer,
-      name: 'Song'
-    })
+    // InteractionManager.runAfterInteractions(() => {
+      dispatch(playSong(playlist, i))
+      navigator.push({
+        component: SongContainer,
+        name: 'Song'
+      })
+    // })
   }
 
   millisToMinutesAndSeconds(millis) {

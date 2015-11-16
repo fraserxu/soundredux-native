@@ -3,7 +3,7 @@ import {CHANGE_TYPES} from '../constants/SongConstants';
 
 export function changePlayerStatus (status) {
     return {
-        type: types.CHAANGE_PLAYER_STATUS,
+        type: types.CHANGE_PLAYER_STATUS,
         status
     }
 }

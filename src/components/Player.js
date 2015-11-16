@@ -1,95 +1,119 @@
-var React = require('react-native')
-var {
+let React = require('react-native')
+let {
   StyleSheet,
   View,
   Text,
   Dimensions,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  DeviceEventEmitter,
+  Component
 } = React
-var RCTPlayer = require('react-native-player')
-var RCTDeviceEventEmitter = require('RCTDeviceEventEmitter')
-var Subscribable = require('Subscribable')
+let RCTPlayer = require('react-native-player')
 
 import Song from './Song'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import {formatSeconds, formatStreamUrl} from '../utils/FormatUtils'
 import { changeSong, changePlayerStatus } from '../actions/player'
 import { CHANGE_TYPES, PLAY_STATUS } from '../constants/SongConstants'
-var deviceWidth = Dimensions.get('window').width
+let deviceWidth = Dimensions.get('window').width
 
-var Player = React.createClass({
+class Player extends Component {
 
-  mixins: [Subscribable.Mixin],
+  constructor (props) {
+    super(props)
 
-  componentWillMount: function() {
-    this.addListenerOn(RCTDeviceEventEmitter, 'error', this.onError)
-    this.addListenerOn(RCTDeviceEventEmitter, 'end', this.onEnd)
-    this.addListenerOn(RCTDeviceEventEmitter, 'ready', this.onReady)
-    this.addListenerOn(RCTDeviceEventEmitter, 'prepare', this.onReady)
-  },
+    this.playSong = this.playSong.bind(this)
+    this.pause = this.pause.bind(this)
+    this.resume = this.resume.bind(this)
+    this.onEnd = this.onEnd.bind(this)
+  }
 
-  componentDidMount: function() {
+  componentWillMount () {
+    DeviceEventEmitter.addListener('error', this.onError)
+    DeviceEventEmitter.addListener('end', this.onEnd)
+    DeviceEventEmitter.addListener('idle', this.onIdle)
+    DeviceEventEmitter.addListener('buffering', this.onBuffering)
+    DeviceEventEmitter.addListener('ready', this.onReady)
+    DeviceEventEmitter.addListener('preparing', this.onReady)
+  }
+
+  componentDidMount () {
     const {dispatch, player, playingSongId, songs, users} = this.props
     const song = songs[playingSongId]
     if (song) {
       this.playSong(formatStreamUrl(song.stream_url))
     }
-  },
+  }
 
-  componentDidUpdate: function(prevProps) {
-    const {dispatch, player, playingSongId, songs, users} = this.props
-    const song = songs[playingSongId]
-    if (prevProps.playingSongId && prevProps.playingSongId === this.props.playingSongId) {
+  componentWillReceiveProps (nextProps) {
+    const {playingSongId} = this.props
+    const song = nextProps.songs[playingSongId]
+    if (nextProps.playingSongId && nextProps.playingSongId === playingSongId) {
       return
     }
 
-    // new song and is playing
-    RCTPlayer.stop()
     this.playSong(formatStreamUrl(song.stream_url))
-  },
+  }
 
-  playSong: function(url) {
+  playSong (url) {
+    // RCTPlayer.isPlaying((isPlaying) => {
+    // if (isPlaying) {
+    // RCTPlayer.stop()
+    // }
     RCTPlayer.prepare(url, true)
     const {dispatch} = this.props
     dispatch(changePlayerStatus(PLAY_STATUS.PLAYING))
-  },
+    // })
+  }
 
-  pause: function() {
+  pause () {
     RCTPlayer.pause()
     const {dispatch} = this.props
     dispatch(changePlayerStatus(PLAY_STATUS.PAUSED))
-  },
+  }
 
-  resume: function() {
+  resume () {
     RCTPlayer.resume()
     const {dispatch} = this.props
     dispatch(changePlayerStatus(PLAY_STATUS.PLAYING))
-  },
+  }
 
-  onError: function(err) {
-    console.log(err)
-  },
+  onBuffering () {
+    console.log('on buffering...')
+  }
 
-  onEnd: function() {
+  onIdle () {
+    console.log('on idle...')
+  }
+
+  onError (err) {
+    console.log('on error...', err)
+  }
+
+  onEnd () {
     const {dispatch} = this.props
     dispatch(changeSong(CHANGE_TYPES.NEXT))
-  },
+  }
 
-  onReady: function() {
-    // RCTPlayer.start?()
-  },
+  onReady () {
+    console.log('on ready...')
+  }
 
-  showSongDetail: function() {
+  onPreparing () {
+    console.log('on preparing...')
+  }
+
+  showSongDetail () {
     const { navigator } = this.props
 
     navigator.push({
       component: Song,
       name: 'Song'
     })
-  },
+  }
 
-  render: function() {
+  render () {
     const {player, playingSongId, songs, users} = this.props
     const song = songs[playingSongId]
     const user = users[song.user_id]
@@ -119,9 +143,9 @@ var Player = React.createClass({
       </View>
     )
   }
-})
+}
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container: {
     alignSelf: 'flex-end',
     width: deviceWidth,

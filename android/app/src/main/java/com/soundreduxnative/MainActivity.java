@@ -13,6 +13,7 @@ import com.facebook.soloader.SoLoader;
 
 import com.xeodou.rctplayer.*;
 import com.oblador.vectoricons.VectorIconsPackage;
+// import me.fraserxu.rncouchbaselite.*;
 
 public class MainActivity extends Activity implements DefaultHardwareBackBtnHandler {
 
@@ -30,6 +31,7 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
                 .setJSMainModuleName("index.android")
                 .addPackage(new MainReactPackage())
                 .addPackage(new ReactPlayerManager())
+                // .addPackage(new ReactCBLiteManager())
                 .addPackage(new VectorIconsPackage())
                 .setUseDeveloperSupport(BuildConfig.DEBUG)
                 .setInitialLifecycleState(LifecycleState.RESUMED)

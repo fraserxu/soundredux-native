@@ -69,6 +69,14 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+
+    /**
+    * packagingOptions {
+    *   exclude 'META-INF/ASL2.0'
+    *   exclude 'META-INF/LICENSE'
+    *   exclude 'META-INF/NOTICE'
+    *}
+    */
 }
 
 dependencies {
@@ -78,4 +86,7 @@ dependencies {
 
     compile project(':react-native-vector-icons')
     compile project(':react-native-player')
+    /**
+     * compile project(':react-native-couchbase-lite')
+     */
 }

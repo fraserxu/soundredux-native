@@ -22,7 +22,7 @@ export default function player(state = {
             selectedPlaylists: action.playlists
         });
 
-    case types.CHAANGE_PLAYER_STATUS:
+    case types.CHANGE_PLAYER_STATUS:
         return Object.assign({}, state, {
             status: action.status
         })
