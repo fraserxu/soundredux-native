@@ -1,5 +1,5 @@
-var React = require('react-native')
-var {
+let React = require('react-native')
+let {
   StyleSheet,
   View,
   Dimensions,
@@ -8,8 +8,9 @@ var {
 } = React
 import {connect} from 'react-redux/native'
 
-var deviceWidth = Dimensions.get('window').width
+let deviceWidth = Dimensions.get('window').width
 
+import InteractionManager from 'InteractionManager'
 import {fetchSongsIfNeeded} from '../actions/playlists'
 import {parseUrl} from '../utils/RouteUtils'
 
@@ -49,12 +50,14 @@ class Main extends React.Component {
 
   onActionSelected (position) {
     const { navigator } = this.props
-    if (position === 0) {
-      navigator.push({
-        component: SearchContainer,
-        name: 'Search'
-      })
-    }
+    InteractionManager.runAfterInteractions(() => {
+      if (position === 0) {
+        navigator.push({
+          component: SearchContainer,
+          name: 'Search'
+        })
+      }
+    })
   }
 
   render () {
@@ -74,7 +77,7 @@ class Main extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column'

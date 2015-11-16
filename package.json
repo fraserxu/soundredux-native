@@ -13,6 +13,7 @@
     "react-native": "^0.14.0",
     "react-native-player": "0.0.6",
     "react-native-vector-icons": "^0.8.4",
+    "react-pure-render": "^1.0.2",
     "react-redux": "^3.1.0",
     "redux": "^3.0.3",
     "redux-logger": "^2.0.4",

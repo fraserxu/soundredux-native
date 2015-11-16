@@ -1,4 +1,4 @@
-let React = require('react-native')
+import React from 'react-native'
 let {
   StyleSheet,
   View,
@@ -9,7 +9,9 @@ let {
   DeviceEventEmitter,
   Component
 } = React
-let RCTPlayer = require('react-native-player')
+import RCTPlayer from 'react-native-player'
+import shallowEqual from 'react-pure-render/shallowEqual'
+
 
 import InteractionManager from 'InteractionManager'
 
@@ -30,6 +32,13 @@ class Player extends Component {
     this.resume = this.resume.bind(this)
     this.onEnd = this.onEnd.bind(this)
     this.showSongDetail = this.showSongDetail.bind(this)
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const shouldUpdate =
+      !shallowEqual(this.props, nextProps) ||
+      !shallowEqual(this.state, nextState)
+    return shouldUpdate
   }
 
   componentWillMount () {

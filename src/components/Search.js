@@ -8,6 +8,7 @@ let {
   TextInput
 } = React
 
+import InteractionManager from 'InteractionManager'
 import PlayerContainer from '../containers/PlayerContainer'
 import Songs from './Songs'
 
@@ -24,6 +25,7 @@ class Search extends React.Component {
     }
 
     this.onSubmitEditing = this.onSubmitEditing.bind(this)
+    this.onBack = this.onBack.bind(this)
   }
 
   renderContent () {
@@ -31,18 +33,14 @@ class Search extends React.Component {
     return (
       <Songs
         {...this.props}
-        playlist={playlist || ''}
-        scrollFunc={fetchSongsIfNeeded.bind(null, playlist || '')} />
+        playlist={playlist}
+        scrollFunc={fetchSongsIfNeeded.bind(null, playlist)} />
     )
   }
 
   renderPlayer () {
-    const {dispatch, navigator} = this.props
-
     return (
-      <PlayerContainer
-        dispatch={dispatch}
-        navigator={navigator} />
+      <PlayerContainer />
     )
   }
 
@@ -51,11 +49,17 @@ class Search extends React.Component {
     dispatch(changePlaylist(this.state.text))
   }
 
+  onBack () {
+    InteractionManager.runAfterInteractions(() => {
+      this.props.navigator.pop()
+    })
+  }
+
   render () {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => this.props.navigator.pop()}>
+          <TouchableOpacity onPress={this.onBack}>
             <Icon name="keyboard-backspace" style={styles.backIcon} size={30} color="#FFF" />
           </TouchableOpacity>
           <Icon name="search" style={styles.search} size={30} color="#FFF" />

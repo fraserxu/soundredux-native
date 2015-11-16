@@ -10,6 +10,7 @@ let {
   Component
 } = React
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import shallowEqual from 'react-pure-render/shallowEqual'
 
 import InteractionManager from 'InteractionManager'
 import ProgressBar from 'ProgressBarAndroid'
@@ -33,6 +34,13 @@ class Songs extends Component {
     this.playSong = this.playSong.bind(this)
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    const shouldUpdate =
+      !shallowEqual(this.props, nextProps) ||
+      !shallowEqual(this.state, nextState)
+    return shouldUpdate
+  }
+
   componentWillMount() {
     const {dispatch, playlist} = this.props
     dispatch(fetchSongsIfNeeded(playlist))
@@ -51,12 +59,10 @@ class Songs extends Component {
     const {playlist, dispatch, navigator} = this.props
     InteractionManager.runAfterInteractions(() => {
       dispatch(playSong(playlist, i))
-      // this.requestAnimationFrame(() => {
       navigator.push({
         component: SongContainer,
         name: 'Song'
       })
-      // })
     })
   }
 
@@ -74,7 +80,6 @@ class Songs extends Component {
     const {dispatch, playlist, playlists, playingSongId, songs, users, route} = this.props
     const isFetching = playlist in playlists ? playlists[playlist].isFetching : false
 
-    // const songs = playlists[activePlaylist]
     let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
     let dataSource = playlist in playlists ? ds.cloneWithRows(playlists[playlist].items) : ds.cloneWithRows([])
 
