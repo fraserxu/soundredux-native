@@ -2,6 +2,8 @@
 
 > In an effort to learn es6 and [redux](https://github.com/rackt/redux), this is SoundRedux, a simple [Soundcloud](http://soundcloud.com) client
 
+I have a blog post sharing my experience [Building A Native Soundcloud Android App With React Native And Redux](https://wiredcraft.com/blog/native-soundcloud-android-app/)
+
 In an effort to learn es6 and [redux](https://github.com/rackt/redux), [react-native](https://facebook.github.io/react-native/) this is SoundRedux Native, a simple [Soundcloud](http://soundcloud.com) native client.
 
 This repo is stolen from the awesome [soundredux](https://soundredux.io/) project by @andrewngu , I've been using it instead of the official Soundclould client for a week.
